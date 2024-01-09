@@ -26,7 +26,6 @@ import SiswaIcon from "../icons/SiswaIcon";
 import PenilaianIcon from "../icons/PenilaianIcon";
 import { usePathname } from "next/navigation";
 import { DownOutlined } from "@ant-design/icons";
-import LogOutIcon from "../icons/LogoutIcon";
 import DropdownLogout from "../Dropdown/DropdownLogout";
 
 const { Header, Sider, Content } = Layout;

@@ -2,7 +2,7 @@ import React from "react";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Dropdown, Space, Typography } from "antd";
-import LogOutIcon from "../icons/LogoutIcon";
+import LogOutIcon from "../icons/LogOutIcon";
 
 const items: MenuProps["items"] = [
   {
