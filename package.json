@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@radix-ui/react-slot": "^1.0.2",
     "antd": "^5.12.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
