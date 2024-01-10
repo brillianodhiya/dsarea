@@ -145,14 +145,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           style={{
             backgroundColor: "#EBF5F5",
             borderWidth: 0,
-            padding: 20,
+            padding: 18,
           }}
+          className="!px-2"
           onClick={onClick}
           defaultSelectedKeys={["1"]}
           items={items}
         />
       </Sider>
       <Layout>
+        {/*
+      
         <Header
           style={{
             padding: 0,
@@ -211,22 +214,29 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             </Avatar>
             <DropdownLogout />
           </div>
-          {/* <Space wrap align="center">
-            <Badge count={100}>
-              <Bell />
-            </Badge>
-            <Avatar
-              style={{ backgroundColor: "#D9D9D9", verticalAlign: "middle" }}
-              size="large"
-              gap={2}
-            >
-              X
-            </Avatar>
-            user@user.com
-            Super Admin
-          </Space> */}
-          {/* <DropdownLogout /> */}
+          
         </Header>
+      */}
+        <Button
+          type="link"
+          icon={
+            !collapsed ? (
+              <ChevronLeft size={15} color="#AAD2D3" />
+            ) : (
+              <ChevronRight size={15} color="#AAD2D3" />
+            )
+          }
+          onClick={() => setCollapsed(!collapsed)}
+          style={{
+            borderWidth: 2,
+            borderColor: "#AAD2D3",
+            marginLeft: -20,
+            marginTop: 14,
+            borderRadius: 12,
+            position: "absolute",
+            backgroundColor: "#EBF5F5",
+          }}
+        />
         <Content
           style={{
             // margin: "24px 16px",

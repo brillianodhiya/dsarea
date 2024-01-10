@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";

@@ -1,49 +1,29 @@
 "use client";
+import { SearchOutlined } from "@ant-design/icons";
+import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
+import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import {
   Card,
+  Col,
   Dropdown,
   DropdownProps,
+  Input,
+  Layout,
   MenuProps,
   Progress,
+  Row,
   Table,
   Typography,
 } from "antd";
 import Button from "antd/lib/button";
 import Column from "antd/lib/table/Column";
-import { Eye, MoreVertical, PencilLine } from "lucide-react";
-import Image from "next/image";
-import { useLayoutEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-
-  const handleMenuClick: MenuProps["onClick"] = (e) => {
-    console.log(e);
-  };
-
-  const handleOpenChange: DropdownProps["onOpenChange"] = (nextOpen, info) => {
-    if (info.source === "trigger" || nextOpen) {
-      setOpen(nextOpen);
-    }
-  };
-
-  const items: MenuProps["items"] = [
-    {
-      label: "View",
-      key: "1",
-      icon: <Eye />,
-    },
-    {
-      label: "Edit",
-      key: "2",
-      icon: <PencilLine />,
-    },
-  ];
-
   const data = [
     {
       key: "1",
-      product: "John",
+      product: "Try Out",
       category: "Brown",
       date: 32,
       siswa: 90,
@@ -52,8 +32,8 @@ export default function Home() {
     },
     {
       key: "2",
-      product: "John",
-      category: "Brown",
+      product: "SPSS",
+      category: "Python Lengkap",
       date: 32,
       siswa: 90,
       status: 100,
@@ -79,8 +59,24 @@ export default function Home() {
     },
   ];
   return (
-    <main className="px-4 py-16">
-      <Card>
+    <div>
+      <CustomHeader title="Penilaian" />
+
+      <Card className="!m-6">
+        <Row className="mb-4" justify={"space-between"} wrap>
+          <Col>
+            <Typography.Text strong className="!text-xl">
+              List Kategori Soal
+            </Typography.Text>
+          </Col>
+          <Col>
+            <Input
+              placeholder="Search anything..."
+              suffix={<SearchOutlined />}
+              className="!w-[250px]"
+            />
+          </Col>
+        </Row>
         <Table
           dataSource={data}
           pagination={{
@@ -91,8 +87,13 @@ export default function Home() {
             title="Product"
             dataIndex="product"
             key="product"
-            render={(text, record) => (
-              <Typography className="!text-[#3A9699]">{text}</Typography>
+            render={(text, record: any) => (
+              <Link
+                href={"/penilaian/" + record.product}
+                className="!text-[#3A9699]"
+              >
+                {text}
+              </Link>
             )}
           />
           <Column
@@ -116,23 +117,10 @@ export default function Home() {
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) => (
-              <Dropdown
-                menu={{
-                  items,
-                  onClick: handleMenuClick,
-                }}
-                onOpenChange={handleOpenChange}
-                open={open}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <MoreVertical color="#000" />
-                </a>
-              </Dropdown>
-            )}
+            render={(text, record) => <DropdownMenu />}
           />
         </Table>
       </Card>
-    </main>
+    </div>
   );
 }
