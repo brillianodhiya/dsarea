@@ -1,6 +1,7 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
+import AddCategoryModal from "@dsarea/@/components/Modals/AddCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import {
   Card,
@@ -19,8 +20,10 @@ import {
 import Button from "antd/lib/button";
 import Column from "antd/lib/table/Column";
 import Link from "next/link";
+import React from "react";
 
 export default function Home() {
+  const [openAddModal, setOpenAddModal] = React.useState(false);
   const data = [
     {
       key: "1",
@@ -37,6 +40,11 @@ export default function Home() {
   ];
   return (
     <div>
+      <AddCategoryModal
+        onCancel={() => setOpenAddModal(false)}
+        onCreate={() => {}}
+        open={openAddModal}
+      />
       <CustomHeader title="Soal" />
 
       <Card className="!m-6">
@@ -53,7 +61,12 @@ export default function Home() {
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
               />
-              <Button type="primary" color="red" icon={<PlusOutlined />}>
+              <Button
+                type="primary"
+                onClick={() => setOpenAddModal(true)}
+                color="red"
+                icon={<PlusOutlined />}
+              >
                 Add Kategori
               </Button>
             </Space>

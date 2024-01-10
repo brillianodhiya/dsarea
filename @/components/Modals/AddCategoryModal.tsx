@@ -7,13 +7,13 @@ interface Values {
   modifier: string;
 }
 
-interface CollectionCreateFormProps {
+interface AddCategoryModalProps {
   open: boolean;
   onCreate: (values: Values) => void;
   onCancel: () => void;
 }
 
-const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
+const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
   open,
   onCreate,
   onCancel,
@@ -22,8 +22,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   return (
     <Modal
       open={open}
-      title="Create a new collection"
-      okText="Create"
+      title="Add Kategori"
+      okText="Save"
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {
@@ -44,62 +44,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         name="form_in_modal"
         initialValues={{ modifier: "public" }}
       >
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[
-            {
-              required: true,
-              message: "Please input the title of collection!",
-            },
-          ]}
-        >
-          <Input />
+        <Form.Item name="name" label="Kategori Name">
+          <Input placeholder="Kategori Name" />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input type="textarea" />
-        </Form.Item>
-        <Form.Item
-          name="modifier"
-          className="collection-create-form_last-form-item"
-        >
-          <Radio.Group>
-            <Radio value="public">Public</Radio>
-            <Radio value="private">Private</Radio>
-          </Radio.Group>
+          <Input.TextArea rows={4} placeholder="Description" />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
-
-const App: React.FC = () => {
-  const [open, setOpen] = useState(false);
-
-  const onCreate = (values: any) => {
-    console.log("Received values of form: ", values);
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button
-        type="primary"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        New Collection
-      </Button>
-      <CollectionCreateForm
-        open={open}
-        onCreate={onCreate}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
-    </div>
-  );
-};
-
-export default App;
+export default AddCategoryModal;
