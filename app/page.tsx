@@ -1,6 +1,11 @@
-import Button from "antd/lib/button";
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dsarea | Masuk",
+  description: "Masuk untuk melanjutkan",
+};
 
 export default function Home() {
   return (
@@ -10,7 +15,7 @@ export default function Home() {
           <Image
             width={400}
             height={400}
-            className="-ml-6 h-32 w-auto"
+            className="m-auto h-32 w-auto"
             src="/DSAREA.png"
             alt="Dsarea Logo"
           />

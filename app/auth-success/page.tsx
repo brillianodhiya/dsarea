@@ -1,16 +1,19 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import { setCookie } from "cookies-next";
 import { useEffect } from "react";
 import Image from "next/image";
 
 const getData = () => {};
 
-export default function AuthSuccess() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const token = params.get("token");
+interface Props {
+  search: any;
+  searchParams: any;
+}
 
+export default function AuthSuccess(props: Props) {
+  console.log(props);
+  const token = props.searchParams.token;
   // mengatur cookie dengan token, masa kadaluwarsa 1 bulan, dan jalur '/'
   setCookie("DS-X-Access-Agent-Token", token, {
     maxAge: 30 * 24 * 60 * 60,
@@ -20,9 +23,9 @@ export default function AuthSuccess() {
 
   //   mengalihkan ke halaman /dashboard setelah 5 detik
   useEffect(() => {
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 500);
+    // setTimeout(() => {
+    redirect("/dashboard");
+    // }, 500);
   }, []);
 
   return (
