@@ -8,3 +8,4 @@ export default function Home() {
     </main>
   );
 }
+// https://dsarea-tryout.vercel.app/auth-success?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMzYxNTgyMDA3NjMzMjM4MDk5MyIsImVtYWlsIjoiZGlhbmNhbmRyYTExMkBnbWFpbC5jb20iLCJuYW1lIjoiRElBTiIsImlhdCI6MTcwNDc2ODQ0OSwiZXhwIjoxNzA0NzcyMDQ5fQ._QxiwouOzlfi15vhxIL2QyPdoO1M1JEVigQiM6mYmK8
