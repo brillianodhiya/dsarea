@@ -22,7 +22,7 @@ export default function AuthSuccess() {
   useEffect(() => {
     setTimeout(() => {
       router.push("/dashboard");
-    }, 1000);
+    }, 500);
   }, []);
 
   return (
