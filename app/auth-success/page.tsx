@@ -4,15 +4,7 @@ import { setCookie } from "cookies-next";
 import { useEffect } from "react";
 import Image from "next/image";
 
-const getData = () => {};
-
-interface Props {
-  search: any;
-  searchParams: any;
-}
-
-export default function AuthSuccess(props: Props) {
-  console.log(props);
+export default function AuthSuccess(props: any) {
   const token = props.searchParams.token;
   // mengatur cookie dengan token, masa kadaluwarsa 1 bulan, dan jalur '/'
   setCookie("DS-X-Access-Agent-Token", token, {
