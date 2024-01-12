@@ -201,7 +201,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 className="!px-2"
                 onClick={onClick}
                 defaultSelectedKeys={[activeKey]}
-                selectedKeys={activeKey}
+                selectedKeys={[activeKey]}
                 items={DsAreaMenu}
               />
             </Sider>
