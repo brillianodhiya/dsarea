@@ -51,8 +51,8 @@ export default function Page() {
           </Col>
         </Row>
         <Row gutter={[24, 24]}>
-          {[...Array(20)].map((e) => (
-            <Col xs={24} sm={12} md={12} lg={8} xl={4} xxl={4}>
+          {[...Array(20)].map((e, i) => (
+            <Col xs={24} sm={12} md={12} lg={8} xl={4} xxl={4} key={i}>
               {/* <Tag
                 style={{
                   position: "absolute",
