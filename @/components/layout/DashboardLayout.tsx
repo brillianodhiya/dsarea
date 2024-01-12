@@ -171,12 +171,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             >
               <Space
                 style={{
-                  borderColor: "#AAD2D3",
-                  borderBottomWidth: 2,
                   width: "100%",
                   alignItems: "center",
                   justifyContent: "center",
                   padding: 13,
+                  borderBottom: "1px solid #AAD2D3",
                 }}
               >
                 <Image src="/DSAREA.png" width={36} height={36} alt="logo" />

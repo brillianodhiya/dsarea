@@ -25,8 +25,7 @@ const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
       style={{
         padding: 0,
         background: "#FFF",
-        borderBottomWidth: 2,
-        borderColor: "#F3F3F3",
+        borderBottom: "1px solid #F3F3F3",
         display: "flex",
         alignItems: "center",
         gap: 10,
