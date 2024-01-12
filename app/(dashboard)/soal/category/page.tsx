@@ -25,7 +25,7 @@ export default function Category() {
     initialData: [],
   });
 
-  console.log(data, "DATAQUERT", isLoading);
+  console.log(isLoading);
 
   return (
     <div>
@@ -66,6 +66,8 @@ export default function Category() {
           pagination={{
             hideOnSinglePage: true,
           }}
+          loading={isLoading}
+          rowKey={"id"}
         >
           <Column
             title="Kategori"
