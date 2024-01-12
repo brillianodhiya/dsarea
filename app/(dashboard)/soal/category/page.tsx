@@ -6,7 +6,9 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
+import { Skeleton } from "antd/lib";
 import Button from "antd/lib/button";
+import SkeletonButton from "antd/lib/skeleton/Button";
 import Column from "antd/lib/table/Column";
 import axios from "axios";
 import { getCookie } from "cookies-next";
@@ -16,16 +18,22 @@ import React from "react";
 export default function Category() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
       const res = await axiosClientInstance.get("/api/soal/category/list");
       return res.data.data;
     },
-    initialData: [],
+    initialData: [
+      {
+        id: 0,
+        name: "test",
+        desc: "test",
+      },
+    ],
   });
 
-  console.log(isLoading);
+  console.log(isFetching);
 
   return (
     <div>
@@ -66,7 +74,6 @@ export default function Category() {
           pagination={{
             hideOnSinglePage: true,
           }}
-          loading={isLoading}
           rowKey={"id"}
         >
           <Column
@@ -75,16 +82,29 @@ export default function Category() {
             key="name"
             width={"20%"}
             render={(text, record) => (
-              <Typography className="!text-[#3A9699]">{text}</Typography>
+              <Skeleton loading={isFetching} active>
+                <Typography className="!text-[#3A9699]">{text}</Typography>
+              </Skeleton>
             )}
           />
-          <Column title="Deskripsi" dataIndex="desc" key="desc" />
+          <Column
+            title="Deskripsi"
+            dataIndex="desc"
+            key="desc"
+            render={(text) => (
+              <Skeleton loading={isFetching} active>
+                {text}
+              </Skeleton>
+            )}
+          />
 
           <Column
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) => <DropdownMenu />}
+            render={(text, record) => (
+              <>{isFetching ? <SkeletonButton active /> : <DropdownMenu />}</>
+            )}
           />
         </Table>
       </Card>
