@@ -30,8 +30,12 @@ import DropdownLogout from "../Dropdown/DropdownLogout";
 import { RootUser } from "./UserTypes";
 import { deleteCookie } from "cookies-next";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Watermark } from "antd/lib";
 
 const { Header, Sider, Content } = Layout;
+
+const queryClient = new QueryClient();
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -129,62 +133,64 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const DsAreaMenu = useMenus();
 
   return (
-    <ProfileContext.Provider value={profileData}>
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sider
-          // trigger={null}
-          // breakpoint="lg"
-          // collapsedWidth="0"
-          // collapsible
-          collapsed={collapsed}
-          breakpoint="md"
-          collapsedWidth="80"
-          onCollapse={(collapsed, type) => {
-            setCollapsed(collapsed);
-          }}
-          style={{
-            width: 500,
-          }}
-        >
-          <Space
-            style={{
-              borderColor: "#AAD2D3",
-              borderBottomWidth: 2,
-              width: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 13,
-            }}
-          >
-            <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
-            {!collapsed && (
-              <Typography.Text
-                strong
+    <QueryClientProvider client={queryClient}>
+      <ProfileContext.Provider value={profileData}>
+        <Watermark content={["AITI", "On Development"]}>
+          <Layout style={{ minHeight: "100vh" }}>
+            <Sider
+              // trigger={null}
+              // breakpoint="lg"
+              // collapsedWidth="0"
+              // collapsible
+              collapsed={collapsed}
+              breakpoint="md"
+              collapsedWidth="80"
+              onCollapse={(collapsed, type) => {
+                setCollapsed(collapsed);
+              }}
+              style={{
+                width: 500,
+              }}
+            >
+              <Space
                 style={{
-                  fontSize: 16,
-                  opacity: collapsed ? 0 : 1,
+                  borderColor: "#AAD2D3",
+                  borderBottomWidth: 2,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 13,
                 }}
               >
-                Digital Skill Area
-              </Typography.Text>
-            )}
-          </Space>
-          <Menu
-            theme="light"
-            mode="inline"
-            style={{
-              backgroundColor: "#EBF5F5",
-              borderWidth: 0,
-              padding: 18,
-            }}
-            className="!px-2"
-            onClick={onClick}
-            defaultSelectedKeys={["1"]}
-            items={DsAreaMenu}
-          />
-        </Sider>
-        <Layout>
-          {/*
+                <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
+                {!collapsed && (
+                  <Typography.Text
+                    strong
+                    style={{
+                      fontSize: 16,
+                      opacity: collapsed ? 0 : 1,
+                    }}
+                  >
+                    Digital Skill Area
+                  </Typography.Text>
+                )}
+              </Space>
+              <Menu
+                theme="light"
+                mode="inline"
+                style={{
+                  backgroundColor: "#EBF5F5",
+                  borderWidth: 0,
+                  padding: 18,
+                }}
+                className="!px-2"
+                onClick={onClick}
+                defaultSelectedKeys={["1"]}
+                items={DsAreaMenu}
+              />
+            </Sider>
+            <Layout>
+              {/*
       
         <Header
           style={{
@@ -247,40 +253,42 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           
         </Header>
       */}
-          <Button
-            type="link"
-            icon={
-              !collapsed ? (
-                <ChevronLeft size={15} color="#AAD2D3" />
-              ) : (
-                <ChevronRight size={15} color="#AAD2D3" />
-              )
-            }
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              borderWidth: 2,
-              borderColor: "#AAD2D3",
-              marginLeft: -20,
-              marginTop: 14,
-              borderRadius: 12,
-              position: "absolute",
-              backgroundColor: "#EBF5F5",
-            }}
-          />
-          <Content
-            style={{
-              // margin: "24px 16px",
-              // padding: 24,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {children}
-          </Content>
-        </Layout>
-      </Layout>
-    </ProfileContext.Provider>
+              <Button
+                type="link"
+                icon={
+                  !collapsed ? (
+                    <ChevronLeft size={15} color="#AAD2D3" />
+                  ) : (
+                    <ChevronRight size={15} color="#AAD2D3" />
+                  )
+                }
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  borderWidth: 2,
+                  borderColor: "#AAD2D3",
+                  marginLeft: -20,
+                  marginTop: 14,
+                  borderRadius: 12,
+                  position: "absolute",
+                  backgroundColor: "#EBF5F5",
+                }}
+              />
+              <Content
+                style={{
+                  // margin: "24px 16px",
+                  // padding: 24,
+                  minHeight: 280,
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+              >
+                {children}
+              </Content>
+            </Layout>
+          </Layout>
+        </Watermark>
+      </ProfileContext.Provider>
+    </QueryClientProvider>
   );
 };
 

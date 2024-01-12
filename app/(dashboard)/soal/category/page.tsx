@@ -3,41 +3,30 @@ import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddCategoryModal from "@dsarea/@/components/Modals/AddCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
-import {
-  Card,
-  Col,
-  Dropdown,
-  DropdownProps,
-  Input,
-  Layout,
-  MenuProps,
-  Progress,
-  Row,
-  Space,
-  Table,
-  Typography,
-} from "antd";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { useQuery } from "@tanstack/react-query";
+import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
 import Button from "antd/lib/button";
 import Column from "antd/lib/table/Column";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import React from "react";
 
-export default function Home() {
+export default function Category() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
-  const data = [
-    {
-      key: "1",
-      category: "Brown",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nemo, corrupti ab dolor excepturi aspernatur vero iste sequi eaque, tempore vel rem architecto nihil, aliquam hic voluptate tempora. Provident, laboriosam?",
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["category"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/soal/category/list");
+      return res.data.data;
     },
-    {
-      key: "2",
-      category: "Python Lengkap",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nemo, corrupti ab dolor excepturi aspernatur vero iste sequi eaque, tempore vel rem architecto nihil, aliquam hic voluptate tempora. Provident, laboriosam?",
-    },
-  ];
+    initialData: [],
+  });
+
+  console.log(data, "DATAQUERT", isLoading);
+
   return (
     <div>
       <AddCategoryModal
@@ -80,14 +69,14 @@ export default function Home() {
         >
           <Column
             title="Kategori"
-            dataIndex="category"
-            key="category"
+            dataIndex="name"
+            key="name"
             width={"20%"}
             render={(text, record) => (
               <Typography className="!text-[#3A9699]">{text}</Typography>
             )}
           />
-          <Column title="Deskripsi" dataIndex="description" key="description" />
+          <Column title="Deskripsi" dataIndex="desc" key="desc" />
 
           <Column
             title="Action"

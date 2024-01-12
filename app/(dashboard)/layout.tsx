@@ -20,6 +20,7 @@ const getDataProfile = async () => {
     };
   }
 };
+
 export default async function Layout({ children }: { children: ReactNode }) {
   const hasCookie = await HasDsAreaCookie();
   if (!hasCookie) {
