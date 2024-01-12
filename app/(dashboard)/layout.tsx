@@ -4,23 +4,35 @@ import { HasDsAreaCookie } from "@dsarea/@/lib/DsAreaCookies";
 import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
-// const getData = async () => {
-//   try {
-//     const res = await axiosInstance.get("/api/users/list/role");
+const getDataProfile = async () => {
+  try {
+    const res = await axiosInstance.get("/api/users/profile");
 
-//     console.log(res);
-//     return res.data;
-//   } catch (error) {
-//     console.log(error);
-//     return [];
-//   }
-// };
+    // console.log(res.data);
+    return {
+      error: false,
+      ...res.data,
+    };
+  } catch (error) {
+    // console.log(error);
+    return {
+      error: true,
+    };
+  }
+};
 export default async function Layout({ children }: { children: ReactNode }) {
   const hasCookie = await HasDsAreaCookie();
   if (!hasCookie) {
     redirect("/");
   }
 
-  // await getData();
-  return <DashboardLayout>{children}</DashboardLayout>;
+  const profileData = await getDataProfile();
+  // console.log(profileData);
+  // if (profileData.error) {
+  // redirect("/");
+  // }
+
+  return (
+    <DashboardLayout profileData={profileData}>{children}</DashboardLayout>
+  );
 }

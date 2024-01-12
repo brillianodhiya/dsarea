@@ -24,13 +24,18 @@ import VoucherIcon from "../icons/VoucherIcon";
 import RoleIcon from "../icons/RoleIcon";
 import SiswaIcon from "../icons/SiswaIcon";
 import PenilaianIcon from "../icons/PenilaianIcon";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { DownOutlined } from "@ant-design/icons";
 import DropdownLogout from "../Dropdown/DropdownLogout";
+import { RootUser } from "./UserTypes";
+import { deleteCookie } from "cookies-next";
+import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 
 const { Header, Sider, Content } = Layout;
+
 type DashboardLayoutProps = {
   children: React.ReactNode;
+  profileData: RootUser;
 };
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -84,7 +89,17 @@ const items: MenuItem[] = [
   ),
 ];
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+  children,
+  profileData,
+}) => {
+  // console.log(profileData);
+  React.useEffect(() => {
+    if (profileData.error) {
+      deleteCookie("DS-X-Access-Agent-Token");
+      redirect("/");
+    }
+  }, [profileData.error]);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -100,61 +115,62 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        // trigger={null}
-        // breakpoint="lg"
-        // collapsedWidth="0"
-        // collapsible
-        collapsed={collapsed}
-        breakpoint="md"
-        collapsedWidth="80"
-        onCollapse={(collapsed, type) => {
-          setCollapsed(collapsed);
-        }}
-        style={{
-          width: 500,
-        }}
-      >
-        <Space
+    <ProfileContext.Provider value={profileData}>
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sider
+          // trigger={null}
+          // breakpoint="lg"
+          // collapsedWidth="0"
+          // collapsible
+          collapsed={collapsed}
+          breakpoint="md"
+          collapsedWidth="80"
+          onCollapse={(collapsed, type) => {
+            setCollapsed(collapsed);
+          }}
           style={{
-            borderColor: "#AAD2D3",
-            borderBottomWidth: 2,
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 13,
+            width: 500,
           }}
         >
-          <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
-          {!collapsed && (
-            <Typography.Text
-              strong
-              style={{
-                fontSize: 16,
-                opacity: collapsed ? 0 : 1,
-              }}
-            >
-              Digital Skill Area
-            </Typography.Text>
-          )}
-        </Space>
-        <Menu
-          theme="light"
-          mode="inline"
-          style={{
-            backgroundColor: "#EBF5F5",
-            borderWidth: 0,
-            padding: 18,
-          }}
-          className="!px-2"
-          onClick={onClick}
-          defaultSelectedKeys={["1"]}
-          items={items}
-        />
-      </Sider>
-      <Layout>
-        {/*
+          <Space
+            style={{
+              borderColor: "#AAD2D3",
+              borderBottomWidth: 2,
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 13,
+            }}
+          >
+            <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
+            {!collapsed && (
+              <Typography.Text
+                strong
+                style={{
+                  fontSize: 16,
+                  opacity: collapsed ? 0 : 1,
+                }}
+              >
+                Digital Skill Area
+              </Typography.Text>
+            )}
+          </Space>
+          <Menu
+            theme="light"
+            mode="inline"
+            style={{
+              backgroundColor: "#EBF5F5",
+              borderWidth: 0,
+              padding: 18,
+            }}
+            className="!px-2"
+            onClick={onClick}
+            defaultSelectedKeys={["1"]}
+            items={items}
+          />
+        </Sider>
+        <Layout>
+          {/*
       
         <Header
           style={{
@@ -217,39 +233,40 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           
         </Header>
       */}
-        <Button
-          type="link"
-          icon={
-            !collapsed ? (
-              <ChevronLeft size={15} color="#AAD2D3" />
-            ) : (
-              <ChevronRight size={15} color="#AAD2D3" />
-            )
-          }
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            borderWidth: 2,
-            borderColor: "#AAD2D3",
-            marginLeft: -20,
-            marginTop: 14,
-            borderRadius: 12,
-            position: "absolute",
-            backgroundColor: "#EBF5F5",
-          }}
-        />
-        <Content
-          style={{
-            // margin: "24px 16px",
-            // padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {children}
-        </Content>
+          <Button
+            type="link"
+            icon={
+              !collapsed ? (
+                <ChevronLeft size={15} color="#AAD2D3" />
+              ) : (
+                <ChevronRight size={15} color="#AAD2D3" />
+              )
+            }
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              borderWidth: 2,
+              borderColor: "#AAD2D3",
+              marginLeft: -20,
+              marginTop: 14,
+              borderRadius: 12,
+              position: "absolute",
+              backgroundColor: "#EBF5F5",
+            }}
+          />
+          <Content
+            style={{
+              // margin: "24px 16px",
+              // padding: 24,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            {children}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ProfileContext.Provider>
   );
 };
 

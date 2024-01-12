@@ -14,7 +14,6 @@ axiosInstance.interceptors.request.use(
     // Mendapatkan token dari cookie
     const token = getCookie("DS-X-Access-Agent-Token", { cookies });
 
-    console.log(token, "TOKEN");
     if (token) {
       // Menetapkan header Authorization dengan token
       config.headers = {

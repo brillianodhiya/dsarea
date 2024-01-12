@@ -2,10 +2,11 @@
 import { Avatar, Badge, Breadcrumb, Button, Layout, Typography } from "antd";
 import { Bell } from "lucide-react";
 import DropdownLogout from "../Dropdown/DropdownLogout";
-import React from "react";
+import React, { useContext } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 
 type HeaderProps = {
   title: string;
@@ -16,6 +17,9 @@ type HeaderProps = {
 const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
   const { Header } = Layout;
   const router = useRouter();
+
+  const { data } = useContext(ProfileContext);
+
   return (
     <Header
       style={{
@@ -77,7 +81,7 @@ const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 30,
+          gap: 24,
         }}
       >
         <Badge count={100}>
@@ -87,8 +91,11 @@ const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
           style={{ backgroundColor: "#D9D9D9", verticalAlign: "middle" }}
           size="large"
           gap={2}
+          src={data.picture}
+          alt={data.name}
+          shape="circle"
         >
-          X
+          {data.name}
         </Avatar>
         <DropdownLogout />
       </div>

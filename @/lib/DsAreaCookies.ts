@@ -8,7 +8,8 @@ export async function GetDsAreaCookie() {
 }
 
 export async function DeleteDsAreaToken() {
-  deleteCookie("DS-X-Access-Agent-Token", { cookies });
+  cookies().delete("DS-X-Access-Agent-Token");
+  // deleteCookie("DS-X-Access-Agent-Token", { cookies });
   return "ok";
 }
 
