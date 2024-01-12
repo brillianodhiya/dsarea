@@ -59,36 +59,44 @@ function getItem(
 }
 
 const itemsSuperAdmin: MenuItem[] = [
-  getItem(<Link href={"/dashboard"}>Dashboard</Link>, "1", <DashboardIcon />),
+  getItem(
+    <Link href={"/dashboard"}>Dashboard</Link>,
+    "dashboard",
+    <DashboardIcon />
+  ),
   getItem("Soal", "sub1", <SoalIcon />, [
     getItem(
       <Link className="sub-menu-item" href={"/soal/category"}>
         Kategori
       </Link>,
-      "2"
+      "category"
     ),
     getItem(
       <Link className="sub-menu-item" href={"/soal/paket-soal"}>
         Paket Soal
       </Link>,
-      "3"
+      "paket-soal"
     ),
     getItem(
       <Link className="sub-menu-item" href={"/soal/product"}>
         Product
       </Link>,
-      "4"
+      "product"
     ),
   ]),
-  getItem(<Link href={"/penilaian"}>Penilaian</Link>, "5", <PenilaianIcon />),
-  getItem(<Link href={"/siswa"}>Siswa</Link>, "6", <SiswaIcon />),
-  getItem(<Link href={"/role"}>User Role</Link>, "7", <RoleIcon />),
-  getItem(<Link href={"/voucher"}>Voucher</Link>, "8", <VoucherIcon />),
-  getItem(<Link href={"/kelas"}>Kelas</Link>, "9", <KelasIcon />),
-  getItem(<Link href={"/banner"}>Banner</Link>, "10", <BannerIcon />),
+  getItem(
+    <Link href={"/penilaian"}>Penilaian</Link>,
+    "penilaian",
+    <PenilaianIcon />
+  ),
+  getItem(<Link href={"/siswa"}>Siswa</Link>, "siswa", <SiswaIcon />),
+  getItem(<Link href={"/role"}>User Role</Link>, "role", <RoleIcon />),
+  getItem(<Link href={"/voucher"}>Voucher</Link>, "voucher", <VoucherIcon />),
+  getItem(<Link href={"/kelas"}>Kelas</Link>, "kelas", <KelasIcon />),
+  getItem(<Link href={"/banner"}>Banner</Link>, "banner", <BannerIcon />),
   getItem(
     <Link href={"/transaction"}>Transaksi</Link>,
-    "11",
+    "transaction",
     <TransaksiIcon />
   ),
 ];
@@ -108,12 +116,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [activeKey, setActiveKey] = useState("1");
-
   const pathname = usePathname();
-  let result =
-    pathname.substring(1).charAt(0).toUpperCase() + pathname.substring(2);
+  const parts = pathname.split("/");
+  let key;
 
+  if (parts[1] === "soal") {
+    key = parts[2].toString();
+  } else {
+    key = parts[1].toString();
+  }
+
+  console.log(key, "key");
+
+  const [activeKey, setActiveKey] = useState(key);
   const onClick: MenuProps["onClick"] = (e) => {
     setActiveKey(e.key);
   };
@@ -185,7 +200,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 }}
                 className="!px-2"
                 onClick={onClick}
-                defaultSelectedKeys={["1"]}
+                defaultSelectedKeys={[activeKey]}
+                selectedKeys={activeKey}
                 items={DsAreaMenu}
               />
             </Sider>
