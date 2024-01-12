@@ -23,8 +23,13 @@ const DropdownLogout: React.FC = () => {
   ];
 
   return (
-    <Dropdown menu={{ items }}>
-      <Space>
+    <Dropdown menu={{ items }} trigger={["click", "hover"]}>
+      <Space
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+      >
         <div>
           <Typography
             style={{
