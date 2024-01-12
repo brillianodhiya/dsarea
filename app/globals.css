@@ -24,7 +24,6 @@
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
     --radius: 0.5rem;
-    
   }
 
   .dark {
@@ -60,7 +59,7 @@
 }
 
 .ant-layout-sider {
-  background-color: #EBF5F5 !important;
+  background-color: #ebf5f5 !important;
   min-width: 250px !important;
   max-width: 250px !important;
   width: 250px !important;
@@ -74,51 +73,57 @@
   width: 80px !important;
 }
 .ant-menu-sub {
-  background-color: #EBF5F5 !important;
+  background-color: #ebf5f5 !important;
 }
 .ant-menu-sub li {
-  background-color: #EBF5F5 !important;
+  background-color: #ebf5f5 !important;
 }
 .ant-menu-item-selected {
-  background-color: #3A9699  !important;
+  background-color: #3a9699 !important;
 }
-.ant-menu-item-selected  a  {
-  color: #FFF  !important;
+.ant-menu-item-selected a {
+  color: #fff !important;
   font-weight: 600 !important;
 }
 .ant-menu-submenu-selected .ant-menu-submenu-title {
-  background-color: #3A9699 !important;
-  color: #FFF !important;
+  background-color: #3a9699 !important;
+  color: #fff !important;
 }
 .ant-menu-item-selected .sub-menu-item {
-  color: #3A9699 !important;
+  color: #3a9699 !important;
   font-weight: 600 !important;
   font-family: var(--font-poppins);
 }
 .ant-menu-item-selected .selected-icon {
-  fill: #FFF
+  fill: #fff;
 }
 .ant-menu-submenu-selected .selected-icon {
-  fill: #FFF;
+  fill: #fff;
 }
 
+/* .ant-menu-item-selected::before {
+  content: "SSS";
+} */
+
+/* .ant-menu-item {
+  content: "ss";
+} */
 .ant-segmented-item {
   transition: #d0e6e7 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
   border-radius: 8px !important;
 }
 
 .ant-segmented-item-selected {
-  background-color: #EBF5F5 !important;
+  background-color: #ebf5f5 !important;
   border-radius: 8px !important;
-  border-color: #3A9699 !important;
+  border-color: #3a9699 !important;
   border-width: 1px !important;
-  color: #3A9699 !important;
+  color: #3a9699 !important;
 }
 
 .ant-segmented-thumb {
   background-color: #d0e6e7 !important;
   border-radius: 8px !important;
-  border-color: #3A9699 !important;
+  border-color: #3a9699 !important;
   border-width: 1px !important;
 }
-
