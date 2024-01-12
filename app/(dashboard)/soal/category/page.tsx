@@ -33,8 +33,6 @@ export default function Category() {
     ],
   });
 
-  console.log(isFetching);
-
   return (
     <div>
       <AddCategoryModal

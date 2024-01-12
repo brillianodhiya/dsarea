@@ -150,7 +150,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <ProfileContext.Provider value={profileData}>
-        <Watermark content={["AITI", "On Development"]}>
+        <Watermark
+        // content={["AITI", "For Development Purpose"]}
+        >
           <Layout style={{ minHeight: "100vh" }}>
             <Sider
               // trigger={null}
