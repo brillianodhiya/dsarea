@@ -91,11 +91,11 @@ const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
           style={{ backgroundColor: "#D9D9D9", verticalAlign: "middle" }}
           size="large"
           gap={2}
-          src={data.picture}
-          alt={data.name}
+          src={data?.picture}
+          alt={data?.name}
           shape="circle"
         >
-          {data.name}
+          {data?.name}
         </Avatar>
         <DropdownLogout />
       </div>

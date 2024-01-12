@@ -54,7 +54,7 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
+const itemsSuperAdmin: MenuItem[] = [
   getItem(<Link href={"/dashboard"}>Dashboard</Link>, "1", <DashboardIcon />),
   getItem("Soal", "sub1", <SoalIcon />, [
     getItem(
@@ -114,6 +114,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     setActiveKey(e.key);
   };
 
+  const useMenus = () => {
+    if (profileData?.data?.ds_user_role.id == 1) {
+      return itemsSuperAdmin;
+    } else if (profileData?.data?.ds_user_role.id == 2) {
+      return [];
+    } else if (profileData?.data?.ds_user_role.id == 3) {
+      return [];
+    } else {
+      return [];
+    }
+  };
+
+  const DsAreaMenu = useMenus();
+
   return (
     <ProfileContext.Provider value={profileData}>
       <Layout style={{ minHeight: "100vh" }}>
@@ -166,7 +180,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             className="!px-2"
             onClick={onClick}
             defaultSelectedKeys={["1"]}
-            items={items}
+            items={DsAreaMenu}
           />
         </Sider>
         <Layout>

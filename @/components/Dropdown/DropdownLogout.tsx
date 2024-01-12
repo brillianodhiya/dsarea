@@ -36,7 +36,7 @@ const DropdownLogout: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            {data.email}
+            {data?.email}
           </Typography>
           <Typography
             style={{
@@ -44,7 +44,7 @@ const DropdownLogout: React.FC = () => {
               textTransform: "capitalize",
             }}
           >
-            {data.ds_user_role.name}
+            {data?.ds_user_role?.name}
           </Typography>
         </div>
         <DownOutlined />
