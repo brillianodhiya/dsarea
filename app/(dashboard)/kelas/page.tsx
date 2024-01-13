@@ -1,14 +1,37 @@
 "use client";
 import { SearchOutlined } from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
-import { Card, Col, Input, Row, Segmented, Tag } from "antd";
+import { formatRupiah } from "@dsarea/@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { Card, Col, Empty, Input, Row, Segmented, Skeleton, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
+import SkeletonImage from "antd/es/skeleton/Image";
+import Image from "next/image";
 import React from "react";
 
 export default function Page() {
   const [activeMenu, setActiveMenu] = React.useState("bootcamp");
-  const [dataKelas, setDataKelas] = React.useState([]);
+  const [page, setPage] = React.useState(10);
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["kelas", page, activeMenu],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(
+        `/api/kelas/${activeMenu}/1/10`
+      );
+      return res.data.data;
+    },
+    initialData: [
+      {
+        id: "id",
+        name: "name",
+        coverImage: null,
+        amount: "0",
+      },
+    ],
+  });
 
   return (
     <div>
@@ -51,24 +74,15 @@ export default function Page() {
           </Col>
         </Row>
         <Row gutter={[24, 24]}>
-          {[...Array(20)].map((e, i) => (
-            <Col xs={24} sm={12} md={12} lg={8} xl={4} xxl={4} key={i}>
-              {/* <Tag
-                style={{
-                  position: "absolute",
-                  // right: 0,
-                  zIndex: 1,
-                }}
-              >
-                Kelas Online
-              </Tag> */}
+          {data.map((e: any, i: any) => (
+            <Col xs={24} sm={12} md={12} lg={8} xl={4} key={i}>
               <Card
                 hoverable
                 style={{
-                  maxWidth: 300,
+                  maxWidth: 252,
                 }}
                 cover={
-                  <>
+                  <div>
                     <Tag
                       style={{
                         position: "absolute",
@@ -81,23 +95,35 @@ export default function Page() {
                       }}
                       color="#AFCF5B"
                     >
-                      Kelas Online
+                      {activeMenu == "bootcamp"
+                        ? "Kelas Cohort/Bootcamp"
+                        : activeMenu === "online"
+                        ? "Kelas Online"
+                        : activeMenu === "digital-product"
+                        ? "Product Digital"
+                        : "Bundling"}
                     </Tag>
-                    <img
-                      alt="example"
-                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                    {/* <SkeletonImage
+                      active
                       style={{
-                        height: 250,
-                        width: 333,
+                        // display: "inline-block",
+                        // width: 250,
+                        width: "auto",
+                        overflow: "hidden",
                       }}
+                    /> */}
+                    <Image
+                      alt="cover image"
+                      src={e.coverImage ? e.coverImage.url : "/card-image.svg"}
+                      width={250}
+                      height={333}
                     />
-                  </>
+                  </div>
                 }
               >
-                <Meta
-                  title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus nisi ratione temporibus? Deleniti itaque consequatur explicabo odio commodi quas molestias, quam quibusdam. A sapiente repellendus, placeat dicta error vitae eius!"
-                  description="Rp 29.000"
-                />
+                <Skeleton loading={isFetching} active>
+                  <Meta title={e.name} description={formatRupiah(e.amount)} />
+                </Skeleton>
               </Card>
             </Col>
           ))}
