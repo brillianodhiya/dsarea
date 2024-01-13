@@ -1,21 +1,21 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddCategoryModal from "@dsarea/@/components/Modals/AddCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
-import { Skeleton } from "antd/lib";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
-import Link from "next/link";
 import React from "react";
 
 export default function Category() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["category"],
@@ -54,6 +54,7 @@ export default function Category() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
               <Button
                 type="primary"
@@ -67,7 +68,7 @@ export default function Category() {
           </Col>
         </Row>
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -101,7 +102,15 @@ export default function Category() {
             dataIndex="action"
             key="action"
             render={(text, record) =>
-              isFetching ? <SkeletonButton active /> : <DropdownMenu />
+              isFetching ? (
+                <SkeletonButton active />
+              ) : (
+                <DropdownMenuAction
+                  onClick={(ev) => {
+                    console.log(ev, "EV");
+                  }}
+                />
+              )
             }
           />
         </Table>

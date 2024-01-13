@@ -1,22 +1,12 @@
 "use client";
-import { Dropdown, DropdownProps, MenuProps } from "antd";
+import { Dropdown, DropdownProps, MenuProps } from "antd/lib";
+// import { Dropdown, DropdownProps, MenuProps } from "antd";
 import { Eye, MoreVertical, PencilLine } from "lucide-react";
 import React, { useState } from "react";
 
-const DropdownMenu = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleMenuClick: MenuProps["onClick"] = (e) => {
-    console.log(e);
-  };
-
-  const handleOpenChange: DropdownProps["onOpenChange"] = (nextOpen, info) => {
-    if (info.source === "trigger" || nextOpen) {
-      setOpen(nextOpen);
-    }
-  };
-
-  const items: MenuProps["items"] = [
+const DropdownMenuAction = ({
+  onClick = (_ev: any) => {},
+  itemLists = [
     {
       label: "View",
       key: "1",
@@ -27,7 +17,21 @@ const DropdownMenu = () => {
       key: "2",
       icon: <PencilLine size={17} />,
     },
-  ];
+  ],
+}) => {
+  const [open, setOpen] = useState(false);
+
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    onClick(e);
+  };
+
+  const handleOpenChange: DropdownProps["onOpenChange"] = (nextOpen, info) => {
+    if (info.source === "trigger" || nextOpen) {
+      setOpen(nextOpen);
+    }
+  };
+
+  const items: MenuProps["items"] = itemLists;
 
   return (
     <Dropdown
@@ -39,10 +43,10 @@ const DropdownMenu = () => {
       open={open}
     >
       <a onClick={(e) => e.preventDefault()}>
-        <MoreVertical color="#000" />
+        <MoreVertical color="#000" size={17} />
       </a>
     </Dropdown>
   );
 };
 
-export default DropdownMenu;
+export default DropdownMenuAction;
