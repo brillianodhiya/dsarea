@@ -20,14 +20,15 @@ const DropdownMenu = () => {
     {
       label: "View",
       key: "1",
-      icon: <Eye />,
+      icon: <Eye size={17} />,
     },
     {
       label: "Edit",
       key: "2",
-      icon: <PencilLine />,
+      icon: <PencilLine size={17} />,
     },
   ];
+
   return (
     <Dropdown
       menu={{

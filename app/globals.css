@@ -121,7 +121,7 @@
   margin-right: 8px;
 }
 
-.ant-menu-item-selected::before {
+.ant-menu-item-only-child.ant-menu-item-selected::before {
   content: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCAyMCA0NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGxpbmUgeDE9IjEwIiB5MT0iLTIuMTg1NTdlLTA4IiB4Mj0iMTAiIHkyPSI0NCIgc3Ryb2tlPSIjM0E5Njk5Ii8+CjxjaXJjbGUgY3g9IjEwIiBjeT0iMjIiIHI9IjQiIGZpbGw9IiMzQTk2OTkiLz4KPC9zdmc+Cg==);
   height: 100%;
   margin-left: -24px;

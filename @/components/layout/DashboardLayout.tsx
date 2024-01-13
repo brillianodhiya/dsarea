@@ -121,8 +121,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     key = parts[1].toString();
   }
 
-  console.log(key, "key");
-
   const [activeKey, setActiveKey] = useState(key);
   const onClick: MenuProps["onClick"] = (e) => {
     setActiveKey(e.key);

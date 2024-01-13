@@ -9,9 +9,8 @@ import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
 import { Skeleton } from "antd/lib";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
+import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
-import axios from "axios";
-import { getCookie } from "cookies-next";
 import Link from "next/link";
 import React from "react";
 
@@ -73,36 +72,37 @@ export default function Category() {
             hideOnSinglePage: true,
           }}
           rowKey={"id"}
+          size="middle"
         >
           <Column
             title="Kategori"
             dataIndex="name"
             key="name"
             width={"20%"}
-            render={(text, record) => (
-              <Skeleton loading={isFetching} active>
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
                 <Typography className="!text-[#3A9699]">{text}</Typography>
-              </Skeleton>
-            )}
+              )
+            }
           />
           <Column
             title="Deskripsi"
             dataIndex="desc"
             key="desc"
-            render={(text) => (
-              <Skeleton loading={isFetching} active>
-                {text}
-              </Skeleton>
-            )}
+            render={(text) =>
+              isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
           />
 
           <Column
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) => (
-              <>{isFetching ? <SkeletonButton active /> : <DropdownMenu />}</>
-            )}
+            render={(text, record) =>
+              isFetching ? <SkeletonButton active /> : <DropdownMenu />
+            }
           />
         </Table>
       </Card>
