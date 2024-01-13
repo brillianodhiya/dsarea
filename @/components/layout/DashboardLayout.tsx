@@ -147,6 +147,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const DsAreaMenu = useMenus();
 
+  const useOpens = () => {
+    if (["category", "paket-soal", "product"].includes(key)) {
+      return ["sub1"];
+    } else {
+      return [];
+    }
+  };
+
+  const opens = useOpens();
+
   return (
     <QueryClientProvider client={queryClient}>
       <ProfileContext.Provider value={profileData}>
@@ -204,6 +214,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 defaultSelectedKeys={[activeKey]}
                 selectedKeys={[activeKey]}
                 items={DsAreaMenu}
+                defaultOpenKeys={opens}
               />
             </Sider>
             <Layout>
