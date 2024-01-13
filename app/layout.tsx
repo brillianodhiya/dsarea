@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import ConfigProvider from "antd/lib/config-provider";
-import { QueryClient } from "@tanstack/react-query";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,8 +15,6 @@ export const metadata: Metadata = {
   title: "Dsarea",
   description: "Tryout application",
 };
-
-const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,

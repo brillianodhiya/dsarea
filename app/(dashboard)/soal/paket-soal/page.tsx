@@ -1,7 +1,7 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddCategoryModal from "@dsarea/@/components/Modals/AddCategoryModal";
+import AddCategoryModal from "@dsarea/@/components/Modals/Category/AddCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import {
   Card,

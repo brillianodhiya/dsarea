@@ -1,12 +1,13 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddCategoryModal from "@dsarea/@/components/Modals/AddCategoryModal";
+import AddCategoryModal from "@dsarea/@/components/Modals/Category/AddCategoryModal";
+import ViewCategoryModal from "@dsarea/@/components/Modals/Category/ViewCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
+import { Card, Col, Input, Row, Space, Table, Typography, message } from "antd";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
@@ -16,9 +17,14 @@ import React from "react";
 export default function Category() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
   const [searchText, setSearchText] = React.useState("");
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+  const [dataSelected, setDataSelected] = React.useState({});
+  const [countFetch, setCountFetch] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
 
   const { data, isFetching } = useQuery({
-    queryKey: ["category"],
+    queryKey: ["category", countFetch],
     queryFn: async () => {
       const res = await axiosClientInstance.get("/api/soal/category/list");
       return res.data.data;
@@ -36,8 +42,33 @@ export default function Category() {
     <div>
       <AddCategoryModal
         onCancel={() => setOpenAddModal(false)}
-        onCreate={() => {}}
+        onCreate={async (values) => {
+          try {
+            setLoading(true);
+            const res = await axiosClientInstance.post(
+              "/api/soal/category/create",
+              {
+                name: values.title,
+                desc: values.description,
+              }
+            );
+            setCountFetch(countFetch + 1);
+            setLoading(false);
+            message.success(`${res.data.message}`);
+            setOpenAddModal(false);
+          } catch (error) {
+            console.log(error);
+          }
+        }}
         open={openAddModal}
+        loading={loading}
+      />
+      <ViewCategoryModal
+        onCancel={() => setOpenViewModal(false)}
+        onSubmit={() => setOpenViewModal(false)}
+        data={dataSelected}
+        open={openViewModal}
+        loading={loading}
       />
       <CustomHeader title="Soal" />
 
@@ -101,13 +132,20 @@ export default function Category() {
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />
               ) : (
                 <DropdownMenuAction
                   onClick={(ev) => {
-                    console.log(ev, "EV");
+                    // console.log(ev, "EV");
+                    if (ev.key == 1) {
+                      setOpenViewModal(true);
+                      setDataSelected(record);
+                    } else if (ev.key == 2) {
+                      setOpenEditModal(true);
+                      setDataSelected(record);
+                    }
                   }}
                 />
               )

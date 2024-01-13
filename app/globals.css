@@ -24,6 +24,7 @@
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
     --radius: 0.5rem;
+    --font-sans: "__Poppins_6d1a03", "__Poppins_Fallback_6d1a03";
   }
 
   .dark {
@@ -159,6 +160,7 @@
   color: #fff !important;
   /* font-weight: 600 !important; */
   font-family: var(--font-poppins);
+  box-shadow: 0px 1px 2px 0px #1018280d !important;
 }
 
 .ant-btn {
@@ -177,6 +179,11 @@
 
 .ant-btn-default:hover {
   color: #3a9699 !important;
+}
+
+.ant-btn-default {
+  border: 1px solid #f7f7f7 !important;
+  box-shadow: 0px 1px 2px 0px #1018280d !important;
 }
 
 .ant-btn:hover {
@@ -198,4 +205,24 @@
 
 .ant-dropdown-menu-item:hover {
   background-color: #ebf5f5 !important;
+}
+
+.ant-menu-item-selected {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-input-affix-wrapper:focus,
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-input-affix-wrapper:focus-within {
+  border-color: #3a9699 !important;
+  box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
+}
+
+.ant-typography {
+  font-family: var(--font-poppins) !important;
+}
+
+* {
+  font-family: "__Poppins_6d1a03", "__Poppins_Fallback_6d1a03";
 }

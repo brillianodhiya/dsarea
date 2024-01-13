@@ -41,8 +41,9 @@ const DropdownMenuAction = ({
       }}
       onOpenChange={handleOpenChange}
       open={open}
+      trigger={["click", "hover"]}
     >
-      <span onClick={(e) => e.preventDefault()}>
+      <span className="cursor-pointer" onClick={(e) => e.preventDefault()}>
         <MoreVertical color="#000" size={17} />
       </span>
     </Dropdown>
