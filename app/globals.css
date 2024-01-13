@@ -152,3 +152,50 @@
   border-color: #3a9699 !important;
   border-width: 1px !important;
 }
+
+.ant-btn-primary {
+  background-color: #3a9699 !important;
+  border-color: #3a9699 !important;
+  color: #fff !important;
+  /* font-weight: 600 !important; */
+  font-family: var(--font-poppins);
+}
+
+.ant-btn {
+  /* font-weight: 600 !important; */
+  font-family: var(--font-poppins);
+}
+
+.ant-btn-link {
+  /* font-weight: 600 !important; */
+  font-family: var(--font-poppins);
+}
+
+.ant-btn-link:hover {
+  color: #3a9699 !important;
+}
+
+.ant-btn-default:hover {
+  color: #3a9699 !important;
+}
+
+.ant-btn:hover {
+  border-color: #3a9699 !important;
+}
+
+.ant-input:hover {
+  border-color: #3a9699 !important;
+}
+
+.ant-input:focus {
+  border-color: #3a9699 !important;
+  box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
+}
+
+.ant-input-affix-wrapper:hover {
+  border-color: #3a9699 !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: #ebf5f5 !important;
+}
