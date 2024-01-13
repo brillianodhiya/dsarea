@@ -8,12 +8,9 @@ import {
   Typography,
   Space,
   MenuProps,
-  Badge,
-  Avatar,
-  Dropdown,
 } from "antd";
 import Image from "next/image";
-import { Bell, BellIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import DashboardIcon from "../icons/DashboardIcon";
 import SoalIcon from "../icons/SoalIcon";
 import Link from "next/link";
@@ -25,8 +22,6 @@ import RoleIcon from "../icons/RoleIcon";
 import SiswaIcon from "../icons/SiswaIcon";
 import PenilaianIcon from "../icons/PenilaianIcon";
 import { redirect, usePathname } from "next/navigation";
-import { DownOutlined } from "@ant-design/icons";
-import DropdownLogout from "../Dropdown/DropdownLogout";
 import { RootUser } from "./UserTypes";
 import { deleteCookie } from "cookies-next";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
@@ -118,7 +113,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   } = theme.useToken();
   const pathname = usePathname();
   const parts = pathname.split("/");
-  let key;
+  let key: string;
 
   if (parts[1] === "soal") {
     key = parts[2].toString();
