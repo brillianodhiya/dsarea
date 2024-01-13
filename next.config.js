@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["media.mayar.club"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media.mayar.club",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "api-dsarea.aitilokal.com",
+        pathname: "**",
+      },
+    ],
   },
 };
 

@@ -112,11 +112,13 @@ export default function Page() {
                         overflow: "hidden",
                       }}
                     /> */}
+
                     <Image
                       alt="cover image"
                       src={e.coverImage ? e.coverImage.url : "/card-image.svg"}
                       width={250}
                       height={333}
+                      className="w-full aspect-square object-contain object-center"
                     />
                   </div>
                 }
