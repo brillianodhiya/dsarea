@@ -2,6 +2,7 @@
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddCategoryModal from "@dsarea/@/components/Modals/Category/AddCategoryModal";
+import EditCategoryModal from "@dsarea/@/components/Modals/Category/EditCategoryModal";
 import ViewCategoryModal from "@dsarea/@/components/Modals/Category/ViewCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
@@ -19,7 +20,11 @@ export default function Category() {
   const [searchText, setSearchText] = React.useState("");
   const [openViewModal, setOpenViewModal] = React.useState(false);
   const [openEditModal, setOpenEditModal] = React.useState(false);
-  const [dataSelected, setDataSelected] = React.useState({});
+  const [dataSelected, setDataSelected] = React.useState({
+    id: 0,
+    name: "",
+    desc: "",
+  });
   const [countFetch, setCountFetch] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
@@ -57,11 +62,52 @@ export default function Category() {
             message.success(`${res.data.message}`);
             setOpenAddModal(false);
           } catch (error) {
-            console.log(error);
+            setLoading(false);
+            message.error(
+              `${(error as any).response.data.message} : ${
+                (error as any).response.data.data
+              }`
+            );
           }
         }}
         open={openAddModal}
         loading={loading}
+      />
+      <EditCategoryModal
+        onCancel={() => setOpenEditModal(false)}
+        onCreate={async (values) => {
+          try {
+            setLoading(true);
+            const res = await axiosClientInstance.patch(
+              "/api/soal/category/change/status/" + dataSelected.id,
+              {
+                name: values.title,
+                desc: values.description,
+              }
+            );
+            setCountFetch(countFetch + 1);
+            setLoading(false);
+            message.success(`${res.data.message}`);
+            setOpenEditModal(false);
+            setOpenViewModal(false);
+          } catch (error) {
+            setLoading(false);
+            message.error(
+              `${(error as any).response.data.message} : ${
+                (error as any).response.data.data
+              }`
+            );
+            console.log(error);
+          }
+        }}
+        open={openEditModal}
+        loading={loading}
+        initialValues={
+          {
+            title: dataSelected.name,
+            description: dataSelected.desc,
+          } as any
+        }
       />
       <ViewCategoryModal
         onCancel={() => setOpenViewModal(false)}
@@ -69,6 +115,7 @@ export default function Category() {
         data={dataSelected}
         open={openViewModal}
         loading={loading}
+        onEdit={() => setOpenEditModal(true)}
       />
       <CustomHeader title="Soal" />
 

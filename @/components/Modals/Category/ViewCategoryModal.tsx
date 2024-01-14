@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Form, Input, Modal, Spin, Typography } from "antd";
+import { Button, Modal, Space, Spin, Typography } from "antd";
 
 interface Values {
   title: string;
@@ -11,6 +11,7 @@ interface ModalProps {
   open: boolean;
   onSubmit: () => void;
   onCancel: () => void;
+  onEdit: () => void;
   loading: boolean;
   data: any;
 }
@@ -19,12 +20,13 @@ const ViewCategoryModal: React.FC<ModalProps> = ({
   open,
   onSubmit,
   onCancel,
+  onEdit,
   loading,
   data,
 }) => {
-  const [form] = Form.useForm();
   return (
     <Modal
+      zIndex={90}
       open={open}
       title={"View Kategori"}
       okText="Save"
@@ -33,6 +35,16 @@ const ViewCategoryModal: React.FC<ModalProps> = ({
       onOk={() => {
         onSubmit();
       }}
+      footer={
+        <div>
+          <Space>
+            <Button onClick={onEdit}>Edit</Button>
+            <Button onClick={onSubmit} type="primary">
+              Close
+            </Button>
+          </Space>
+        </div>
+      }
     >
       <Spin spinning={loading}>
         <div
