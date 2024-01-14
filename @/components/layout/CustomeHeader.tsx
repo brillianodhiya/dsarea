@@ -14,7 +14,11 @@ type HeaderProps = {
   subMenu?: any;
 };
 
-const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
+const CustomHeader: React.FC<HeaderProps> = ({
+  title,
+  isSubMenu = false,
+  subMenu,
+}) => {
   const { Header } = Layout;
   const router = useRouter();
 
@@ -42,11 +46,7 @@ const CustomHeader: React.FC<HeaderProps> = ({ title, isSubMenu = false }) => {
               {
                 title: "Home",
               },
-              {
-                title: "Application Center",
-                // href: "",
-              },
-            ]}
+            ].concat(subMenu)}
           />
           <div
             style={{

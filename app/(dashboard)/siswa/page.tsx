@@ -17,6 +17,7 @@ import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
 import moment from "moment";
+import Link from "next/link";
 import React from "react";
 
 export default function Page() {
@@ -92,13 +93,18 @@ export default function Page() {
             title="Nama Siswa"
             dataIndex="name"
             key="name"
-            render={(text) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Space>
                   <Avatar size={"small"} />
-                  {text}
+                  <Link
+                    href={"/siswa/" + record.id}
+                    className="!text-[#3A9699]"
+                  >
+                    {text}
+                  </Link>
                 </Space>
               )
             }
