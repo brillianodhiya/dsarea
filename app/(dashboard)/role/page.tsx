@@ -1,70 +1,40 @@
 "use client";
 import {
   CheckCircleFilled,
-  CheckOutlined,
   MinusCircleFilled,
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddVourcherModal from "@dsarea/@/components/Modals/AddVoucherModal";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
+import { Avatar, Card, Col, Input, Row, Space, Table, Typography } from "antd";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
-import moment from "moment";
 import React from "react";
 
 export default function Page() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
-  const isFetching = false;
-
-  // const { data, isFetching } = useQuery({
-  //   queryKey: ["category"],
-  //   queryFn: async () => {
-  //     const res = await axiosClientInstance.get("/api/soal/category/list");
-  //     return res.data.data;
-  //   },
-  //   initialData: [
-  //     {
-  //       id: 0,
-  //       name: "test",
-  //       desc: "test",
-  //     },
-  //   ],
-  // });
-  const data = [
-    {
-      id: "0",
-      name: "name",
-      voucher: "name",
-      qouta: 0,
-      expired: 9,
-      diskon: 10,
-      status: "active",
+  const { data, isFetching } = useQuery({
+    queryKey: ["Role"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/users/list?role_id=1,2");
+      return res.data.data;
     },
-    {
-      id: "1",
-      name: "name",
-      voucher: "name",
-      qouta: 0,
-      expired: 9,
-      diskon: 10,
-      status: "inactive",
-    },
-  ];
+    initialData: [
+      {
+        id: 0,
+        name: "test",
+        desc: "test",
+      },
+    ],
+  });
 
   return (
     <div>
-      {/* <AddVourcherModal
-        open={openAddModal}
-        onCreate={() => {}}
-        onCancel={() => setOpenAddModal(false)}
-      /> */}
       <CustomHeader title="User Role" />
 
       <Card className="!m-6">
@@ -102,11 +72,18 @@ export default function Page() {
           size="middle"
         >
           <Column
-            title="Name"
+            title="Nama Siswa"
             dataIndex="name"
             key="name"
-            render={(text) =>
-              isFetching ? <SkeletonInput active size={"small"} /> : text
+            render={(text, record: any) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <Space>
+                  <Avatar size={"small"} src={record.picture} />
+                  <Typography className="!text-[#3A9699]">{text}</Typography>
+                </Space>
+              )
             }
           />
           <Column
@@ -122,11 +99,13 @@ export default function Page() {
             title="Role"
             dataIndex="role"
             key="role"
-            render={(text) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                <div>{text}</div>
+                <Typography className="capitalize">
+                  {record.ds_user_role.name}
+                </Typography>
               )
             }
           />
@@ -139,15 +118,15 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="capitalize">
-                  {text == "active" ? (
+                  {text == true ? (
                     <>
                       <CheckCircleFilled className="!text-[#32D583]" />
-                      {" " + text}
+                      {" Active"}
                     </>
                   ) : (
                     <>
                       <MinusCircleFilled className="!text-[#F04438]" />
-                      {" " + text}
+                      {" Inactive"}
                     </>
                   )}
                 </Typography>
@@ -160,7 +139,11 @@ export default function Page() {
             dataIndex="action"
             key="action"
             render={(text, record) =>
-              isFetching ? <SkeletonButton active /> : <DropdownMenu />
+              isFetching ? (
+                <SkeletonButton active />
+              ) : (
+                <DropdownMenuAction itemLists={[]} />
+              )
             }
           />
         </Table>

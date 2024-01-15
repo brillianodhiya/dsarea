@@ -1,63 +1,39 @@
 "use client";
 import {
   CheckCircleFilled,
-  CheckOutlined,
   MinusCircleFilled,
-  PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddVourcherModal from "@dsarea/@/components/Modals/AddVoucherModal";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, Card, Col, Input, Row, Space, Table, Typography } from "antd";
-import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
+import { Eye } from "lucide-react";
 import moment from "moment";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function Page() {
-  const [openAddModal, setOpenAddModal] = React.useState(false);
-  const isFetching = false;
+  const router = useRouter();
 
-  // const { data, isFetching } = useQuery({
-  //   queryKey: ["category"],
-  //   queryFn: async () => {
-  //     const res = await axiosClientInstance.get("/api/soal/category/list");
-  //     return res.data.data;
-  //   },
-  //   initialData: [
-  //     {
-  //       id: 0,
-  //       name: "test",
-  //       desc: "test",
-  //     },
-  //   ],
-  // });
-  const data = [
-    {
-      id: "0",
-      name: "name",
-      email: "name@mail.com",
-      qouta: 0,
-      expired: 9,
-      diskon: 10,
-      status: "active",
+  const { data, isFetching } = useQuery({
+    queryKey: ["Siswa"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/users/list?role_id=3");
+      return res.data.data;
     },
-    {
-      id: "1",
-      name: "name",
-      email: "name@mail.com",
-      qouta: 0,
-      expired: 9,
-      diskon: 10,
-      status: "inactive",
-    },
-  ];
+    initialData: [
+      {
+        id: 0,
+        name: "test",
+        desc: "test",
+      },
+    ],
+  });
 
   return (
     <div>
@@ -98,13 +74,8 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Space>
-                  <Avatar size={"small"} />
-                  <Link
-                    href={"/siswa/" + record.id}
-                    className="!text-[#3A9699]"
-                  >
-                    {text}
-                  </Link>
+                  <Avatar size={"small"} src={record.picture} />
+                  <Typography className="!text-[#3A9699]">{text}</Typography>
                 </Space>
               )
             }
@@ -119,14 +90,16 @@ export default function Page() {
           />
 
           <Column
-            title="Last Login"
+            title="Last Access"
             dataIndex="role"
             key="role"
-            render={(text) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                <div>{moment().format("DD/MM/YYYY HH:mm")}</div>
+                <div>
+                  {moment(record.last_access).format("DD/MM/YYYY HH:mm")}
+                </div>
               )
             }
           />
@@ -139,15 +112,15 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="capitalize">
-                  {text == "active" ? (
+                  {text == true ? (
                     <>
                       <CheckCircleFilled className="!text-[#32D583] text-[10px]" />
-                      {" " + text}
+                      {" Active"}
                     </>
                   ) : (
                     <>
                       <MinusCircleFilled className="!text-[#F04438] text-[10px]" />
-                      {" " + text}
+                      {" Inactive"}
                     </>
                   )}
                 </Typography>
@@ -159,8 +132,23 @@ export default function Page() {
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) =>
-              isFetching ? <SkeletonButton active /> : <DropdownMenu />
+            render={(text, record: any) =>
+              isFetching ? (
+                <SkeletonButton active />
+              ) : (
+                <DropdownMenuAction
+                  itemLists={[
+                    {
+                      label: "View",
+                      key: "1",
+                      icon: <Eye size={17} />,
+                    },
+                  ]}
+                  onClick={(e) => {
+                    router.push("/siswa/" + record.id);
+                  }}
+                />
+              )
             }
           />
         </Table>
