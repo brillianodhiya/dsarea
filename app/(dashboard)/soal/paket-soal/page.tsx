@@ -1,42 +1,44 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddCategoryModal from "@dsarea/@/components/Modals/Category/AddCategoryModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
-import {
-  Card,
-  Col,
-  Dropdown,
-  DropdownProps,
-  Input,
-  Layout,
-  MenuProps,
-  Progress,
-  Row,
-  Space,
-  Table,
-  Typography,
-} from "antd";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { useQuery } from "@tanstack/react-query";
+import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
+import SkeletonButton from "antd/es/skeleton/Button";
+import SkeletonInput from "antd/es/skeleton/Input";
 import Button from "antd/lib/button";
 import Column from "antd/lib/table/Column";
-import Link from "next/link";
 import React from "react";
+import { Eye, PencilLine } from "lucide-react";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
+import Link from "next/link";
 
 export default function Home() {
-  const data = [
-    {
-      key: "1",
-      category: "Brown",
-      soal: 10,
-      duration: 60,
+  const [countFetch, setCountFetch] = React.useState(0);
+  const [searchText, setSearchText] = React.useState("");
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["sub_category", countFetch],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/soal/sub/category/list");
+      return res.data.data;
     },
-    {
-      key: "2",
-      category: "Python Lengkap",
-      soal: 10,
-      duration: 120,
-    },
-  ];
+    initialData: [
+      {
+        id: 0,
+        title: "test",
+        duration: 12,
+        rules: "deskripsi",
+        total: 80,
+        ds_soal_category: {
+          id: 1,
+          name: "TKP SKD CPNS1",
+          desc: "Category CPNS1",
+        },
+      },
+    ],
+  });
   return (
     <div>
       <CustomHeader title="Soal" />
@@ -45,7 +47,7 @@ export default function Home() {
         <Row className="mb-4" justify={"space-between"} wrap>
           <Col>
             <Typography.Text strong className="!text-xl">
-              List Soal
+              List Soal (Sub Kategori)
             </Typography.Text>
           </Col>
           <Col>
@@ -54,53 +56,91 @@ export default function Home() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
-              <Button
-                type="primary"
-                onClick={() => {}}
-                color="red"
-                icon={<PlusOutlined />}
-              >
-                Buat Soal
-              </Button>
+              <Link href={"/soal/paket-soal/add-soal"}>
+                <Button type="primary" color="red" icon={<PlusOutlined />}>
+                  Buat Soal
+                </Button>
+              </Link>
             </Space>
           </Col>
         </Row>
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
+          rowKey={"id"}
         >
           <Column
             title="Judul"
-            dataIndex="category"
-            key="category"
-            render={(text, record) => (
-              <Typography className="!text-[#3A9699]">{text}</Typography>
-            )}
+            dataIndex="title"
+            key="title"
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <Typography className="!text-[#3A9699]">{text}</Typography>
+              )
+            }
           />
           <Column
             title="Kategori"
-            dataIndex="category"
+            dataIndex={["ds_soal_category", "name"]}
             key="category"
-            render={(text, record) => (
-              <Typography className="!text-[#3A9699]">{text}</Typography>
-            )}
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <Typography className="!text-[#3A9699]">{text}</Typography>
+              )
+            }
           />
-          <Column title="Jumlah Soal" dataIndex="soal" key="soal" />
+          <Column
+            title="Jumlah Soal"
+            dataIndex="total"
+            key="total"
+            render={(text) =>
+              isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+          />
           <Column
             title="Durasi"
             dataIndex="duration"
             key="duration"
-            render={(text, record) => <Typography>{text} Menit</Typography>}
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <Typography>{text} Menit</Typography>
+              )
+            }
           />
-
           <Column
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) => <DropdownMenu />}
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonButton active />
+              ) : (
+                <DropdownMenu
+                  itemLists={[
+                    {
+                      key: "Preview",
+                      label: "Preview",
+                      icon: <Eye size={17} />,
+                    },
+                    {
+                      label: "Edit",
+                      key: "2",
+                      icon: <PencilLine size={17} />,
+                    },
+                  ]}
+                />
+              )
+            }
           />
         </Table>
       </Card>

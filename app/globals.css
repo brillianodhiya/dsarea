@@ -226,3 +226,42 @@
 * {
   font-family: "__Poppins_6d1a03", "__Poppins_Fallback_6d1a03";
 }
+
+.ant-collapse-header {
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.ant-select-arrow {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-select:not(
+    .ant-select-disabled
+  ):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover
+  .ant-select-selector {
+  border-color: #3a9699 !important;
+}
+
+.ant-collapse-header-text {
+  font-weight: 600;
+}
+
+.anticon-edit {
+  color: #3a9699 !important;
+}
+
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-input-number-affix-wrapper:hover {
+  border-color: #3a9699 !important;
+}
+
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-input-number-affix-wrapper:focus,
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-input-number-affix-wrapper:focus-within {
+  border-color: #3a9699 !important;
+  box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
+}
