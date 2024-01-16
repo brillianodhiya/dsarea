@@ -7,7 +7,7 @@ import ViewCategoryModal from "@dsarea/@/components/Modals/Category/ViewCategory
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, Col, Input, Row, Space, Table, Typography, message } from "antd";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
@@ -27,6 +27,7 @@ export default function Category() {
   });
   const [countFetch, setCountFetch] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
+  const queryClient = useQueryClient();
 
   const { data, isFetching } = useQuery({
     queryKey: ["category", countFetch],
@@ -57,7 +58,9 @@ export default function Category() {
                 desc: values.description,
               }
             );
-            setCountFetch(countFetch + 1);
+            queryClient.invalidateQueries({
+              queryKey: ["category"],
+            });
             setLoading(false);
             message.success(`${res.data.message}`);
             setOpenAddModal(false);
@@ -85,7 +88,9 @@ export default function Category() {
                 desc: values.description,
               }
             );
-            setCountFetch(countFetch + 1);
+            queryClient.invalidateQueries({
+              queryKey: ["category"],
+            });
             setLoading(false);
             message.success(`${res.data.message}`);
             setOpenEditModal(false);
