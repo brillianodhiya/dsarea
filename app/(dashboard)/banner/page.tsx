@@ -122,7 +122,8 @@ export default function Page() {
           >
             <Image
               alt="example"
-              src={"/card-image.svg"}
+              // src={"/card-image.svg"}
+              src={e.image}
               width={240}
               height={100}
             />
