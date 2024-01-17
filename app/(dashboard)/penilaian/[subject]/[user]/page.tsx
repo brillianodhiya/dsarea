@@ -1,5 +1,5 @@
 "use client";
-import { SearchOutlined } from "@ant-design/icons";
+import { CalendarOutlined, SearchOutlined } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
@@ -27,7 +27,7 @@ export default function Page() {
   const router = useRouter();
   const submenu = [
     {
-      title: "Home",
+      title: "Penilaian",
     },
     {
       title: "Sub Menu",
@@ -77,11 +77,12 @@ export default function Page() {
       <CustomHeader title="Sub Menu" isSubMenu={true} subMenu={submenu} />
       <Card className="!m-6">
         <Row className="mb-4" justify={"space-between"} wrap>
-          <Col span={24}>
-            <Space>
+          <Col>
+            <div className="flex items-center gap-x-2">
               <Typography.Text strong className="!text-xl">
-                Result : Try Out
+                Penilaian : Try Outs
               </Typography.Text>
+              <Tag>Matematika</Tag>
               <Tag
                 color="#EBF5F5"
                 style={{
@@ -96,42 +97,61 @@ export default function Page() {
                   TKP SKD CPNS
                 </Typography>
               </Tag>
-            </Space>
-          </Col>
-          <Col>
-            <Typography>Expired at : Unlimited</Typography>
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                flexWrap: "wrap",
-                alignItems: "center",
-              }}
-            >
-              <Space>
-                <TimeIcon />
-                <Typography.Text strong style={{ color: "#FDB022" }}>
-                  90 min
-                </Typography.Text>
-              </Space>
-              <Space>
-                <CalendarIcon size={16} />
-                {moment().format("DD/MM/YYYY")}
-              </Space>
-              <Space>
-                <Badge color="#3A9699" />
-                Total Pertanyaan : 90
-              </Space>
+            </div>
+            <div>
+              <div>
+                <Typography>Nama Siswa : Dianne Russell</Typography>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                }}
+              >
+                <Space>
+                  <TimeIcon />
+                  <Typography.Text strong style={{ color: "#FDB022" }}>
+                    90 min
+                  </Typography.Text>
+                </Space>
+
+                <Space>
+                  <Badge color="#32D583" />
+                  Terjawab : 84
+                </Space>
+                <Space>
+                  <Badge color="#F04438" />
+                  Dilewati : 6
+                </Space>
+                <Space>
+                  <Badge color="#3A9699" />
+                  Total Pertanyaan : 90
+                </Space>
+              </div>
             </div>
           </Col>
           <Col>
-            <Button type="primary" disabled style={{ borderWidth: 0 }}>
-              Publish Hasil Penilaian
-            </Button>
-            <Typography>9 dari 79 siswa telah di nilai</Typography>
+            <Typography>Tanggal Pengerjaan</Typography>
+            <Typography>
+              <CalendarOutlined
+                style={{
+                  color: "#FDB022",
+                }}
+              />
+              {moment().format("DD/MM/YYYY HH:mm")}
+            </Typography>
+            <Typography>Durasi Pengerjaan : 85 min 30 sec</Typography>
+          </Col>
+          <Col>
+            <div className="bg-[#EBF5F5] rounded-md p-2">
+              Total Score
+              <Typography.Paragraph strong>223</Typography.Paragraph>
+            </div>
           </Col>
         </Row>
-        <Table
+        {/* <Table
           dataSource={data}
           pagination={{
             hideOnSinglePage: true,
@@ -163,7 +183,7 @@ export default function Page() {
             key="action"
             render={(text, record) => <DropdownMenu />}
           />
-        </Table>
+        </Table> */}
       </Card>
     </div>
   );

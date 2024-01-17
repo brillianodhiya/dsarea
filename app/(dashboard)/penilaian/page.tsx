@@ -1,63 +1,54 @@
 "use client";
 import { SearchOutlined } from "@ant-design/icons";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
-import {
-  Card,
-  Col,
-  Dropdown,
-  DropdownProps,
-  Input,
-  Layout,
-  MenuProps,
-  Progress,
-  Row,
-  Table,
-  Typography,
-} from "antd";
-import Button from "antd/lib/button";
+import { Card, Col, Input, Progress, Row, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
-import Link from "next/link";
+import { Eye } from "lucide-react";
+import moment from "moment";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const data = [
     {
-      key: "1",
+      id: "1",
       product: "Try Out",
-      category: "Brown",
+      tanggal: "Brown",
       date: 32,
       siswa: 90,
       status: 70,
       soal: 99,
     },
     {
-      key: "2",
+      id: "2",
       product: "SPSS",
-      category: "Python Lengkap",
+      tanggal: "Python Lengkap",
       date: 32,
       siswa: 90,
       status: 100,
       soal: 99,
     },
     {
-      key: "3",
+      id: "3",
       product: "John",
-      category: "Brown",
+      tanggal: "Brown",
       date: 32,
       siswa: 90,
       status: 50,
       soal: 99,
     },
     {
-      key: "4",
+      id: "4",
       product: "John",
-      category: "Brown",
+      tanggal: "Brown",
       date: 32,
       siswa: 90,
       status: 10,
       soal: 99,
     },
   ];
+  const router = useRouter();
+
   return (
     <div>
       <CustomHeader title="Penilaian" />
@@ -88,23 +79,17 @@ export default function Home() {
             dataIndex="product"
             key="product"
             render={(text, record: any) => (
-              <Link
-                href={"/penilaian/" + record.product}
-                className="!text-[#3A9699]"
-              >
-                {text}
-              </Link>
-            )}
-          />
-          <Column
-            title="Kategori"
-            dataIndex="category"
-            key="category"
-            render={(text, record) => (
               <Typography className="!text-[#3A9699]">{text}</Typography>
             )}
           />
-          <Column title="Tanggal" dataIndex="date" key="date" />
+          <Column
+            title="Tanggal"
+            dataIndex="tanggal"
+            key="tanggal"
+            render={(text, record) => (
+              <Typography>{moment().format("DD/MM/YYYY HH:mm")}</Typography>
+            )}
+          />
           <Column title="Jml. Soal" dataIndex="soal" key="soal" />
           <Column title="Jml. Siswa" dataIndex="siswa" key="siswa" />
           <Column
@@ -117,7 +102,22 @@ export default function Home() {
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) => <DropdownMenu />}
+            render={(text, record: any) => (
+              <DropdownMenuAction
+                itemLists={[
+                  {
+                    label: "View",
+                    key: "1",
+                    icon: <Eye size={17} />,
+                  },
+                ]}
+                onClick={() => {
+                  router.push(
+                    "/penilaian/" + record.id + "?soal=" + record.product
+                  );
+                }}
+              />
+            )}
           />
         </Table>
       </Card>
