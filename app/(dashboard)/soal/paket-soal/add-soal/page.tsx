@@ -1,6 +1,7 @@
 "use client";
 import { ClockCircleOutlined, UpOutlined } from "@ant-design/icons";
 import Container from "@dsarea/@/components/DragnDrop/Container";
+import DynamicFormAddSoal from "@dsarea/@/components/Form/DynamicForm";
 import SelectCategory from "@dsarea/@/components/Select/SelectCategory";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import {
@@ -27,104 +28,108 @@ interface KonfigurasiProps {
 
 const KonfigurasiSoal = ({ FooterAction, title }: KonfigurasiProps) => {
   return (
-    <div className="bg-[#F3F3F3] border border-solid border-[#F3F3F3] h-[93vh] flex flex-col">
-      <Collapse
-        bordered={false}
-        defaultActiveKey={["Konfigurasi Soal", "List Soal"]}
-        expandIcon={({ isActive }) => (
-          <UpOutlined rotate={isActive ? 0 : 180} />
-        )}
-        expandIconPosition="end"
-        style={{
-          background: "#fff",
-          borderRadius: 0,
-        }}
-        //   style={{ background: token.colorBgContainer }}
-        items={[
-          {
-            key: "Konfigurasi Soal",
-            label: "Konfigurasi Soal",
-            children: (
-              <>
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Kategori tidak boleh kosong!",
-                    },
-                  ]}
-                  name="category_id"
-                  label="Nama Kategori"
-                >
-                  <SelectCategory />
-                </Form.Item>
-                <Form.Item
-                  name="description"
-                  label="Batas Waktu"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Batas Waktu tidak boleh kosong!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    placeholder="Batas Waktu"
-                    suffix={
-                      <Tooltip title="Batas waktu dalam menit">
-                        <ClockCircleOutlined style={{ color: "#3A9699" }} />
-                      </Tooltip>
-                    }
-                    style={{
-                      width: "100%",
+    <div className="w-full relative">
+      <div className="bg-[#F3F3F3] border border-solid border-[#F3F3F3] h-[93vh] flex flex-col overflow-y-scroll fixed">
+        <Collapse
+          bordered={false}
+          defaultActiveKey={["Konfigurasi Soal", "List Soal"]}
+          expandIcon={({ isActive }) => (
+            <UpOutlined rotate={isActive ? 0 : 180} />
+          )}
+          expandIconPosition="end"
+          style={{
+            background: "#fff",
+            borderRadius: 0,
+            width: "21vw",
+            position: "relative",
+          }}
+          //   style={{ background: token.colorBgContainer }}
+          items={[
+            {
+              key: "Konfigurasi Soal",
+              label: "Konfigurasi Soal",
+              children: (
+                <>
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Kategori tidak boleh kosong!",
+                      },
+                    ]}
+                    name="category_id"
+                    label="Nama Kategori"
+                  >
+                    <SelectCategory />
+                  </Form.Item>
+                  <Form.Item
+                    name="description"
+                    label="Batas Waktu"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Batas Waktu tidak boleh kosong!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      placeholder="Batas Waktu"
+                      suffix={
+                        <Tooltip title="Batas waktu dalam menit">
+                          <ClockCircleOutlined style={{ color: "#3A9699" }} />
+                        </Tooltip>
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    />
+                  </Form.Item>
+                  <Form.Item name="rules" label="Tata Cara Pengerjaan Soal">
+                    <Input.TextArea
+                      rows={4}
+                      placeholder="Tata Cara Pengerjaan Soal"
+                    />
+                  </Form.Item>
+                </>
+              ),
+            },
+            {
+              key: "List Soal",
+              label: "List Soal",
+              children: (
+                <>
+                  <Form.Item shouldUpdate noStyle>
+                    {() => {
+                      return (
+                        <Typography
+                          style={{
+                            fontWeight: 500,
+                            marginTop: "8px",
+                            paddingBottom: "8px",
+                          }}
+                        >
+                          {title}
+                        </Typography>
+                      );
                     }}
-                  />
-                </Form.Item>
-                <Form.Item name="rules" label="Tata Cara Pengerjaan Soal">
-                  <Input.TextArea
-                    rows={4}
-                    placeholder="Tata Cara Pengerjaan Soal"
-                  />
-                </Form.Item>
-              </>
-            ),
-          },
-          {
-            key: "List Soal",
-            label: "List Soal",
-            children: (
-              <>
-                <Form.Item shouldUpdate noStyle>
-                  {() => {
-                    return (
-                      <Typography
-                        style={{
-                          fontWeight: 500,
-                          marginTop: "8px",
-                          paddingBottom: "8px",
-                        }}
-                      >
-                        {title}
-                      </Typography>
-                    );
-                  }}
-                </Form.Item>
-                <div
-                  className="-ml-4 w-[108%] h-[33vh] overflow-y-scroll"
-                  style={{
-                    borderTop: "1px solid #F3F3F3",
-                  }}
-                >
-                  <DndProvider backend={HTML5Backend}>
-                    <Container />
-                  </DndProvider>
-                </div>
-              </>
-            ),
-          },
-        ]}
-      />
-      {FooterAction}
+                  </Form.Item>
+                  <div
+                    className="-ml-4 w-[108%] h-[33vh] overflow-y-scroll"
+                    style={{
+                      borderTop: "1px solid #F3F3F3",
+                    }}
+                  >
+                    <DndProvider backend={HTML5Backend}>
+                      <Container />
+                    </DndProvider>
+                  </div>
+                </>
+              ),
+            },
+          ]}
+        />
+        {FooterAction}
+      </div>
     </div>
   );
 };
@@ -190,8 +195,9 @@ export default function AddSoal() {
               >
                 <JudulForm value={titleSoal} onChange={setTitleSoal} />
               </Form.Item>
+              <DynamicFormAddSoal form={form} />
             </Col>
-            <Col xxl={6} xl={6} lg={8} md={0} sm={0} xs={0}>
+            <Col xxl={6} xl={6} lg={8} md={0} sm={0} xs={0} style={{}}>
               <KonfigurasiSoal
                 FooterAction={
                   <div className="w-full text-center flex flex-row justify-center gap-3 my-4">

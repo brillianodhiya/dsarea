@@ -1,0 +1,43 @@
+{
+  "title": "FISIKA",
+  "soal": [
+    {
+      "no": 1,
+      "soal": "Sebuah pegas dengan konstanta pegas 100 N/m diregangkan sejauh 2 cm. Berapa besar energi potensial elastis yang disimpan oleh pegas?",
+      "type": "essay",
+      "image": "",
+      "audio": "",
+      "jawaban": []
+    },
+    {
+      "no": 2,
+      "soal": "Partikel dengan massa 4 kilogram gerak lurus dengan kecepatan konstan 2 m/s. Lalu, ada usaha 8 joule yang dilakukan partikel tersebut. Kecepatannya menjadi...",
+      "type": "pilihan",
+      "image": "",
+      "audio": "",
+      "jawaban": [
+        {
+          "key": "A",
+          "jawaban": "4 m/s",
+          "nilai": "0",
+          "image": "",
+          "audio": ""
+        },
+        {
+          "key": "B",
+          "jawaban": "3 akar 2 m/s",
+          "nilai": "0",
+          "image": "",
+          "audio": ""
+        },
+        {
+          "key": "C",
+          "jawaban": "2 akar 2 m/s",
+          "nilai": "100",
+          "image": "",
+          "audio": ""
+        }
+      ]
+    }
+  ]
+}
