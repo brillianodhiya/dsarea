@@ -7,7 +7,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddVourcherModal from "@dsarea/@/components/Modals/AddVoucherModal";
+import AddVourcherModal from "@dsarea/@/components/Modals/Voucher/AddVoucherModal";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
