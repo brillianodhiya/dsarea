@@ -6,10 +6,21 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
+import AddRoleModal from "@dsarea/@/components/Modals/Role/AddRoleModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
-import { useQuery } from "@tanstack/react-query";
-import { Avatar, Card, Col, Input, Row, Space, Table, Typography } from "antd";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Avatar,
+  Card,
+  Col,
+  Input,
+  Row,
+  Space,
+  Table,
+  Typography,
+  message,
+} from "antd";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
@@ -18,6 +29,9 @@ import React from "react";
 
 export default function Page() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const queryClient = useQueryClient();
+
   const { data, isFetching } = useQuery({
     queryKey: ["Role"],
     queryFn: async () => {
@@ -35,6 +49,35 @@ export default function Page() {
 
   return (
     <div>
+      <AddRoleModal
+        open={openAddModal}
+        onCancel={() => {
+          setOpenAddModal(false);
+        }}
+        onCreate={async (value: any) => {
+          try {
+            setLoading(true);
+            const res = await axiosClientInstance.put(
+              "/api/users/change/role",
+              value
+            );
+            queryClient.invalidateQueries({
+              queryKey: ["Role"],
+            });
+            setLoading(false);
+            message.success(`${res.data.message}`);
+            setOpenAddModal(false);
+          } catch (error) {
+            setLoading(false);
+            message.error(
+              `${(error as any).response.data.message} : ${
+                (error as any).response.data.data
+              }`
+            );
+          }
+        }}
+        loading={loading}
+      />
       <CustomHeader title="User Role" />
 
       <Card className="!m-6">
@@ -118,14 +161,14 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="capitalize">
-                  {text == true ? (
+                  {text == "active" ? (
                     <>
-                      <CheckCircleFilled className="!text-[#32D583]" />
+                      <CheckCircleFilled className="!text-[#32D583] text-[10px]" />
                       {" Active"}
                     </>
                   ) : (
                     <>
-                      <MinusCircleFilled className="!text-[#F04438]" />
+                      <MinusCircleFilled className="!text-[#F04438] text-[10px]" />
                       {" Inactive"}
                     </>
                   )}

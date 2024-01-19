@@ -74,7 +74,7 @@ export default function Page() {
         onCancel={() => {
           setOpenAddModal(false);
         }}
-        loading={false}
+        loading={loading}
       />
       <CustomHeader title="Banner" />
 

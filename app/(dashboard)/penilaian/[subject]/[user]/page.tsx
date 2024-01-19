@@ -1,77 +1,65 @@
 "use client";
-import { CalendarOutlined, SearchOutlined } from "@ant-design/icons";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
+import { CalendarOutlined } from "@ant-design/icons";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import {
   Badge,
   Card,
   Col,
-  Input,
-  Progress,
+  Collapse,
+  CollapseProps,
   Row,
   Space,
-  Table,
   Tag,
   Typography,
 } from "antd";
-import Column from "antd/es/table/Column";
-import Button from "antd/lib/button";
-import { CalendarIcon, Link } from "lucide-react";
 import moment from "moment";
 import { usePathname, useRouter } from "next/navigation";
 
+const text = `
+  A dog is a type of domesticated animal.
+  Known for its loyalty and faithfulness,
+  it can be found as a welcome guest in many households across the world.
+`;
+
+const items: CollapseProps["items"] = [
+  {
+    key: "1",
+    label: (
+      <Row>
+        <Col span={18}>Pertanyaan</Col>
+        <Col span={6}>Score</Col>
+      </Row>
+    ),
+    children: <p>{text}</p>,
+  },
+  {
+    key: "2",
+    label: "This is panel header 2",
+    children: <p>{text}</p>,
+  },
+  {
+    key: "3",
+    label: "This is panel header 3",
+    children: <p>{text}</p>,
+  },
+];
+
 export default function Page() {
   const pahtname = usePathname();
-  console.log(pahtname);
-  const router = useRouter();
   const submenu = [
     {
       title: "Penilaian",
     },
     {
       title: "Sub Menu",
-      // href: "",
     },
   ];
-  const data = [
-    {
-      key: "1",
-      product: "Try Out",
-      category: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 70,
-      soal: 99,
-    },
-    {
-      key: "2",
-      product: "SPSS",
-      category: "Python Lengkap",
-      date: 32,
-      siswa: 90,
-      status: 100,
-      soal: 99,
-    },
-    {
-      key: "3",
-      product: "John",
-      category: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 50,
-      soal: 99,
-    },
-    {
-      key: "4",
-      product: "John",
-      category: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 10,
-      soal: 99,
-    },
-  ];
+
+  const onChange = (key: string | string[]) => {
+    console.log(key);
+  };
+
   return (
     <div>
       <CustomHeader title="Sub Menu" isSubMenu={true} subMenu={submenu} />
@@ -151,39 +139,12 @@ export default function Page() {
             </div>
           </Col>
         </Row>
-        {/* <Table
-          dataSource={data}
-          pagination={{
-            hideOnSinglePage: true,
-          }}
-        >
-          <Column
-            title="Nama Siswa"
-            dataIndex="category"
-            key="category"
-            render={(text, record: any) => (
-              <Button
-                type="link"
-                onClick={() => router.push(`${pahtname}/user`)}
-              >
-                {text}
-              </Button>
-            )}
-          />
-          <Column title="Total Score" dataIndex="score" key="score" />
-          <Column
-            title="Status Penilaian"
-            dataIndex="status"
-            key="status"
-            render={(text, record) => <Progress percent={text} />}
-          />
-          <Column
-            title="Action"
-            dataIndex="action"
-            key="action"
-            render={(text, record) => <DropdownMenu />}
-          />
-        </Table> */}
+        <Collapse
+          items={items}
+          defaultActiveKey={["1"]}
+          onChange={onChange}
+          expandIconPosition="right"
+        />
       </Card>
     </div>
   );
