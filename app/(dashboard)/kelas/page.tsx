@@ -33,6 +33,7 @@ export default function Page() {
     ],
   });
 
+  const filteredData = data.filter((e: any) => e.id !== "id");
   return (
     <div>
       <CustomHeader title="Kelas" />
@@ -73,37 +74,42 @@ export default function Page() {
             />
           </Col>
         </Row>
-        <Row gutter={[24, 24]}>
-          {data.map((e: any, i: any) => (
-            <Col xs={24} sm={12} md={12} lg={8} xl={4} key={i}>
-              <Card
-                hoverable
-                style={{
-                  maxWidth: 252,
-                }}
-                cover={
-                  <div>
-                    <Tag
-                      style={{
-                        position: "absolute",
-                        margin: 10,
-                        borderRadius: 100,
-                        // maxWidth: 200,
-                        textAlign: "center",
-                        right: 0,
-                        width: "max-content",
-                      }}
-                      color="#AFCF5B"
-                    >
-                      {activeMenu == "bootcamp"
-                        ? "Kelas Cohort/Bootcamp"
-                        : activeMenu === "online"
-                        ? "Kelas Online"
-                        : activeMenu === "digital-product"
-                        ? "Product Digital"
-                        : "Bundling"}
-                    </Tag>
-                    {/* <SkeletonImage
+        <Row
+          gutter={[24, 24]}
+          justify={
+            filteredData.length === 0 && !isFetching ? "center" : "start"
+          }
+        >
+          {isFetching ? (
+            <Card
+              loading={isFetching}
+              hoverable
+              style={{
+                maxWidth: 252,
+              }}
+              cover={
+                <div>
+                  <Tag
+                    style={{
+                      position: "absolute",
+                      margin: 10,
+                      borderRadius: 100,
+                      // maxWidth: 200,
+                      textAlign: "center",
+                      right: 0,
+                      width: "max-content",
+                    }}
+                    color="#AFCF5B"
+                  >
+                    {activeMenu == "bootcamp"
+                      ? "Kelas Cohort/Bootcamp"
+                      : activeMenu === "online"
+                      ? "Kelas Online"
+                      : activeMenu === "digital-product"
+                      ? "Product Digital"
+                      : "Bundling"}
+                  </Tag>
+                  {/* <SkeletonImage
                       active
                       style={{
                         // display: "inline-block",
@@ -113,22 +119,86 @@ export default function Page() {
                       }}
                     /> */}
 
-                    <Image
-                      alt="cover image"
-                      src={e.coverImage ? e.coverImage.url : "/card-image.svg"}
-                      width={250}
-                      height={333}
-                      className="w-full aspect-square object-contain object-center"
-                    />
-                  </div>
-                }
-              >
-                <Skeleton loading={isFetching} active>
-                  <Meta title={e.name} description={formatRupiah(e.amount)} />
-                </Skeleton>
-              </Card>
+                  <Image
+                    alt="cover image"
+                    src={"/card-image.svg"}
+                    width={250}
+                    height={333}
+                    className="w-full aspect-square object-contain object-center"
+                  />
+                </div>
+              }
+            >
+              {/* <Skeleton loading={isFetching} active> */}
+              <Meta title={"title"} description={formatRupiah(0)} />
+              {/* </Skeleton> */}
+            </Card>
+          ) : filteredData.length === 0 ? (
+            <Col>
+              <Empty description="Data not found" />
             </Col>
-          ))}
+          ) : (
+            data
+              .filter((e: any) => e.id !== "id")
+              .map((e: any, i: any) => (
+                <Col xs={24} sm={12} md={12} lg={8} xl={4} key={i}>
+                  <Card
+                    loading={isFetching}
+                    hoverable
+                    style={{
+                      maxWidth: 252,
+                    }}
+                    cover={
+                      <div>
+                        <Tag
+                          style={{
+                            position: "absolute",
+                            margin: 10,
+                            borderRadius: 100,
+                            // maxWidth: 200,
+                            textAlign: "center",
+                            right: 0,
+                            width: "max-content",
+                          }}
+                          color="#AFCF5B"
+                        >
+                          {activeMenu == "bootcamp"
+                            ? "Kelas Cohort/Bootcamp"
+                            : activeMenu === "online"
+                            ? "Kelas Online"
+                            : activeMenu === "digital-product"
+                            ? "Product Digital"
+                            : "Bundling"}
+                        </Tag>
+                        {/* <SkeletonImage
+                      active
+                      style={{
+                        // display: "inline-block",
+                        // width: 250,
+                        width: "auto",
+                        overflow: "hidden",
+                      }}
+                    /> */}
+
+                        <Image
+                          alt="cover image"
+                          src={
+                            e.coverImage ? e.coverImage.url : "/card-image.svg"
+                          }
+                          width={250}
+                          height={333}
+                          className="w-full aspect-square object-contain object-center"
+                        />
+                      </div>
+                    }
+                  >
+                    {/* <Skeleton loading={isFetching} active> */}
+                    <Meta title={e.name} description={formatRupiah(e.amount)} />
+                    {/* </Skeleton> */}
+                  </Card>
+                </Col>
+              ))
+          )}
         </Row>
       </Card>
     </div>
