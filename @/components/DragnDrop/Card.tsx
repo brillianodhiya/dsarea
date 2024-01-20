@@ -18,6 +18,7 @@ export interface CardProps {
   text: string;
   index: number;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
+  form: any;
 }
 
 interface DragItem {
@@ -26,7 +27,7 @@ interface DragItem {
   type: string;
 }
 
-export const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
+export const Card: FC<CardProps> = ({ id, text, index, moveCard, form }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -80,7 +81,9 @@ export const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
 
       // Time to actually perform the action
       moveCard(dragIndex, hoverIndex);
-
+      form
+        .getFieldsValue()
+        .soal.map((item: any, index: number) => (item.no = index + 1));
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
       // but it's good here for the sake of performance

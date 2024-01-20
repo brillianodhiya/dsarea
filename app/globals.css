@@ -265,3 +265,24 @@
   border-color: #3a9699 !important;
   box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
 }
+
+.div-to-button {
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+}
+
+.div-to-button:hover {
+  border: 1px solid #3a9699;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #ebf5f5 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-btn-dashed:not(:disabled):not(
+    .ant-btn-disabled
+  ):hover {
+  border-color: #3a9699 !important;
+  color: #3a9699 !important;
+}

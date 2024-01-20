@@ -70,6 +70,7 @@ const Container: FC = () => {
             id={card.id}
             text={card.text}
             moveCard={moveCard}
+            form={{}}
           />
         );
       },

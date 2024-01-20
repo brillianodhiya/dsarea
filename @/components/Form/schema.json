@@ -39,5 +39,6 @@
         }
       ]
     }
-  ]
+  ],
+  "bulk_image": ["image1", "image2"]
 }
