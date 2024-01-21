@@ -64,3 +64,27 @@ export function pickRandomItem() {
   // Mengembalikan data pada indeks acak tersebut
   return colors[randIndex];
 }
+
+export function formatAngka(angka: any) {
+  const satuan = ["", "rb", "jt", "M"]; // Satuan ribu, juta, dan jutaan
+
+  let formattedAngka = angka;
+
+  // Menentukan satuan yang sesuai
+  let satuanIndex = 0;
+  while (formattedAngka >= 1000 && satuanIndex < satuan.length - 1) {
+    formattedAngka /= 1000;
+    satuanIndex++;
+  }
+
+  // Format angka dengan dua digit di belakang koma dan satuan yang sesuai
+  formattedAngka = formattedAngka?.toLocaleString("id-ID", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  // Tambahkan satuan ke angka yang sudah diformat
+  formattedAngka += " " + satuan[satuanIndex];
+
+  return formattedAngka;
+}
