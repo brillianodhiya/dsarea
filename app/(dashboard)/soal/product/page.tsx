@@ -5,8 +5,9 @@ import {
   RightOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
-import AddCategoryModal from "@dsarea/@/components/Modals/Category/AddCategoryModal";
+import ViewProductModal from "@dsarea/@/components/Modals/Product/ViewProductModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
@@ -16,12 +17,7 @@ import {
   Badge,
   Card,
   Col,
-  Dropdown,
-  DropdownProps,
   Input,
-  Layout,
-  MenuProps,
-  Progress,
   Row,
   Space,
   Table,
@@ -38,6 +34,32 @@ import React from "react";
 
 export default function Home() {
   const [searchText, setSearchText] = React.useState("");
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const [dataSelected, setDataSelected] = React.useState({
+    id: 0,
+    having_expired: false,
+    expired_date: "2024-02-10 10:00:00",
+    nama_product: "loading",
+    harga: 10000,
+    desc: "loading",
+    benefit: "loading",
+    image: "",
+    is_publish: false,
+    publish_date: null,
+    createdAt: "2024-01-18T10:19:33.000Z",
+    updatedAt: "2024-01-18T10:19:33.000Z",
+    is_buying: false,
+    category: [
+      {
+        id: 0,
+        product_id: 0,
+        name: "loading",
+        desc: "loading",
+        createdAt: "2024-01-18T10:19:33.000Z",
+        updatedAt: "2024-01-18T10:19:33.000Z",
+      },
+    ],
+  });
 
   const { data, isFetching } = useQuery({
     queryKey: ["product"],
@@ -76,7 +98,11 @@ export default function Home() {
   return (
     <div>
       <CustomHeader title="Soal" />
-
+      <ViewProductModal
+        onSubmit={() => setOpenViewModal(false)}
+        data={dataSelected}
+        open={openViewModal}
+      />
       <Card className="!m-6">
         <Row className="mb-4" justify={"space-between"} wrap>
           <Col>
@@ -90,15 +116,18 @@ export default function Home() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
-              <Button
-                type="primary"
-                onClick={() => {}}
-                color="red"
-                icon={<PlusOutlined />}
-              >
-                Buat Product
-              </Button>
+              <Link href={"/soal/product/add-product"}>
+                <Button
+                  type="primary"
+                  onClick={() => {}}
+                  color="red"
+                  icon={<PlusOutlined />}
+                >
+                  Buat Product
+                </Button>
+              </Link>
             </Space>
           </Col>
         </Row>
@@ -124,6 +153,7 @@ export default function Home() {
                   style={{
                     fontSize: "14px",
                     marginBottom: "4px",
+                    color: "#7A7A7A",
                   }}
                 >
                   Kategori
@@ -147,9 +177,21 @@ export default function Home() {
             ),
             expandIcon: ({ expanded, onExpand, record }) =>
               expanded ? (
-                <DownOutlined onClick={(e) => onExpand(record, e)} />
+                <DownOutlined
+                  color="#7A7A7A"
+                  style={{
+                    color: "#7A7A7A",
+                  }}
+                  onClick={(e) => onExpand(record, e)}
+                />
               ) : (
-                <RightOutlined onClick={(e) => onExpand(record, e)} />
+                <RightOutlined
+                  color="#7A7A7A"
+                  style={{
+                    color: "#7A7A7A",
+                  }}
+                  onClick={(e) => onExpand(record, e)}
+                />
               ),
           }}
         >
@@ -157,6 +199,12 @@ export default function Home() {
             title="Product"
             dataIndex="nama_product"
             key="nama_product"
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) =>
+                    a.nama_product.length - b.nama_product.length
+            }
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
@@ -169,6 +217,11 @@ export default function Home() {
             title="Jml. Soal"
             dataIndex={"total_soal"}
             key="total_soal"
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.total_soal - b.total_soal
+            }
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
@@ -181,14 +234,24 @@ export default function Home() {
             title="Jml. Pembeli"
             dataIndex="total_pembelian"
             key="total_pembelian"
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.total_pembelian - b.total_pembelian
+            }
             render={(text) =>
-              isFetching ? <SkeletonInput active size={"small"} /> : text
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                text + " Orang"
+              )
             }
           />
           <Column
             title="Harga"
             dataIndex="harga"
             key="harga"
+            sorter={isFetching ? false : (a: any, b: any) => a.harga - b.harga}
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
@@ -201,11 +264,19 @@ export default function Home() {
             title="Expired At"
             dataIndex="expired_date"
             key="expired_date"
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) =>
+                    a.expired_date.length - b.expired_date.length
+            }
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                <Typography>{text}</Typography>
+                <Typography>
+                  {text == "undefined" ? "Unlimited" : text}
+                </Typography>
               )
             }
           />
@@ -217,16 +288,30 @@ export default function Home() {
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                <Space
-                  style={{
-                    textTransform: "capitalize",
-                  }}
-                >
-                  <Badge
-                    status={getStatus(text) == "active" ? "success" : "error"}
-                  />{" "}
-                  {getStatus(text)}
-                </Space>
+                <>
+                  {text == "undefined" ? (
+                    <Space
+                      style={{
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      <Badge status={"success"} /> Active
+                    </Space>
+                  ) : (
+                    <Space
+                      style={{
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      <Badge
+                        status={
+                          getStatus(text) == "active" ? "success" : "error"
+                        }
+                      />{" "}
+                      {getStatus(text)}
+                    </Space>
+                  )}
+                </>
               )
             }
           />
@@ -236,23 +321,19 @@ export default function Home() {
             key="action"
             fixed="right"
             width={100}
-            render={(text, record) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />
               ) : (
-                <DropdownMenu
-                  itemLists={[
-                    {
-                      key: "Preview",
-                      label: "Preview",
-                      icon: <Eye size={17} />,
-                    },
-                    {
-                      label: "Edit",
-                      key: "2",
-                      icon: <PencilLine size={17} />,
-                    },
-                  ]}
+                <DropdownMenuAction
+                  onClick={(ev) => {
+                    // console.log(ev, "EV");
+                    if (ev.key == 1) {
+                      setOpenViewModal(true);
+                      setDataSelected(record);
+                    } else if (ev.key == 2) {
+                    }
+                  }}
                 />
               )
             }

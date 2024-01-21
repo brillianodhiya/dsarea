@@ -231,7 +231,7 @@ export default function AddSoal() {
         isSubMenu
         subMenu={[
           {
-            title: "Paket Soal (Sub Kategori)",
+            title: "Tambah Paket Soal (Sub Kategori)",
           },
         ]}
       />

@@ -1,15 +1,22 @@
 import React from "react";
-import { Select } from "antd";
+import { Select, Tag } from "antd";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
-import { Each } from "../GetterServerComponent/Each";
+import type { SelectProps } from "antd";
+import { pickRandomItem } from "@dsarea/@/lib/utils";
 
+type TagRender = SelectProps["tagRender"];
 interface SelectCategoryProps {
   onChange?: (values: any, option: any) => void;
   value?: string;
+  multiple?: true | false;
 }
 
-const SelectCategory: React.FC<SelectCategoryProps> = ({ onChange, value }) => {
+const SelectCategory: React.FC<SelectCategoryProps> = ({
+  onChange,
+  value,
+  multiple = false,
+}) => {
   const { data, isFetching } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
@@ -25,12 +32,33 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({ onChange, value }) => {
     ],
   });
 
+  const tagRender: TagRender = (props) => {
+    const { label, value, closable, onClose } = props;
+    const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    return (
+      <Tag
+        color={pickRandomItem()}
+        onMouseDown={onPreventMouseDown}
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3 }}
+      >
+        {label}
+      </Tag>
+    );
+  };
+
   return (
     <Select
       loading={isFetching}
       placeholder="Pilih Kategori"
       value={value}
       onChange={onChange}
+      mode={multiple ? "multiple" : undefined}
+      tagRender={multiple ? tagRender : undefined}
     >
       {data.map((item: any) => {
         return (

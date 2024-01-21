@@ -137,7 +137,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
               },
             ]}
           >
-            <Upload.Dragger {...props}>
+            <Upload.Dragger {...props} accept=".png,.jpg">
               {imageUrl ? (
                 <Image
                   src={imageUrl}

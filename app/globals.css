@@ -286,3 +286,68 @@
   border-color: #3a9699 !important;
   color: #3a9699 !important;
 }
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-radio-wrapper
+  .ant-radio-inner::after {
+  background-color: #3a9699 !important;
+}
+:where(.css-dev-only-do-not-override-dkbvqv).ant-radio-wrapper
+  .ant-radio-checked
+  .ant-radio-inner {
+  border-color: #3a9699 !important;
+  background-color: #fff !important;
+}
+
+.ant-radio-wrapper:hover
+  :where(.css-dev-only-do-not-override-dkbvqv).ant-radio-wrapper,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-radio-wrapper:hover
+  .ant-radio-inner {
+  border-color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv) a {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border: 1px solid #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-focused.ant-picker {
+  border-color: #3a9699 !important;
+  box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker .ant-picker-suffix {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-input-number:hover {
+  border-color: #3a9699 !important;
+}
+:where(.css-dev-only-do-not-override-dkbvqv).ant-input-number:focus,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-input-number:focus-within {
+  border-color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+  .ant-select-item-option-state {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-tabs .ant-tabs-tab:hover {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-tabs
+  .ant-tabs-tab.ant-tabs-tab-active
+  .ant-tabs-tab-btn {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-tabs .ant-tabs-ink-bar {
+  background-color: #3a9699 !important;
+}
