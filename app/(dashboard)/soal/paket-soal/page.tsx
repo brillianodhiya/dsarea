@@ -31,7 +31,7 @@ export default function Home() {
         duration: 12,
         rules: "deskripsi",
         total: 80,
-        ds_soal_category: {
+        ds_category: {
           id: 1,
           name: "TKP SKD CPNS1",
           desc: "Category CPNS1",
@@ -72,6 +72,9 @@ export default function Home() {
             hideOnSinglePage: true,
           }}
           rowKey={"id"}
+          scroll={{
+            x: 800,
+          }}
         >
           <Column
             title="Judul"
@@ -87,7 +90,7 @@ export default function Home() {
           />
           <Column
             title="Kategori"
-            dataIndex={["ds_soal_category", "name"]}
+            dataIndex={["ds_category", "name"]}
             key="category"
             render={(text, record) =>
               isFetching ? (
@@ -121,6 +124,8 @@ export default function Home() {
             title="Action"
             dataIndex="action"
             key="action"
+            fixed="right"
+            width={100}
             render={(text, record) =>
               isFetching ? (
                 <SkeletonButton active />

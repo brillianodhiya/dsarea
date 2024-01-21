@@ -157,6 +157,9 @@ export default function Category() {
           }}
           rowKey={"id"}
           size="middle"
+          scroll={{
+            x: 800,
+          }}
         >
           <Column
             title="Kategori"
@@ -184,6 +187,8 @@ export default function Category() {
             title="Action"
             dataIndex="action"
             key="action"
+            fixed="right"
+            width={100}
             render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />
