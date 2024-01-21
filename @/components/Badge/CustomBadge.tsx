@@ -20,7 +20,12 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
         </Typography>
       ) : status === "pending" ? (
         <Typography className="capitalize">
-          <ExclamationCircleFilled className="!text-[#FDB022] text-[10px]" />
+          <ExclamationCircleFilled
+            style={{
+              color: "#FDB022",
+            }}
+            className="!text-[#FDB022] text-[10px]"
+          />
           {" " + value}
         </Typography>
       ) : (
