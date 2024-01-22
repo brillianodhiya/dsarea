@@ -6,7 +6,6 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
-import DropdownMenu from "@dsarea/@/components/Dropdown/DropdownMenu";
 import ViewProductModal from "@dsarea/@/components/Modals/Product/ViewProductModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
@@ -28,11 +27,13 @@ import SkeletonButton from "antd/es/skeleton/Button";
 import Button from "antd/lib/button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
-import { Eye, PencilLine } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function Home() {
+  const router = useRouter();
+
   const [searchText, setSearchText] = React.useState("");
   const [openViewModal, setOpenViewModal] = React.useState(false);
   const [dataSelected, setDataSelected] = React.useState({
@@ -262,34 +263,35 @@ export default function Home() {
           />
           <Column
             title="Expired At"
-            dataIndex="expired_date"
-            key="expired_date"
+            dataIndex="expired_at"
+            key="expired_at"
             sorter={
               isFetching
                 ? false
-                : (a: any, b: any) =>
-                    a.expired_date.length - b.expired_date.length
+                : (a: any, b: any) => a.expired_at.length - b.expired_at.length
             }
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography>
-                  {text == "undefined" ? "Unlimited" : text}
+                  {text == "undefined" || text == "unlimeted"
+                    ? "Unlimited"
+                    : text}
                 </Typography>
               )
             }
           />
           <Column
             title="Status"
-            dataIndex="expired_date"
-            key="expired_date"
+            dataIndex="expired_at"
+            key="expired_at"
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
                 <>
-                  {text == "undefined" ? (
+                  {text == "undefined" || text == "unlimeted" ? (
                     <Space
                       style={{
                         textTransform: "capitalize",
@@ -332,6 +334,11 @@ export default function Home() {
                       setOpenViewModal(true);
                       setDataSelected(record);
                     } else if (ev.key == 2) {
+                      window.localStorage.setItem(
+                        "edit-product",
+                        JSON.stringify(record)
+                      );
+                      router.push("/soal/product/edit-product");
                     }
                   }}
                 />

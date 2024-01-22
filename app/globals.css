@@ -351,3 +351,16 @@
 :where(.css-dev-only-do-not-override-dkbvqv).ant-tabs .ant-tabs-ink-bar {
   background-color: #3a9699 !important;
 }
+
+.ant-picker-now-btn {
+  color: #3a9699 !important;
+}
+
+.ant-picker:hover {
+  border-color: #3a9699 !important;
+}
+.ant-upload-wrapper .ant-upload-drag:not(.ant-upload-disabled):hover,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-upload-wrapper
+  .ant-upload-drag-hover:not(.ant-upload-disabled) {
+  border-color: #3a9699 !important;
+}

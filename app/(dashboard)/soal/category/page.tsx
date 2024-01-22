@@ -151,7 +151,7 @@ export default function Category() {
           </Col>
         </Row>
         <Table
-          dataSource={searchFromValue(data, searchText)}
+          dataSource={searchFromValue(data ? data : [], searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}

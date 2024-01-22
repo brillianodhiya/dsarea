@@ -84,10 +84,51 @@ const AddProduct = (props: Props) => {
     },
   };
 
+  React.useEffect(() => {
+    const dataForEdit = JSON.parse(
+      window.localStorage.getItem("edit-product") || ""
+    );
+
+    if (dataForEdit) {
+      const categoryID = dataForEdit.category.map((v: any) => v.name) || [];
+      form.setFieldsValue({
+        image: {
+          file: {
+            originFileObj: {
+              name: dataForEdit.image,
+              type: "image/jpeg",
+              size: 0,
+              lastModified: 0,
+              lastModifiedDate: new Date(),
+              slice: () => new Blob(),
+              stream: () => new Blob(),
+              text: () => new Blob(),
+              arrayBuffer: () => new Blob(),
+              msClose: () => {},
+              msDetachStream: () => {},
+              msGetUntransformedBounds: () => {},
+              msInsertBlob: () => {},
+              msNewStream: () => {},
+              msWriteBlob: () => {},
+            },
+          },
+        },
+        nama_product: dataForEdit.nama_product,
+        desc: dataForEdit.desc,
+        benefit: dataForEdit.benefit,
+        harga: dataForEdit.harga,
+        category_id: categoryID,
+        having_expired: dataForEdit.having_expired,
+        expired_date: dataForEdit.expired_date,
+      });
+      setImageUrl(dataForEdit.image);
+    }
+  }, []);
+
   return (
     <div>
       <CustomHeader
-        title="Buat Product"
+        title="Edit Product"
         isSubMenu
         subMenu={[
           {
@@ -149,8 +190,8 @@ const AddProduct = (props: Props) => {
                     <Image
                       src={imageUrl}
                       alt="banner image"
-                      width={20}
-                      height={20}
+                      width={1000}
+                      height={1000}
                       style={{
                         width: "100%",
                         height: 100,
@@ -382,40 +423,40 @@ const AddProduct = (props: Props) => {
                         .validateFields()
                         .then((values) => {
                           console.log(values, "values");
-                          const formData = new FormData();
-                          formData.append(
-                            "image",
-                            values.image.file.originFileObj
-                          );
-                          formData.append("nama_product", values.nama_product);
-                          formData.append("desc", values.desc);
-                          formData.append("benefit", values.benefit);
-                          formData.append("harga", values.harga);
-                          values.category_id.map((v: any, idx: number) => {
-                            formData.append(`category_id[${idx}]`, v);
-                          });
-                          formData.append(
-                            "having_expired",
-                            values.having_expired
-                          );
-                          formData.append("expired_date", values.expired_date);
+                          // const formData = new FormData();
+                          // formData.append(
+                          //   "image",
+                          //   values.image.file.originFileObj
+                          // );
+                          // formData.append("nama_product", values.nama_product);
+                          // formData.append("desc", values.desc);
+                          // formData.append("benefit", values.benefit);
+                          // formData.append("harga", values.harga);
+                          // values.category_id.map((v: any) => {
+                          //   formData.append("category_id", v);
+                          // });
+                          // formData.append(
+                          //   "having_expired",
+                          //   values.having_expired
+                          // );
+                          // formData.append("expired_date", values.expired_date);
 
-                          setLoading(true);
-                          axiosClientInstance
-                            .post("/api/soal/product/create", formData, {
-                              headers: {
-                                "Content-Type": "multipart/form-data",
-                              },
-                            })
-                            .then((ok) => {
-                              setLoading(false);
-                              message.success(ok.data.message);
-                              router.push("/soal/product");
-                            })
-                            .catch((err) => {
-                              setLoading(false);
-                              message.error(err.response.data.message);
-                            });
+                          // setLoading(true);
+                          // axiosClientInstance
+                          //   .post("/api/soal/product/create", formData, {
+                          //     headers: {
+                          //       "Content-Type": "multipart/form-data",
+                          //     },
+                          //   })
+                          //   .then((ok) => {
+                          //     setLoading(false);
+                          //     message.success(ok.data.message);
+                          //     router.push("/soal/product");
+                          //   })
+                          //   .catch((err) => {
+                          //     setLoading(false);
+                          //     message.error(err.response.data.message);
+                          //   });
                         })
                         .catch((info) => {
                           // console.log("Validate Failed:", info);
