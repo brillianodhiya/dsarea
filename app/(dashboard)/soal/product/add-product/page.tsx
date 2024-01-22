@@ -210,44 +210,26 @@ const AddProduct = (props: Props) => {
                   }}
                 >
                   <Form.Item
-                    name="having_expired"
-                    label="Expired?"
-                    initialValue={true}
-                    noStyle
+                    name="expired_date"
+                    //   label="DatePicker"
+                    //   noStyle
+                    rules={[
+                      {
+                        type: "array" as const,
+                        required: true,
+                        message: "Please select time!",
+                      },
+                    ]}
                   >
-                    <Radio.Group>
-                      <Radio value={false}>Unlimited</Radio>
-                      <Radio value={true}>By Date</Radio>
-                    </Radio.Group>
+                    <DatePicker.RangePicker
+                      style={{
+                        margin: "8px 0px",
+                      }}
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                    />
                   </Form.Item>
-                  <Form.Item shouldUpdate noStyle>
-                    {() => {
-                      if (form.getFieldValue("having_expired")) {
-                        return (
-                          <Form.Item
-                            name="expired_date"
-                            //   label="DatePicker"
-                            //   noStyle
-                            rules={[
-                              {
-                                type: "object" as const,
-                                required: true,
-                                message: "Please select time!",
-                              },
-                            ]}
-                          >
-                            <DatePicker
-                              style={{
-                                margin: "8px 0px",
-                              }}
-                              showTime
-                              format="YYYY-MM-DD HH:mm:ss"
-                            />
-                          </Form.Item>
-                        );
-                      }
-                    }}
-                  </Form.Item>
+
                   <Form.Item
                     name="nama_product"
                     label="Nama Produk"
@@ -398,7 +380,14 @@ const AddProduct = (props: Props) => {
                             "having_expired",
                             values.having_expired
                           );
-                          formData.append("expired_date", values.expired_date);
+                          formData.append(
+                            "expired_date",
+                            values.expired_date[1].format("YYYY-MM-DD HH:mm:ss")
+                          );
+                          formData.append(
+                            "start_date",
+                            values.expired_date[0].format("YYYY-MM-DD HH:mm:ss")
+                          );
 
                           setLoading(true);
                           axiosClientInstance

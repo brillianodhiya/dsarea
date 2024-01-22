@@ -364,3 +364,30 @@
   .ant-upload-drag-hover:not(.ant-upload-disabled) {
   border-color: #3a9699 !important;
 }
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border: 1px solid #3a9699 !important;
+}
+
+.ant-picker-range .ant-picker-active-bar {
+  background-color: #3a9699 !important;
+}
+
+.ant-input-outlined:focus,
+.ant-input-outlined:focus-within {
+  border-color: #3a9699 !important;
+  box-shadow: 0 0 0 2px rgba(58, 150, 153, 0.2) !important;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #3a9699 !important;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background-color: #3a9699 !important;
+}
+.ant-tabs .ant-tabs-tab:hover {
+  color: #3a9699 !important;
+}

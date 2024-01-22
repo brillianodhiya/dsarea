@@ -36,6 +36,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
         justifyContent: "space-between",
         paddingRight: 20,
         paddingLeft: 24,
+        // position: "fixed",
       }}
     >
       {isSubMenu ? (

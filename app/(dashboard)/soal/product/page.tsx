@@ -262,9 +262,9 @@ export default function Home() {
             }
           />
           <Column
-            title="Expired At"
-            dataIndex="expired_at"
-            key="expired_at"
+            title="Start Date"
+            dataIndex="start_date"
+            key="start_date"
             sorter={
               isFetching
                 ? false
@@ -274,24 +274,37 @@ export default function Home() {
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                <Typography>
-                  {text == "undefined" || text == "unlimeted"
-                    ? "Unlimited"
-                    : text}
-                </Typography>
+                <Typography>{text}</Typography>
+              )
+            }
+          />
+          <Column
+            title="End Date"
+            dataIndex="end_date"
+            key="end_date"
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.expired_at.length - b.expired_at.length
+            }
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <Typography>{text}</Typography>
               )
             }
           />
           <Column
             title="Status"
-            dataIndex="expired_at"
-            key="expired_at"
+            dataIndex="status"
+            key="status"
             render={(text, record) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
                 <>
-                  {text == "undefined" || text == "unlimeted" ? (
+                  {text == "active" ? (
                     <Space
                       style={{
                         textTransform: "capitalize",
@@ -305,12 +318,7 @@ export default function Home() {
                         textTransform: "capitalize",
                       }}
                     >
-                      <Badge
-                        status={
-                          getStatus(text) == "active" ? "success" : "error"
-                        }
-                      />{" "}
-                      {getStatus(text)}
+                      <Badge status={"error"} /> Inactive
                     </Space>
                   )}
                 </>

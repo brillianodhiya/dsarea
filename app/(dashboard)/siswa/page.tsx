@@ -112,7 +112,7 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="capitalize">
-                  {text == true ? (
+                  {text == "active" ? (
                     <>
                       <CheckCircleFilled className="!text-[#32D583] text-[10px]" />
                       {" Active"}

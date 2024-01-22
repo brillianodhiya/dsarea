@@ -1,44 +1,164 @@
 {
-  "title": "FISIKA",
+  "category_id": 5,
+  "duration": 120,
+  "rules": "lorem ipsum dolor sit amet lalala",
   "soal": [
     {
       "no": 1,
-      "soal": "Sebuah pegas dengan konstanta pegas 100 N/m diregangkan sejauh 2 cm. Berapa besar energi potensial elastis yang disimpan oleh pegas?",
-      "type": "essay",
-      "image": "",
-      "audio": "",
-      "jawaban": []
-    },
-    {
-      "no": 2,
-      "soal": "Partikel dengan massa 4 kilogram gerak lurus dengan kecepatan konstan 2 m/s. Lalu, ada usaha 8 joule yang dilakukan partikel tersebut. Kecepatannya menjadi...",
       "type": "pilihan",
-      "image": "",
-      "audio": "",
+      "soal": "Soal biasa",
       "jawaban": [
         {
           "key": "A",
-          "jawaban": "4 m/s",
-          "nilai": "0",
-          "image": "",
-          "audio": ""
+          "jawaban": "Opsi 1",
+          "nilai": "80"
         },
         {
           "key": "B",
-          "jawaban": "3 akar 2 m/s",
-          "nilai": "0",
-          "image": "",
-          "audio": ""
+          "jawaban": "Opsi 2",
+          "nilai": "40"
         },
         {
           "key": "C",
-          "jawaban": "2 akar 2 m/s",
-          "nilai": "100",
-          "image": "",
-          "audio": ""
+          "jawaban": "Opsi 3",
+          "nilai": "20"
+        },
+        {
+          "key": "D",
+          "jawaban": "Opsi 4",
+          "nilai": "10"
         }
       ]
+    },
+    {
+      "no": 2,
+      "type": "pilihan",
+      "soal": "Soal Gambar",
+      "image": "MTcwNjczMTk2NjM4N2NvZGUzMzMucG5nLi1zcGxhc2gtLmltYWdlL3BuZw",
+      "jawaban": [
+        {
+          "key": "A",
+          "jawaban": "Server Component",
+          "nilai": "100"
+        },
+        {
+          "key": "B",
+          "jawaban": "Client Component",
+          "nilai": "0"
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "type": "pilihan",
+      "soal": "Soal Suara",
+      "audio": "MTcwNjM3NDk3MTgyNm5lZSBhdWxpYSBvbmUgY2hhbm4ud2F2Li1zcGxhc2gtLmF1ZGlvL3dhdg",
+      "jawaban": [
+        {
+          "key": "A",
+          "jawaban": "Aulia One Chan",
+          "nilai": "80"
+        },
+        {
+          "key": "B",
+          "jawaban": "Aulia Onee Chan",
+          "nilai": "100"
+        },
+        {
+          "key": "C",
+          "jawaban": "Dian San",
+          "nilai": "40"
+        },
+        {
+          "key": "D",
+          "jawaban": "Ahyar Kun",
+          "nilai": "0"
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "type": "pilihan",
+      "soal": "Gambar Semua",
+      "image": "MTcwNjg4NjQxMDMwMTE3MDE3NzI1NjA3ODAuanBnLi1zcGxhc2gtLmltYWdlL2pwZWc",
+      "jawaban": [
+        {
+          "key": "A",
+          "image": "MTcwNjUyMTI3NTI0NTE3MDE3NzI1NjA3OTIuanBnLi1zcGxhc2gtLmltYWdlL2pwZWc",
+          "nilai": "100",
+          "jawaban": "Dengan Opsi"
+        },
+        {
+          "key": "B",
+          "image": "MTcwNjQ0ODk5NDU0ODE3MDE3NzI1NjA1OTUuanBnLi1zcGxhc2gtLmltYWdlL2pwZWc",
+          "nilai": "80"
+        },
+        {
+          "key": "C",
+          "image": "MTcwNjU0NzU5NjgxMjE3MDE3NzI1NjAzNTEuanBnLi1zcGxhc2gtLmltYWdlL2pwZWc",
+          "nilai": "50"
+        }
+      ]
+    },
+    {
+      "no": 5,
+      "type": "pilihan",
+      "soal": "Suara Semua",
+      "audio": "MTcwNjAxNDA4NDU3OG95YXN1bWluc2FpLndhdi4tc3BsYXNoLS5hdWRpby93YXY",
+      "jawaban": [
+        {
+          "key": "A",
+          "audio": "MTcwNjAzMTE5ODgyNG91dHB1dC53YXYuLXNwbGFzaC0uYXVkaW8vd2F2",
+          "jawaban": "Dengan Opsi",
+          "nilai": "80"
+        },
+        {
+          "key": "B",
+          "audio": "MTcwNjMwODQwNTgxNmhhbGxvIHp1bGZhIHNhbi53YXYuLXNwbGFzaC0uYXVkaW8vd2F2",
+          "nilai": "50"
+        },
+        {
+          "key": "C",
+          "audio": "MTcwNjY1ODMwMjA1NDEwOTkyNjYzMzQzNTQ4MzM0ODkubXAzLi1zcGxhc2gtLmF1ZGlvL21wZWc",
+          "nilai": "30"
+        }
+      ]
+    },
+    {
+      "no": 6,
+      "type": "pilihan",
+      "soal": "Suara Dengan Gambar",
+      "image": "MTcwNjUwMDU2NzQ2NVdoYXRzQXBwIEltYWdlIDIwMjQtMDEtMjIgYXQgMDguMzYuMzdfOGFhZTc2NGUuanBnLi1zcGxhc2gtLmltYWdlL2pwZWc",
+      "audio": "MTcwNjU3NTA1NjIzMjExMTgwMTc1NjQ4MjAzODU4NDQubXAzLi1zcGxhc2gtLmF1ZGlvL21wZWc",
+      "jawaban": [
+        {
+          "key": "A",
+          "image": "MTcwNjMwNjMzODg0OHBkYW1zdXJhYmF5YS5qcGcuLXNwbGFzaC0uaW1hZ2UvanBlZw",
+          "audio": "MTcwNjM0ODUzMTAwMzExMDUxNTg4NzM5ODk1Mjk2OTAubXAzLi1zcGxhc2gtLmF1ZGlvL21wZWc",
+          "jawaban": "Dengan Opsi",
+          "nilai": "100"
+        },
+        {
+          "key": "B",
+          "jawaban": "",
+          "image": "MTcwNjE3MDgzMTU0MG1hcmtldGluZ19tYW5hZ2VyX2xvZ28uYjAxOWM1NGZhYjY4M2M4MGQ0NDkucG5nLi1zcGxhc2gtLmltYWdlL3BuZw",
+          "audio": "MTcwNjI4NDM0NzUwNzExMTgwMTc1NjQ4MjAzODU4NDQubXAzLi1zcGxhc2gtLmF1ZGlvL21wZWc",
+          "nilai": "50"
+        },
+        {
+          "key": "C",
+          "jawaban": "Opsi Biasa",
+          "nilai": "20"
+        }
+      ]
+    },
+    {
+      "no": 7,
+      "type": "essay",
+      "soal": "Soal 7",
+      "jawaban": []
     }
   ],
+  "title": "Soal testing preview",
   "bulk_image": ["image1", "image2"]
 }

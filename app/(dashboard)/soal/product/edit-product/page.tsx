@@ -19,6 +19,7 @@ import {
   UploadProps,
   message,
 } from "antd";
+import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -119,7 +120,10 @@ const AddProduct = (props: Props) => {
         harga: dataForEdit.harga,
         category_id: categoryID,
         having_expired: dataForEdit.having_expired,
-        expired_date: dataForEdit.expired_date,
+        expired_date: [
+          moment(dataForEdit.start_date),
+          moment(dataForEdit.end_date),
+        ],
       });
       setImageUrl(dataForEdit.image);
     }
@@ -251,43 +255,24 @@ const AddProduct = (props: Props) => {
                   }}
                 >
                   <Form.Item
-                    name="having_expired"
-                    label="Expired?"
-                    initialValue={true}
-                    noStyle
+                    name="expired_date"
+                    //   label="DatePicker"
+                    //   noStyle
+                    rules={[
+                      {
+                        type: "array" as const,
+                        required: true,
+                        message: "Please select time!",
+                      },
+                    ]}
                   >
-                    <Radio.Group>
-                      <Radio value={false}>Unlimited</Radio>
-                      <Radio value={true}>By Date</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item shouldUpdate noStyle>
-                    {() => {
-                      if (form.getFieldValue("having_expired")) {
-                        return (
-                          <Form.Item
-                            name="expired_date"
-                            //   label="DatePicker"
-                            //   noStyle
-                            rules={[
-                              {
-                                type: "object" as const,
-                                required: true,
-                                message: "Please select time!",
-                              },
-                            ]}
-                          >
-                            <DatePicker
-                              style={{
-                                margin: "8px 0px",
-                              }}
-                              showTime
-                              format="YYYY-MM-DD HH:mm:ss"
-                            />
-                          </Form.Item>
-                        );
-                      }
-                    }}
+                    <DatePicker.RangePicker
+                      style={{
+                        margin: "8px 0px",
+                      }}
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                    />
                   </Form.Item>
                   <Form.Item
                     name="nama_product"
@@ -332,7 +317,7 @@ const AddProduct = (props: Props) => {
                       },
                     ]}
                   >
-                    <SelectCategory multiple={true} />
+                    <SelectCategory multiple={true} disabled />
                   </Form.Item>
                 </Col>
                 <Col

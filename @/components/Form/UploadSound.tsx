@@ -22,7 +22,7 @@ const UploadSound: React.FC<UploadSoundProps> = ({
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
+        // console.log(info.file, info.fileList);
 
         // setFile(info.fileList);
         if (onChange) {

@@ -238,119 +238,144 @@ export default function AddSoal() {
       <Spin spinning={loading}>
         <DndProvider backend={HTML5Backend}>
           <Form form={form} layout="vertical" name="formaddSoal">
-            <Row>
-              <Col xxl={0} xl={0} lg={0} md={24} sm={24} xs={24}>
-                <KonfigurasiSoal
-                  FooterAction={
-                    <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
-                      <Button
-                        style={{
-                          width: "40%",
-                        }}
-                        onClick={() => {
-                          form
-                            .validateFields()
-                            .then((values) => {
-                              console.log(values);
-                            })
-                            .catch((info) => {
-                              // console.log("Validate Failed:", info);
-                            });
-                        }}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        type="primary"
-                        style={{
-                          width: "40%",
-                        }}
-                      >
-                        Preview
-                      </Button>
-                    </div>
-                  }
-                  title={titleSoal}
-                  form={form}
-                />
-              </Col>
-              <Col
-                xxl={18}
-                xl={18}
-                lg={16}
-                md={24}
-                sm={24}
-                xs={24}
-                style={{
-                  padding: "3em 6em",
-                }}
-              >
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Judul soal tidak boleh kosong!",
-                    },
-                  ]}
-                  name="title"
-                  initialValue={"Judul Soal..."}
-                  valuePropName="value"
+            <div
+              style={{
+                height: "93vh",
+                overflowY: "scroll",
+              }}
+            >
+              <Row>
+                <Col xxl={0} xl={0} lg={0} md={24} sm={24} xs={24}>
+                  <KonfigurasiSoal
+                    FooterAction={
+                      <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
+                        <Button
+                          style={{
+                            width: "40%",
+                          }}
+                          onClick={() => {
+                            form
+                              .validateFields()
+                              .then((values) => {
+                                console.log(values);
+                              })
+                              .catch((info) => {
+                                // console.log("Validate Failed:", info);
+                              });
+                          }}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          type="primary"
+                          style={{
+                            width: "40%",
+                          }}
+                        >
+                          Preview
+                        </Button>
+                      </div>
+                    }
+                    title={titleSoal}
+                    form={form}
+                  />
+                </Col>
+                <Col
+                  xxl={18}
+                  xl={18}
+                  lg={16}
+                  md={24}
+                  sm={24}
+                  xs={24}
+                  style={{
+                    padding: "3em 6em",
+                  }}
                 >
-                  <JudulForm value={titleSoal} onChange={setTitleSoal} />
-                </Form.Item>
-                <DynamicFormAddSoal form={form} />
-              </Col>
-              <Col xxl={6} xl={6} lg={8} md={0} sm={0} xs={0} style={{}}>
-                <KonfigurasiSoal
-                  FooterAction={
-                    <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
-                      <Button
-                        style={{
-                          width: "40%",
-                        }}
-                        onClick={() => {
-                          form
-                            .validateFields()
-                            .then((values) => {
-                              const _data = getImageAndAudio(values);
-                              setLoading(true);
-                              axiosClientInstance
-                                .post("/api/soal/sub/category/create", {
-                                  ...values,
-                                  bulk_file: _data,
-                                })
-                                .then((ok) => {
-                                  setLoading(false);
-                                  message.success(ok.data.message);
-                                  router.push("/soal/paket-soal");
-                                })
-                                .catch((err) => {
-                                  setLoading(false);
-                                  message.error(err.response.data.message);
-                                });
-                            })
-                            .catch((info) => {
-                              // console.log("Validate Failed:", info);
-                            });
-                        }}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        type="primary"
-                        style={{
-                          width: "40%",
-                        }}
-                      >
-                        Preview
-                      </Button>
-                    </div>
-                  }
-                  title={titleSoal}
-                  form={form}
-                />
-              </Col>
-            </Row>
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Judul soal tidak boleh kosong!",
+                      },
+                    ]}
+                    name="title"
+                    initialValue={"Judul Soal..."}
+                    valuePropName="value"
+                  >
+                    <JudulForm value={titleSoal} onChange={setTitleSoal} />
+                  </Form.Item>
+                  <DynamicFormAddSoal form={form} />
+                </Col>
+                <Col xxl={6} xl={6} lg={8} md={0} sm={0} xs={0} style={{}}>
+                  <KonfigurasiSoal
+                    FooterAction={
+                      <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
+                        <Button
+                          style={{
+                            width: "40%",
+                          }}
+                          onClick={() => {
+                            form
+                              .validateFields()
+                              .then((values) => {
+                                const _data = getImageAndAudio(values);
+                                setLoading(true);
+                                axiosClientInstance
+                                  .post("/api/soal/sub/category/create", {
+                                    ...values,
+                                    bulk_file: _data,
+                                  })
+                                  .then((ok) => {
+                                    setLoading(false);
+                                    message.success(ok.data.message);
+                                    router.push("/soal/paket-soal");
+                                  })
+                                  .catch((err) => {
+                                    setLoading(false);
+                                    message.error(err.response.data.message);
+                                  });
+                              })
+                              .catch((info) => {
+                                // console.log("Validate Failed:", info);
+                              });
+                          }}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          type="primary"
+                          style={{
+                            width: "40%",
+                          }}
+                          onClick={() => {
+                            form
+                              .validateFields()
+                              .then((values) => {
+                                const _data = getImageAndAudio(values);
+                                // console.log(values, "values");
+                                window.localStorage.setItem(
+                                  "preview-soal",
+                                  JSON.stringify({
+                                    ...values,
+                                    bulk_file: _data,
+                                  })
+                                );
+                              })
+                              .catch((info) => {
+                                // console.log("Validate Failed:", info);
+                              });
+                          }}
+                        >
+                          Preview
+                        </Button>
+                      </div>
+                    }
+                    title={titleSoal}
+                    form={form}
+                  />
+                </Col>
+              </Row>
+            </div>
           </Form>
         </DndProvider>
       </Spin>

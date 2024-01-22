@@ -13,10 +13,12 @@ import React from "react";
 import { Eye, PencilLine } from "lucide-react";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [countFetch, setCountFetch] = React.useState(0);
   const [searchText, setSearchText] = React.useState("");
+  const router = useRouter();
 
   const { data, isFetching } = useQuery({
     queryKey: ["sub_category", countFetch],
@@ -126,14 +128,14 @@ export default function Home() {
             key="action"
             fixed="right"
             width={100}
-            render={(text, record) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />
               ) : (
                 <DropdownMenu
                   itemLists={[
                     {
-                      key: "Preview",
+                      key: "1",
                       label: "Preview",
                       icon: <Eye size={17} />,
                     },
@@ -143,6 +145,14 @@ export default function Home() {
                       icon: <PencilLine size={17} />,
                     },
                   ]}
+                  onClick={(ev) => {
+                    // console.log(ev, "EV");
+                    if (ev.key == 1) {
+                      router.push(`/soal/paket-soal/preview-soal/${record.id}`);
+                    } else if (ev.key == 2) {
+                      router.push(`/soal/paket-soal/edit-soal/${record.id}`);
+                    }
+                  }}
                 />
               )
             }

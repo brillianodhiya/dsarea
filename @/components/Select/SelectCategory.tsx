@@ -10,12 +10,14 @@ interface SelectCategoryProps {
   onChange?: (values: any, option: any) => void;
   value?: string;
   multiple?: true | false;
+  disabled?: false | true;
 }
 
 const SelectCategory: React.FC<SelectCategoryProps> = ({
   onChange,
   value,
   multiple = false,
+  disabled = false,
 }) => {
   const { data, isFetching } = useQuery({
     queryKey: ["category"],
@@ -59,6 +61,7 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({
       onChange={onChange}
       mode={multiple ? "multiple" : undefined}
       tagRender={multiple ? tagRender : undefined}
+      disabled={disabled}
     >
       {data.map((item: any) => {
         return (
