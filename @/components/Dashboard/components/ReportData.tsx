@@ -38,7 +38,7 @@ const ReportData = ({ data, loading }: { data: any; loading: boolean }) => {
           <ReportCard
             data={data.total_pending}
             loading={loading}
-            title={"Total Pending"}
+            title={"Transaksi Pending"}
             percent={data.total_pending_persen}
           />
         </Col>
@@ -46,7 +46,7 @@ const ReportData = ({ data, loading }: { data: any; loading: boolean }) => {
           <ReportCard
             data={data.total_failed}
             loading={loading}
-            title={"Total Failed"}
+            title={"Transaksi Gagal"}
             percent={data.total_failed_persen}
           />
         </Col>
