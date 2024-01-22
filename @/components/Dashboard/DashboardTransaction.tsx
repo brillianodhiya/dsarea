@@ -1,5 +1,5 @@
 "use client";
-import { Card, Col, Row, Select, Typography } from "antd";
+import { Card, Col, Row, Select, Spin, Typography } from "antd";
 import dynamic from "next/dynamic";
 import ReportData from "./components/ReportData";
 import LineChart from "./components/LineChart";
@@ -17,60 +17,6 @@ export const DashboardTransaction: React.FC<TransactionType> = ({
   setYear,
   isFetching,
 }) => {
-  // const data = [
-  //   {
-  //     date: "2024-01",
-  //     value: 10000,
-  //   },
-  //   {
-  //     date: "2024-02",
-  //     value: 9000,
-  //   },
-  //   {
-  //     date: "2024-03",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-04",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-05",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-06",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-07",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-08",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-09",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-10",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-10",
-  //     value: 2000,
-  //   },
-  //   {
-  //     date: "2024-11",
-  //     value: 0,
-  //   },
-  //   {
-  //     date: "2024-12",
-  //     value: 0,
-  //   },
-  // ];
   return (
     <Card>
       <Row
@@ -115,16 +61,21 @@ export const DashboardTransaction: React.FC<TransactionType> = ({
       </Row>
       <Row gutter={[24, 24]} justify={"space-between"}>
         <Col xl={18} xs={24}>
-          <div
-            style={{
-              position: "relative",
-              height: "40vh",
-              width: "100%",
-              margin: "auto",
-            }}
-          >
-            <LineChart data={data?.grafik} />
-          </div>
+          <Spin spinning={isFetching}>
+            <div
+              style={{
+                position: "relative",
+                height: "40vh",
+                width: "100%",
+                margin: "auto",
+              }}
+            >
+              <LineChart
+                data={data?.grafik ? data.grafik : []}
+                loading={isFetching}
+              />
+            </div>
+          </Spin>
         </Col>
         <Col xl={6} xs={24}>
           <ReportData data={data} loading={isFetching} />
