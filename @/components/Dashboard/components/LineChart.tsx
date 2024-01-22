@@ -183,7 +183,7 @@ const LineChart: React.FC<LineType> = ({ data, loading }) => {
     pointRadius: 3,
     pointHoverRadius: 4,
     interaction: {
-      mode: "index",
+      // mode: "index",
       intersect: false,
     },
   };
