@@ -305,9 +305,9 @@
   border-color: #3a9699 !important;
 }
 
-:where(.css-dev-only-do-not-override-dkbvqv) a {
+/* :where(.css-dev-only-do-not-override-dkbvqv) a {
   color: #3a9699 !important;
-}
+} */
 
 :where(.css-dev-only-do-not-override-dkbvqv).ant-picker-dropdown
   .ant-picker-cell-in-view.ant-picker-cell-today
