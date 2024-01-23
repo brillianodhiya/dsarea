@@ -10,7 +10,7 @@ interface Values {
 
 interface AddCategoryModalProps {
   open: boolean;
-  onCreate: (values: Values) => void;
+  onCreate: (values: Values, form: any) => void;
   onCancel: () => void;
   loading: boolean;
 }
@@ -33,8 +33,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
         form
           .validateFields()
           .then((values) => {
-            form.resetFields();
-            onCreate(values);
+            onCreate(values, form);
           })
           .catch((info) => {
             // console.log("Validate Failed:", info);

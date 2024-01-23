@@ -48,7 +48,7 @@ export default function Category() {
     <div>
       <AddCategoryModal
         onCancel={() => setOpenAddModal(false)}
-        onCreate={async (values) => {
+        onCreate={async (values, form) => {
           try {
             setLoading(true);
             const res = await axiosClientInstance.post(
@@ -62,6 +62,7 @@ export default function Category() {
               queryKey: ["category"],
             });
             setLoading(false);
+            form.resetFields();
             message.success(`${res.data.message}`);
             setOpenAddModal(false);
           } catch (error) {
@@ -78,7 +79,7 @@ export default function Category() {
       />
       <EditCategoryModal
         onCancel={() => setOpenEditModal(false)}
-        onCreate={async (values) => {
+        onCreate={async (values, form) => {
           try {
             setLoading(true);
             const res = await axiosClientInstance.patch(
@@ -92,6 +93,8 @@ export default function Category() {
               queryKey: ["category"],
             });
             setLoading(false);
+            form.resetFields();
+
             message.success(`${res.data.message}`);
             setOpenEditModal(false);
             setOpenViewModal(false);

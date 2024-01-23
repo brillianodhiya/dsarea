@@ -10,7 +10,7 @@ interface Values {
 
 interface EditCategoryModalProps {
   open: boolean;
-  onCreate: (values: Values) => void;
+  onCreate: (values: Values, form: any) => void;
   onCancel: () => void;
   loading: boolean;
   initialValues?: Partial<Values>;
@@ -41,8 +41,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
         form
           .validateFields()
           .then((values) => {
-            form.resetFields();
-            onCreate(values);
+            onCreate(values, form);
           })
           .catch((info) => {
             // console.log("Validate Failed:", info);
