@@ -18,5 +18,6 @@ export const ProfileContext = createContext({
     createdAt: "2024-01-11T08:58:33.000Z",
     updatedAt: "2024-01-12T03:59:16.000Z",
     ds_user_role: { id: 0, name: "no role" },
+    isFullscreen: false,
   },
 });

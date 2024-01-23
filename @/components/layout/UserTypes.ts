@@ -19,6 +19,7 @@ export interface Data {
   createdAt: string;
   updatedAt: string;
   ds_user_role: DsUserRole;
+  isFullscreen: boolean;
 }
 
 export interface DsUserRole {

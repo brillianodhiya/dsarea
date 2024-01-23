@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Layout,
   Menu,
@@ -150,13 +150,41 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   const opens = useOpens();
 
+  // buat state untuk menyimpan status fullscreen
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    // buat fungsi untuk mengubah status fullscreen berdasarkan document.fullscreenElement
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        // jika ada elemen yang fullscreen, maka ubah status menjadi true
+        setIsFullscreen(true);
+      } else {
+        // jika tidak ada elemen yang fullscreen, maka ubah status menjadi false
+        setIsFullscreen(false);
+      }
+    };
+
+    // tambahkan event listener untuk mendeteksi perubahan fullscreen
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    // hapus event listener ketika komponen unmount
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ProfileContext.Provider value={profileData}>
         <Watermark
         // content={["AITI", "For Development Purpose"]}
         >
-          <Layout style={{ minHeight: "100vh" }}>
+          <Layout
+            style={{
+              minHeight: "100vh",
+            }}
+          >
             <Sider
               // trigger={null}
               // breakpoint="lg"
@@ -170,6 +198,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               }}
               style={{
                 width: 500,
+                display: isFullscreen ? "none" : undefined,
               }}
             >
               <Space

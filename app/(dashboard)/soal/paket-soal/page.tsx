@@ -14,6 +14,7 @@ import { Eye, PencilLine } from "lucide-react";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import useFullscreen from "@dsarea/@/lib/Fullscreen";
 
 export default function Home() {
   const [countFetch, setCountFetch] = React.useState(0);
@@ -41,6 +42,25 @@ export default function Home() {
       },
     ],
   });
+
+  // fungsi untuk meminta fullscreen
+  const requestFullscreen = () => {
+    // cek apakah browser mendukung fitur fullscreen
+    if (document.fullscreenEnabled) {
+      // cek apakah sudah ada elemen yang fullscreen
+      if (!document.fullscreenElement) {
+        // jika tidak, maka buat elemen body menjadi fullscreen
+        document.body.requestFullscreen().catch((err) => {
+          // tangani error jika ada
+          console.error(err);
+        });
+      }
+    } else {
+      // jika browser tidak mendukung fitur fullscreen, tampilkan pesan error
+      // alert("Browser Anda tidak mendukung fitur fullscreen.");
+    }
+  };
+
   return (
     <div>
       <CustomHeader title="Soal" />
@@ -148,6 +168,7 @@ export default function Home() {
                   onClick={(ev) => {
                     // console.log(ev, "EV");
                     if (ev.key == 1) {
+                      requestFullscreen();
                       router.push(`/soal/paket-soal/preview-soal/${record.id}`);
                     } else if (ev.key == 2) {
                       router.push(`/soal/paket-soal/edit-soal/${record.id}`);
