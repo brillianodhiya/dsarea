@@ -1,7 +1,8 @@
 "use server";
 import { cookies } from "next/headers";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import axios, { AxiosRequestHeaders } from "axios";
+import { redirect } from "next/navigation";
 
 // Membuat instance axios dengan konfigurasi dasar
 export const axiosInstance = axios.create({
@@ -24,6 +25,24 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Menangani kesalahan respons
+    if (error.response && error.response.status === 401) {
+      // Token tidak valid atau kedaluwarsa, redirect ke halaman login
+      // Gantilah '/login' dengan URL halaman login Anda
+      // redirect('/')
+      deleteCookie("DS-X-Access-Agent-Token");
+      deleteCookie("DS-X-Access-Agent-Role");
+      window.location.href = '/';
+    }
     return Promise.reject(error);
   }
 );

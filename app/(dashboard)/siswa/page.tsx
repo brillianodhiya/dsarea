@@ -145,7 +145,14 @@ export default function Page() {
                     },
                   ]}
                   onClick={(e) => {
+                    const data = JSON.stringify({
+                      name: record.name,
+                      picture: record.picture,
+                      status: record.status,
+                      email: record.email,
+                    });
                     router.push("/siswa/" + record.id);
+                    localStorage.setItem("siswaData", data);
                   }}
                 />
               )
