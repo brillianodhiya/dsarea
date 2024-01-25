@@ -1,22 +1,96 @@
 "use client";
 
-import { ClockCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  ClockCircleOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Col, Popover, Row, Space, Statistic, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Image,
+  Popover,
+  Row,
+  Space,
+  Statistic,
+  Typography,
+} from "antd";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const { Countdown } = Statistic;
 
 export default function AddSoal() {
-  const [soal, setSoal] = React.useState([]);
-  const [detail, setDetail] = React.useState({
+  const [soal, setSoal] = React.useState<
+    {
+      no: number;
+      type: "pilihan" | "essay";
+      soal: string;
+      jawaban: {
+        key: string;
+        jawaban: string;
+        nilai: string;
+        selected?: boolean;
+      }[];
+    }[]
+  >([]);
+  const [detail, setDetail] = React.useState<{
+    category_id: number;
+    duration: number;
+    rules: string;
+    soal: {
+      no: number;
+      type: "pilihan" | "essay";
+      soal: string;
+      jawaban: {
+        key: string;
+        jawaban: string;
+        nilai: string;
+        selected?: boolean;
+      }[];
+    }[];
+  }>({
     category_id: 0,
     duration: 0,
+    rules: "",
+    soal: [],
   });
+  const [no, setNo] = useState(0);
+  const [soalNow, setSoalNow] = useState<{
+    image?: string;
+    audio?: string;
+    no: number;
+    type: "pilihan" | "essay";
+    soal: string;
+    jawaban: {
+      key: string;
+      jawaban: string;
+      nilai: string;
+      image?: string;
+      audio?: string;
+      selected?: boolean;
+    }[];
+  }>({
+    no: 0,
+    type: "pilihan",
+    soal: "",
+    jawaban: [],
+  });
+  const [selectedKey, setSelectedKey] = React.useState("");
+
+  const handleNextQuestion = () => {
+    if (no < soal.length) {
+      setSoalNow(soal[no - 1 + 1]);
+      setNo(no + 1);
+      setSelectedKey("");
+    }
+  };
+
   const router = useRouter();
 
   const { data, isFetching } = useQuery({
@@ -42,8 +116,11 @@ export default function AddSoal() {
       : {};
     console.log(localData);
     if (Object.keys(localData).length > 0) {
-      console.log(localData);
       setSoal(localData.soal);
+      if (localData.soal.length > 0) {
+        setNo(localData.soal[0].no);
+        setSoalNow(localData.soal[0]);
+      }
       setDetail(localData);
     } else {
       router.push("/soal/paket-soal");
@@ -136,8 +213,8 @@ export default function AddSoal() {
           xl={6}
           lg={8}
           md={8}
-          sm={24}
-          xs={24}
+          sm={0}
+          xs={0}
           style={{
             borderRight: "1px solid #F3F3F3",
             height: "calc(100vh - 64px)",
@@ -182,22 +259,42 @@ export default function AddSoal() {
             }}
           >
             {soal.map((item: any, index: number) => {
+              let color = "#F3F3F3";
+              let fontColor = "#333333";
+              if (item.answered) {
+                color = "#A7EDCA";
+                fontColor = "#32D583";
+              } else if (item.skipped) {
+                color = "#F9AFA9";
+                fontColor = "#F04438";
+              }
+
+              if (item.no == no) {
+                color = "#3A9699";
+                fontColor = "#FFFFFF";
+              }
               return (
                 <div
                   key={item.no}
+                  onClick={() => {
+                    setNo(item.no);
+                    setSoalNow(item);
+                    setSelectedKey("");
+                  }}
                   style={{
                     width: 44,
                     height: 44,
                     borderRadius: 8,
-                    backgroundColor: "#F3F3F3",
+                    backgroundColor: color,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    color: "#333333",
+                    color: fontColor,
                     fontWeight: 400,
                     border: "1px solid #E0E0E0",
                     cursor: "pointer",
                     fontSize: "14px",
+                    borderColor: fontColor == "#333333" ? undefined : fontColor,
                   }}
                 >
                   {item.no}
@@ -206,7 +303,21 @@ export default function AddSoal() {
             })}
           </div>
         </Col>
-        <Col xxl={18} xl={18} lg={16} md={16} sm={24} xs={24}>
+        <Col
+          xxl={18}
+          xl={18}
+          lg={16}
+          md={16}
+          sm={24}
+          xs={24}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "calc(100vh - 64px)",
+            overflowY: "scroll",
+            alignItems: "center",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -214,6 +325,7 @@ export default function AddSoal() {
               alignItems: "center",
               width: "100%",
               flexDirection: "row",
+              flexWrap: "wrap",
             }}
           >
             <div
@@ -258,7 +370,7 @@ export default function AddSoal() {
                   margin: 0,
                 }}
               >
-                Pertanyaan ke 1 dari 6
+                Pertanyaan ke {no} dari {soal.length}
               </Typography>
             </div>
             <div>
@@ -316,6 +428,296 @@ export default function AddSoal() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div
+            style={{
+              borderRadius: "8px",
+              border: "1px solid #F3F3F3",
+              width: "94%",
+              padding: "1% 2%",
+              position: "relative",
+            }}
+          >
+            <Typography
+              style={{
+                color: "#7A7A7A",
+              }}
+            >
+              Pertanyaan
+            </Typography>
+            <Typography
+              style={{
+                color: "#333333",
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
+              {soalNow.soal}
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                alignItems: "flex-start",
+              }}
+            >
+              {soalNow.image != undefined ? (
+                <Image
+                  alt={soalNow.image + "Image Soal" + no}
+                  src={
+                    soalNow.image
+                      ? soalNow.image.includes("http")
+                        ? soalNow.image
+                        : "https://api-dsarea.aitilokal.com/api/attach/" +
+                          soalNow.image
+                      : ""
+                  }
+                  width={200}
+                  style={{
+                    position: "relative",
+                  }}
+
+                  // className="w-[200px] object-contain aspect-auto"
+                />
+              ) : null}
+
+              {soalNow.audio != undefined ? (
+                <audio id="audio" controls>
+                  <source
+                    id="source"
+                    src={
+                      soalNow.audio
+                        ? soalNow.audio.includes("http")
+                          ? soalNow.audio
+                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                            soalNow.audio
+                        : ""
+                    }
+                    type="audio/mp3"
+                  />
+                  <source
+                    id="source"
+                    src={
+                      soalNow.audio
+                        ? soalNow.audio.includes("http")
+                          ? soalNow.audio
+                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                            soalNow.audio
+                        : ""
+                    }
+                    type="audio/ogg"
+                  />
+                  <source
+                    id="source"
+                    src={
+                      soalNow.audio
+                        ? soalNow.audio.includes("http")
+                          ? soalNow.audio
+                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                            soalNow.audio
+                        : ""
+                    }
+                    type="audio/wav"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              ) : null}
+            </div>
+
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              {soalNow.jawaban.map((val, idx) => {
+                return (
+                  <div
+                    key={val.key}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                      // cursor: "pointer",
+                    }}
+                    // onClick={() => {
+                    //   setSelectedKey(val.key);
+                    // }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 10,
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setSelectedKey(val.key);
+                      }}
+                    >
+                      <div
+                        style={{
+                          background:
+                            val.key == selectedKey ? "#3A9699" : "#F3F3F3",
+                          borderRight:
+                            val.key == selectedKey
+                              ? "1px solid #3A9699"
+                              : "1px solid #F3F3F3",
+                          color: val.key == selectedKey ? "#fff" : "#333333",
+                          // padding: "2px 8px",
+                          borderRadius: "4px",
+                          width: "26px",
+                          height: "26px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontWeight: 500,
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setSelectedKey(val.key);
+                        }}
+                      >
+                        {val.key}
+                      </div>
+                      <div>{val.jawaban}</div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "8px",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      {val.image != undefined ? (
+                        <Image
+                          alt={val.image + "Image Soal" + no}
+                          src={
+                            val.image
+                              ? val.image.includes("http")
+                                ? val.image
+                                : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                  val.image
+                              : ""
+                          }
+                          width={200}
+                          style={{
+                            position: "relative",
+                          }}
+
+                          // className="w-[200px] object-contain aspect-auto"
+                        />
+                      ) : null}
+
+                      {val.audio != undefined ? (
+                        <audio id="audio" controls>
+                          <source
+                            id="source"
+                            src={
+                              val.audio
+                                ? val.audio.includes("http")
+                                  ? val.audio
+                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                    val.audio
+                                : ""
+                            }
+                            type="audio/mp3"
+                          />
+                          <source
+                            id="source"
+                            src={
+                              val.audio
+                                ? val.audio.includes("http")
+                                  ? val.audio
+                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                    val.audio
+                                : ""
+                            }
+                            type="audio/ogg"
+                          />
+                          <source
+                            id="source"
+                            src={
+                              val.audio
+                                ? val.audio.includes("http")
+                                  ? val.audio
+                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                    val.audio
+                                : ""
+                            }
+                            type="audio/wav"
+                          />
+                          Your browser does not support the audio element.
+                        </audio>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              padding: "2% 3%",
+            }}
+          >
+            <Button
+              size="large"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+              disabled={no == 1}
+              onClick={() => {
+                if (no > 0) {
+                  setSoalNow(soal[no - 1 - 1]);
+                  setNo(no - 1);
+                  setSelectedKey("");
+                }
+              }}
+            >
+              <ArrowLeftOutlined /> Sebelumnya
+            </Button>
+            {no < soal.length ? (
+              <Button
+                size="large"
+                type="primary"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                onClick={handleNextQuestion}
+              >
+                Selanjutnya
+                <ArrowRightOutlined />
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                type="primary"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                onClick={() => {}}
+              >
+                Selesaikan
+                <ArrowRightOutlined />
+              </Button>
+            )}
           </div>
         </Col>
       </Row>

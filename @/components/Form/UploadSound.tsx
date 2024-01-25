@@ -13,6 +13,8 @@ const UploadSound: React.FC<UploadSoundProps> = ({
   size = "default",
 }) => {
   const [file, setFile] = React.useState<UploadFile[]>([]);
+  const [loading, setLoading] = React.useState(false);
+
   const props: UploadProps = {
     name: "file",
     action: "https://api-dsarea.aitilokal.com" + "/api/upload/file",
@@ -29,9 +31,14 @@ const UploadSound: React.FC<UploadSoundProps> = ({
           onChange(info.file.response?.data);
         }
       }
+      if (info.file.status == "uploading") {
+        setLoading(true);
+      }
       if (info.file.status === "done") {
+        setLoading(false);
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
+        setLoading(false);
         message.error(`${info.file.name} file upload failed.`);
       }
     },
