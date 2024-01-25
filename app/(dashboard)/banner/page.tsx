@@ -4,10 +4,20 @@ import AddBannerModal from "@dsarea/@/components/Modals/Banner/AddBannerModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, Col, Input, Row, Space, Tag, Typography, message } from "antd";
+import {
+  Card,
+  Col,
+  Input,
+  Row,
+  Space,
+  Tag,
+  Typography,
+  message,
+  Image,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import Button from "antd/lib/button";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 
 export default function Page() {
@@ -40,7 +50,7 @@ export default function Page() {
           const formData = new FormData();
           formData.append("title", values.title);
           formData.append("desc", values.description);
-          formData.append("image", values.image);
+          formData.append("image", values.image.file.originFileObj);
           try {
             setLoading(true);
             const res = await axiosClientInstance.post(
@@ -67,7 +77,7 @@ export default function Page() {
               }`
             );
           }
-          console.log(values);
+          // console.log(values);
         }}
         onCancel={() => {
           setOpenAddModal(false);
@@ -119,11 +129,12 @@ export default function Page() {
             }}
           >
             <Image
-              alt="example"
+              alt={e.title + i}
               // src={"/card-image.svg"}
               src={e.image}
               width={240}
-              height={100}
+              height={140}
+              className="h-[140px] aspect-video object-contain object-center"
             />
 
             <div className="flex-row p-4 ">

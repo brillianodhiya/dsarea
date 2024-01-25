@@ -391,3 +391,7 @@
 .ant-tabs .ant-tabs-tab:hover {
   color: #3a9699 !important;
 }
+
+.ant-typography .ant-typography-copy {
+  color: #3a9699 !important;
+}

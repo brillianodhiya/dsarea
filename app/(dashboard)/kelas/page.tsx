@@ -55,14 +55,14 @@ export default function Page() {
                   label: "Kelas Online",
                   value: "online",
                 },
-                {
-                  label: "Product Digital",
-                  value: "digital-product",
-                },
-                {
-                  label: "Bundling",
-                  value: "bundling",
-                },
+                // {
+                //   label: "Product Digital",
+                //   value: "digital-product",
+                // },
+                // {
+                //   label: "Bundling",
+                //   value: "bundling",
+                // },
               ]}
             />
           </Col>

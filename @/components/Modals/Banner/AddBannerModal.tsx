@@ -137,7 +137,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
               },
             ]}
           >
-            <Upload.Dragger {...props} accept=".png,.jpg">
+            <Upload.Dragger {...props} accept=".png,.jpg,.gif,.webp">
               {imageUrl ? (
                 <Image
                   src={imageUrl}
@@ -204,7 +204,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
             <Input placeholder="Banner Name" />
           </Form.Item>
 
-          <Form.Item name="description" label="Description">
+          <Form.Item name="description" label="Description" initialValue={""}>
             <Input.TextArea rows={2} placeholder="Description" />
           </Form.Item>
         </Form>

@@ -712,7 +712,9 @@ export default function AddSoal() {
                   flexDirection: "row",
                   alignItems: "center",
                 }}
-                onClick={() => {}}
+                onClick={() => {
+                  router.back();
+                }}
               >
                 Selesaikan
                 <ArrowRightOutlined />

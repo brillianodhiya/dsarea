@@ -360,6 +360,10 @@ export default function AddSoal() {
                                     bulk_file: _data,
                                   })
                                 );
+                                window.open(
+                                  "/soal/paket-soal/preview-soal/0",
+                                  "_blank"
+                                );
                               })
                               .catch((info) => {
                                 // console.log("Validate Failed:", info);
