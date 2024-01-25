@@ -17,6 +17,7 @@ const DropdownLogout: React.FC = () => {
       icon: <LogOutIcon />,
       onClick: () => {
         deleteCookie("DS-X-Access-Agent-Token");
+        deleteCookie("DS-X-Access-Agent-Role");
         window.location.href = "/";
       },
     },

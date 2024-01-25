@@ -6,6 +6,9 @@ import { getCookie, deleteCookie, setCookie, hasCookie } from "cookies-next";
 export async function GetDsAreaCookie() {
   return getCookie("DS-X-Access-Agent-Token", { cookies });
 }
+export async function GetDsAreaRoleCookie() {
+  return getCookie("DS-X-Access-Agent-Role", { cookies });
+}
 
 export async function DeleteDsAreaToken() {
   cookies().delete("DS-X-Access-Agent-Token");

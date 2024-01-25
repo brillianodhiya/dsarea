@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { HasDsAreaCookie } from "@dsarea/@/lib/DsAreaCookies";
+import {
+  GetDsAreaRoleCookie,
+  HasDsAreaCookie,
+} from "@dsarea/@/lib/DsAreaCookies";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -11,10 +14,16 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const hasCookie = await HasDsAreaCookie();
+  const roleId = await GetDsAreaRoleCookie();
 
   if (hasCookie) {
-    redirect("/dashboard");
+    if (roleId == "3") {
+      redirect("/siswa/dashboard");
+    } else {
+      redirect("/dashboard");
+    }
   }
+
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#5acacc]">
       <div className="max-w-md w-full space-y-8">
@@ -46,5 +55,5 @@ export default async function Home() {
     </div>
   );
 }
-// http://localhost:3000/auth-success?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMzYxNTgyMDA3NjMzMjM4MDk5MyIsImVtYWlsIjoiZGlhbmNhbmRyYTExMkBnbWFpbC5jb20iLCJuYW1lIjoiRElBTiIsImlhdCI6MTcwNDc2ODQ0OSwiZXhwIjoxNzA0NzcyMDQ5fQ._QxiwouOzlfi15vhxIL2QyPdoO1M1JEVigQiM6mYmK8
-// http://localhost:3000/auth-success?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMDU3NDMyOTAwNDQ4NzI4MDQ2MyIsImVtYWlsIjoiYnJpbGxpZGhpeWFAZ21haWwuY29tIiwibmFtZSI6IkJyaWxsaWFubyBEaGl5YSBVbGhhcSIsImlhdCI6MTcwNDk5NjgzOSwiZXhwIjoxNzM2MTAwODM5fQ.JPWvVftUAB19t2i-8SG7EzIQmg9iFlWeU_ELauPRbH0
+// http://localhost:3000/auth-success?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMzYxNTgyMDA3NjMzMjM4MDk5MyIsImVtYWlsIjoiZGlhbmNhbmRyYTExMkBnbWFpbC5jb20iLCJuYW1lIjoiRElBTiIsImlhdCI6MTcwNDc2ODQ0OSwiZXhwIjoxNzA0NzcyMDQ5fQ._QxiwouOzlfi15vhxIL2QyPdoO1M1JEVigQiM6mYmK8&role_id=3
+// http://localhost:3000/auth-success?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMDU3NDMyOTAwNDQ4NzI4MDQ2MyIsImVtYWlsIjoiYnJpbGxpZGhpeWFAZ21haWwuY29tIiwibmFtZSI6IkJyaWxsaWFubyBEaGl5YSBVbGhhcSIsImlhdCI6MTcwNDk5NjgzOSwiZXhwIjoxNzM2MTAwODM5fQ.JPWvVftUAB19t2i-8SG7EzIQmg9iFlWeU_ELauPRbH0&role_id=1
