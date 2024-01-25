@@ -1,5 +1,6 @@
 "use client";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddBannerModal from "@dsarea/@/components/Modals/Banner/AddBannerModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
@@ -17,6 +18,7 @@ import {
 } from "antd";
 import Meta from "antd/es/card/Meta";
 import Button from "antd/lib/button";
+import { PencilLine } from "lucide-react";
 // import Image from "next/image";
 import React from "react";
 
@@ -143,17 +145,41 @@ export default function Page() {
               <Meta title={e.title} description={e.desc} />
             </div>
 
-            <Tag
+            <div
               style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 8,
                 position: "absolute",
                 zIndex: 1,
-                right: "10px",
-                borderRadius: "10px",
+                right: "2vw",
+                alignItems: "center",
               }}
-              color={e.status ? "#32D583" : "#F04438"}
             >
-              {e.status ? "Active" : "Inactive"}
-            </Tag>
+              <Tag
+                style={{
+                  borderRadius: "10px",
+                }}
+                color={e.status ? "#32D583" : "#F04438"}
+              >
+                {e.status ? "Active" : "Inactive"}
+              </Tag>
+
+              <DropdownMenuAction
+                itemLists={[
+                  {
+                    label: "Edit",
+                    key: "2",
+                    icon: <PencilLine size={17} />,
+                  },
+                ]}
+                onClick={(ev) => {
+                  if (ev.key == 2) {
+                    console.log("WEWE");
+                  }
+                }}
+              />
+            </div>
           </Card>
         ))}
       </Card>
