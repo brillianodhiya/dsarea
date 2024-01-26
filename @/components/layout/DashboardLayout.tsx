@@ -104,6 +104,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   React.useEffect(() => {
     if (profileData.error) {
       deleteCookie("DS-X-Access-Agent-Token");
+      deleteCookie("DS-X-Access-Agent-Role");
+      redirect("/");
+    } else if (profileData.data.role_id != 1 && profileData.data.role_id != 2) {
+      deleteCookie("DS-X-Access-Agent-Token");
+      deleteCookie("DS-X-Access-Agent-Role");
       redirect("/");
     }
   }, [profileData.error]);
