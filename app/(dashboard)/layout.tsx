@@ -1,6 +1,9 @@
 import DashboardLayout from "@dsarea/@/components/layout/DashboardLayout";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
-import { HasDsAreaCookie } from "@dsarea/@/lib/DsAreaCookies";
+import {
+  GetDsAreaRoleCookie,
+  HasDsAreaCookie,
+} from "@dsarea/@/lib/DsAreaCookies";
 import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
@@ -23,7 +26,13 @@ const getDataProfile = async () => {
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const hasCookie = await HasDsAreaCookie();
+  const role = await GetDsAreaRoleCookie();
+
   if (!hasCookie) {
+    redirect("/");
+  }
+
+  if (role !== "1") {
     redirect("/");
   }
 
