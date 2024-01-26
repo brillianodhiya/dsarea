@@ -67,11 +67,11 @@ const itemsSiswa: MenuItem[] = [
     "pengumuman",
     <PenilaianIcon />
   ),
-  getItem(
-    <Link href={"/siswa/kelas"}>Kelas saya</Link>,
-    "kelas",
-    <KelasIcon />
-  ),
+  // getItem(
+  //   <Link href={"/siswa/kelas"}>Kelas saya</Link>,
+  //   "kelas",
+  //   <KelasIcon />
+  // ),
   getItem(
     <Link href={"/siswa/informasi"}>Informasi</Link>,
     "informasi",
