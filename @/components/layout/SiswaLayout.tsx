@@ -14,9 +14,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import DashboardIcon from "../icons/DashboardIcon";
 import SoalIcon from "../icons/SoalIcon";
 import Link from "next/link";
-import VoucherIcon from "../icons/VoucherIcon";
-import RoleIcon from "../icons/RoleIcon";
-import SiswaIcon from "../icons/SiswaIcon";
 import PenilaianIcon from "../icons/PenilaianIcon";
 import { redirect, usePathname } from "next/navigation";
 import { RootUser } from "./UserTypes";
@@ -24,8 +21,11 @@ import { deleteCookie } from "cookies-next";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Watermark } from "antd/lib";
+import TransaksiIcon from "../icons/TransaksiIcon";
+import KelasIcon from "../icons/KelasIcon";
+import BannerIcon from "../icons/BannerIcon";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 const queryClient = new QueryClient();
 
@@ -60,20 +60,24 @@ const itemsSiswa: MenuItem[] = [
   getItem(
     <Link href={"/siswa/latihan-soal"}>Latihan Soal</Link>,
     "latihan-soal",
-    <PenilaianIcon />
+    <SoalIcon />
   ),
   getItem(
     <Link href={"/siswa/pengumuman"}>Pengumuman</Link>,
     "pengumuman",
-    <SiswaIcon />
+    <PenilaianIcon />
   ),
-  getItem(<Link href={"/siswa/kelas"}>Kelas saya</Link>, "kelas", <RoleIcon />),
+  getItem(
+    <Link href={"/siswa/kelas"}>Kelas saya</Link>,
+    "kelas",
+    <KelasIcon />
+  ),
   getItem(
     <Link href={"/siswa/informasi"}>Informasi</Link>,
     "informasi",
-    <VoucherIcon />
+    <BannerIcon />
   ),
-  getItem("Pembelian", "sub1", <SoalIcon />, [
+  getItem("Pembelian", "sub1", <TransaksiIcon />, [
     getItem(
       <Link className="sub-menu-item" href={"/siswa/pembelian/product"}>
         Product
@@ -105,7 +109,6 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
   const pathname = usePathname();
   const parts = pathname.split("/");
   let key: string;
-  console.log(parts);
 
   if (parts[2] === "pembelian") {
     key = parts[3].toString();
@@ -167,7 +170,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
               collapsed={collapsed}
               breakpoint="md"
               collapsedWidth="80"
-              onCollapse={(collapsed, type) => {
+              onCollapse={(collapsed) => {
                 setCollapsed(collapsed);
               }}
               style={{

@@ -1,6 +1,9 @@
 import SiswaLayout from "@dsarea/@/components/layout/SiswaLayout";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
-import { HasDsAreaCookie } from "@dsarea/@/lib/DsAreaCookies";
+import {
+  GetDsAreaRoleCookie,
+  HasDsAreaCookie,
+} from "@dsarea/@/lib/DsAreaCookies";
 import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
@@ -23,15 +26,18 @@ const getDataProfile = async () => {
 
 export default async function Layout({ children }: { children: ReactNode }) {
   const hasCookie = await HasDsAreaCookie();
+  const role = await GetDsAreaRoleCookie();
+
   if (!hasCookie) {
+    redirect("/");
+  }
+
+  if (role !== "3") {
     redirect("/");
   }
 
   const profileData = await getDataProfile();
   // console.log(profileData);
-  // if (profileData.error) {
-  // redirect("/");
-  // }
 
   return <SiswaLayout profileData={profileData}>{children}</SiswaLayout>;
 }
