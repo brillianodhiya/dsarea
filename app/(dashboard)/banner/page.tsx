@@ -1,7 +1,12 @@
 "use client";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleFilled,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddBannerModal from "@dsarea/@/components/Modals/Banner/AddBannerModal";
+import EditBannerModal from "@dsarea/@/components/Modals/Banner/EditBannerModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,15 +20,26 @@ import {
   Typography,
   message,
   Image,
+  Modal,
 } from "antd";
 import Meta from "antd/es/card/Meta";
 import Button from "antd/lib/button";
-import { PencilLine } from "lucide-react";
+import { PencilLine, TrashIcon } from "lucide-react";
 // import Image from "next/image";
 import React from "react";
-
+const { confirm } = Modal;
 export default function Page() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+  const [dataSelected, setDataSelected] = React.useState({
+    id: 0,
+    title: "",
+    desc: "",
+    image: "",
+    status: false,
+    createdAt: "",
+    updatedAt: "",
+  });
   const [loading, setLoading] = React.useState(false);
   const [countFetch, setCountFetch] = React.useState(0);
   const queryClient = useQueryClient();
@@ -48,11 +64,12 @@ export default function Page() {
     <div>
       <AddBannerModal
         open={openAddModal}
-        onCreate={async (values) => {
+        onCreate={async (values, form) => {
           const formData = new FormData();
           formData.append("title", values.title);
           formData.append("desc", values.description);
           formData.append("image", values.image.file.originFileObj);
+          formData.append("status", values.status ? "1" : "0");
           try {
             setLoading(true);
             const res = await axiosClientInstance.post(
@@ -70,6 +87,7 @@ export default function Page() {
             setLoading(false);
             message.success(`${res.data.message}`);
             setOpenAddModal(false);
+            form.resetFields();
           } catch (error) {
             console.log(error);
             setLoading(false);
@@ -85,6 +103,50 @@ export default function Page() {
           setOpenAddModal(false);
         }}
         loading={loading}
+      />
+
+      <EditBannerModal
+        open={openEditModal}
+        onCreate={async (values, form) => {
+          // const formData = new FormData();
+          // formData.append("title", values.title);
+          // formData.append("desc", values.description);
+          // if (values.image) {
+          //   formData.append("image", values.image.file.originFileObj);
+          // }
+          // formData.append("status", values.status ? "1" : "0");
+          try {
+            setLoading(true);
+            const res = await axiosClientInstance.put(
+              "/api/banner/change/status",
+              {
+                id: dataSelected.id,
+                status: values.status,
+              }
+            );
+            queryClient.invalidateQueries({
+              queryKey: ["Banner"],
+            });
+            setLoading(false);
+            message.success(`${res.data.message}`);
+            setOpenEditModal(false);
+            form.resetFields();
+          } catch (error) {
+            console.log(error);
+            setLoading(false);
+            message.error(
+              `${(error as any).response.data.message} : ${
+                (error as any).response.data
+              }`
+            );
+          }
+          // console.log(values);
+        }}
+        onCancel={() => {
+          setOpenEditModal(false);
+        }}
+        loading={loading}
+        dataSelected={dataSelected}
       />
       <CustomHeader title="Banner" />
 
@@ -149,7 +211,7 @@ export default function Page() {
               style={{
                 display: "flex",
                 flexDirection: "row",
-                gap: 8,
+                gap: 20,
                 position: "absolute",
                 zIndex: 1,
                 right: "2vw",
@@ -172,10 +234,48 @@ export default function Page() {
                     key: "2",
                     icon: <PencilLine size={17} />,
                   },
+                  {
+                    label: "Delete",
+                    key: "3",
+                    icon: <TrashIcon size={17} />,
+                  },
                 ]}
                 onClick={(ev) => {
-                  if (ev.key == 2) {
-                    console.log("WEWE");
+                  if (ev.key == "2") {
+                    // console.log("WEWE");
+                    setDataSelected(e);
+                    setOpenEditModal(true);
+                  } else if (ev.key == "3") {
+                    confirm({
+                      title: "Apakah anda yakin ingin menghapus banner ini?",
+                      icon: <ExclamationCircleFilled />,
+                      // content: 'Some descriptions',
+                      onOk: async () => {
+                        try {
+                          setLoading(true);
+                          const res = await axiosClientInstance.delete(
+                            `/api/banner/delete/${e.id}`
+                          );
+                          queryClient.invalidateQueries({
+                            queryKey: ["Banner"],
+                          });
+                          setLoading(false);
+                          message.success(`${res.data.message}`);
+                          // form.resetFields();
+                        } catch (error) {
+                          console.log(error);
+                          setLoading(false);
+                          message.error(
+                            `${(error as any).response.data.message} : ${
+                              (error as any).response.data
+                            }`
+                          );
+                        }
+                      },
+                      onCancel() {
+                        console.log("Cancel");
+                      },
+                    });
                   }
                 }}
               />

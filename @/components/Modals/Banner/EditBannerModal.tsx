@@ -16,11 +16,20 @@ interface Values {
   status: boolean;
 }
 
-interface AddBannerModalProps {
+interface EditBannerModalProps {
   open: boolean;
   onCreate: (values: Values, form: any) => void;
   onCancel: () => void;
   loading: boolean;
+  dataSelected: {
+    id: number;
+    title: string;
+    desc: string;
+    image: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 // type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -41,11 +50,12 @@ const beforeUpload = (file: any) => {
   }
   return isJpgOrPng && isLt2M;
 };
-const AddBannerModal: React.FC<AddBannerModalProps> = ({
+const EditBannerModal: React.FC<EditBannerModalProps> = ({
   open,
   onCreate,
   onCancel,
   loading,
+  dataSelected,
 }) => {
   const [form] = Form.useForm();
   const [checked, setChecked] = React.useState(true);
@@ -83,24 +93,36 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
-    // beforeUpload(file) {
-    //   const isJpgOrPng =
-    //     file.type === "image/jpeg" || file.type === "image/png";
-    //   if (!isJpgOrPng) {
-    //     message.error("You can only upload JPG/PNG file!");
-    //   }
-    //   const isLt2M = file.size / 1024 / 1024 < 2;
-    //   if (!isLt2M) {
-    //     message.error("Image must smaller than 2MB!");
-    //   }
-    //   return isJpgOrPng && isLt2M;
-    // },
+    beforeUpload(file) {
+      const isJpgOrPng =
+        file.type === "image/jpeg" || file.type === "image/png";
+      if (!isJpgOrPng) {
+        message.error("You can only upload JPG/PNG file!");
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error("Image must smaller than 2MB!");
+      }
+      return isJpgOrPng && isLt2M;
+    },
   };
+
+  React.useEffect(() => {
+    if (dataSelected) {
+      form.setFieldsValue({
+        title: dataSelected.title,
+        description: dataSelected.desc,
+        status: dataSelected.status,
+      });
+      setImageUrl(dataSelected.image);
+      setChecked(dataSelected.status);
+    }
+  }, [dataSelected]);
 
   return (
     <Modal
       open={open}
-      title="Unggah Banner"
+      title="Edit Banner"
       okText="Save"
       cancelText="Cancel"
       onCancel={() => {
@@ -112,13 +134,13 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
         form
           .validateFields()
           .then((values) => {
-            // form.resetFields();
+            values.status = checked;
             onCreate(values, form);
           })
           .catch((info) => {
             // console.log("Validate Failed:", info);
           });
-        setImageUrl(undefined);
+        // setImageUrl(undefined);
         setChecked(true);
       }}
     >
@@ -129,22 +151,25 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
           name="form_in_modal"
           initialValues={{ modifier: "public" }}
         >
-          <Form.Item
-            name={"image"}
-            rules={[
-              {
-                required: true,
-                message: "Gambar tidak boleh kosong!",
-              },
-            ]}
-          >
-            <Upload.Dragger {...props} accept=".png,.jpg,.gif,.webp">
+          <Form.Item name={"image"}>
+            <Image
+              src={imageUrl ? imageUrl : ""}
+              alt="banner image"
+              width={1000}
+              height={1000}
+              style={{
+                width: "100%",
+                height: 100,
+                objectFit: "contain",
+              }}
+            />
+            {/* <Upload.Dragger disabled {...props} accept=".png,.jpg,.gif,.webp">
               {imageUrl ? (
                 <Image
                   src={imageUrl}
                   alt="banner image"
-                  width={20}
-                  height={20}
+                  width={1000}
+                  height={1000}
                   style={{
                     width: "100%",
                     height: 100,
@@ -169,7 +194,7 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
                   )}
                 </>
               )}
-            </Upload.Dragger>
+            </Upload.Dragger> */}
           </Form.Item>
 
           <Form.Item
@@ -181,9 +206,9 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
             <Space>
               {checked ? "Active" : "No Active"}
               <Switch
-                defaultChecked={true}
-                onChange={(checked) => {
-                  setChecked(checked);
+                checked={checked}
+                onChange={(e) => {
+                  setChecked(e);
                   form.setFieldValue("status", checked);
                 }}
                 style={{
@@ -202,15 +227,15 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
             name="title"
             label="Judul"
           >
-            <Input placeholder="Banner Name" />
+            <Input placeholder="Banner Name" disabled />
           </Form.Item>
 
           <Form.Item name="description" label="Description" initialValue={""}>
-            <Input.TextArea rows={2} placeholder="Description" />
+            <Input.TextArea disabled rows={2} placeholder="Description" />
           </Form.Item>
         </Form>
       </Spin>
     </Modal>
   );
 };
-export default AddBannerModal;
+export default EditBannerModal;

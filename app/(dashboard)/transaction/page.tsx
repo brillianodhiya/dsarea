@@ -13,7 +13,21 @@ import SkeletonButton from "antd/es/skeleton/Button";
 import SkeletonInput from "antd/es/skeleton/Input";
 import Button from "antd/lib/button";
 import Column from "antd/lib/table/Column";
+import moment from "moment";
 import React from "react";
+import { CSVLink } from "react-csv";
+
+// headers = [
+//   { label: "First Name", key: "firstname" },
+//   { label: "Last Name", key: "lastname" },
+//   { label: "Email", key: "email" }
+// ];
+
+// data = [
+//   { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+//   { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+//   { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+// ];
 
 export default function Page() {
   const [searchText, setSearchText] = React.useState("");
@@ -49,14 +63,44 @@ export default function Page() {
                 className="!w-[250px]"
                 onChange={(e) => setSearchText(e.target.value)}
               />
-              <Button
-                type="primary"
-                onClick={() => {}}
-                color="red"
-                icon={<ExportIcon />}
+              <CSVLink
+                data={data.map((val: any) => {
+                  return {
+                    invoice: val.invoice,
+                    status: val.status,
+                    name: val.ds_user.name,
+                    product: val.ds_product.nama_product,
+                    tanggal_transaksi: val.tanggal_transaksi,
+                    tanggal_pembayaran: val.tanggal_pembayaran,
+                    voucher: val.voucher,
+                    discount: val.discount,
+                    harga: val.harga,
+                    total_pembayaran: val.total_pembayaran,
+                  };
+                })}
+                filename={"export-transaction" + moment().unix()}
+                headers={[
+                  { label: "No. Transaksi", key: "invoice" },
+                  { label: "Status", key: "status" },
+                  { label: "Nama Siswa", key: "name" },
+                  { label: "Product", key: "product" },
+                  { label: "Tanggal Pembelian", key: "tanggal_transaksi" },
+                  { label: "Tanggal Pembayaran", key: "tanggal_pembayaran" },
+                  { label: "Voucher", key: "voucher" },
+                  { label: "Diskon", key: "discount" },
+                  { label: "Harga", key: "harga" },
+                  { label: "Total Pembayaran", key: "total_pembayaran" },
+                ]}
               >
-                Export
-              </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {}}
+                  color="red"
+                  icon={<ExportIcon />}
+                >
+                  Export
+                </Button>
+              </CSVLink>
             </Space>
           </Col>
         </Row>
@@ -67,6 +111,9 @@ export default function Page() {
           }}
           rowKey={"id"}
           size="middle"
+          scroll={{
+            x: 1800,
+          }}
         >
           <Column
             title="No. Transaction"
@@ -77,10 +124,24 @@ export default function Page() {
             }
           />
           <Column
+            title="Status"
+            dataIndex="status"
+            key="status"
+            width={140}
+            render={(text) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <CustomBadge value={text} status={text} />
+              )
+            }
+          />
+
+          <Column
             title="Nama Siswa"
             dataIndex="name"
             key="name"
-            width={"20%"}
+            width={200}
             render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
@@ -100,6 +161,28 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 record.ds_product.nama_product
+              )
+            }
+          />
+          <Column
+            title="Tanggal Pembelian"
+            dataIndex="tanggal_transaksi"
+            key="tanggal_transaksi"
+            render={(text) =>
+              isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+          />
+          <Column
+            title="Tanggal Pembayaran"
+            dataIndex="tanggal_pembayaran"
+            key="tanggal_pembayaran"
+            render={(text) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : text ? (
+                text
+              ) : (
+                "-"
               )
             }
           />
@@ -146,35 +229,6 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 formatRupiah(text)
-              )
-            }
-          />
-          <Column
-            title="Status"
-            dataIndex="status"
-            key="status"
-            render={(text) =>
-              isFetching ? (
-                <SkeletonInput active size={"small"} />
-              ) : (
-                <CustomBadge value={text} status={text} />
-              )
-            }
-          />
-
-          <Column
-            title="Action"
-            dataIndex="action"
-            key="action"
-            render={(text, record: any) =>
-              isFetching ? (
-                <SkeletonButton active />
-              ) : (
-                <DropdownMenuAction
-                  onClick={(ev) => {
-                    // console.log(ev, "EV");
-                  }}
-                />
               )
             }
           />
