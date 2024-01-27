@@ -1,5 +1,7 @@
+"use client";
 import { SearchOutlined } from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { PengumumanCard } from "@dsarea/@/components/pengumuman/PengumumanCard";
 import { Card, Col, Input, Row, Typography } from "antd";
 import moment from "moment";
 import Image from "next/image";
@@ -15,35 +17,13 @@ export default function Page() {
           className="!w-[250px]"
         />
 
-        {/* <Row gutter={[24, 24]} className="mt-4">
-          <Col>
-            <Card>
-              <Image
-                src={"/card-image.svg"}
-                alt="cover"
-                width={100}
-                height={100}
-                className="w-full aspect-square object-cover h-[100px] object-center rounded-md"
-                style={
-                  {
-                    // height: 100,
-                    // width: "100%",
-                    // objectFit: "fill",
-                  }
-                }
-              />
-              <Typography>Excel For Advance</Typography>
-              <Typography>
-                Expired at : {moment().format("DD/MM/YYYY HH:mm")}
-              </Typography>
-              <Typography>Harga</Typography>
-              <Typography>Rp 75.000</Typography>
-              <Typography>
-                Peringkat : <span>30</span>/40 Siswa
-              </Typography>
-            </Card>
-          </Col>
-        </Row> */}
+        <Row gutter={[24, 24]} className="mt-4">
+          {[...Array(5)].map((e, i) => (
+            <Col key={i}>
+              <PengumumanCard />
+            </Col>
+          ))}
+        </Row>
       </div>
     </div>
   );
