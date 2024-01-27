@@ -32,9 +32,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
     redirect("/");
   }
 
-  if (role !== "3") {
-    redirect("/");
-  }
+  // if (role !== "3") {
+  //   redirect("/");
+  // }
 
   const profileData = await getDataProfile();
   // console.log(profileData);

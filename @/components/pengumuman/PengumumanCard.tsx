@@ -33,9 +33,9 @@ export const PengumumanCard: React.FC<dataType> = () => {
           right: 0,
           width: "max-content",
         }}
-        color="#32D583"
+        // color="#32D583"
       >
-        Active
+        Selesai
       </Tag>
       <Image
         alt={"alt"}
@@ -63,30 +63,16 @@ export const PengumumanCard: React.FC<dataType> = () => {
       <Typography.Text strong> {formatRupiah(75000)}</Typography.Text>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
+          marginTop: 10,
+          marginBottom: 10,
         }}
       >
-        <div
-          style={{
-            fontWeight: 700,
-            color: "#7A7A7A",
-          }}
+        <Tag
+          color="#EBF5F5"
+          className="!text-[#3A9699] !border !border-[#D0E6E7] !rounded-md !font-bold"
         >
-          0%
-        </div>
-        <Progress showInfo={false} />
-        <div
-          style={{
-            fontWeight: 700,
-            color: "#7A7A7A",
-          }}
-        >
-          1/<span style={{ fontWeight: 400 }}>4</span>
-        </div>
+          Score : 223
+        </Tag>
       </div>
       <div
         style={{

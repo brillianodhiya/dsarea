@@ -62,11 +62,24 @@ export default function Page() {
               gap: 8,
             }}
           >
-            <Typography.Text strong className="!text-xl">
-              Penilaian : Try Outs
-            </Typography.Text>
             <div className="flex items-center gap-x-2">
-              <Tag>Matematika</Tag>
+              <Typography.Text strong className="!text-xl">
+                Penilaian : Try Outs
+              </Typography.Text>
+              <Tag
+                color="#EBF5F5"
+                style={{
+                  borderRadius: 100,
+                }}
+              >
+                <Typography
+                  style={{
+                    color: "#3A9699",
+                  }}
+                >
+                  Matematika
+                </Typography>
+              </Tag>
               <Tag
                 color="#EBF5F5"
                 style={{
@@ -190,23 +203,16 @@ export default function Page() {
             align="center"
             dataIndex="status"
             key="status"
-            render={(text, record: any) =>
-              record.status == "expired" ? (
-                <Button type="text" disabled>
-                  Selesai
-                </Button>
-              ) : (
-                <Button
-                  style={{
-                    color: "#3A9699",
-                    borderColor: "#3A9699",
-                    borderWidth: 1,
-                  }}
-                >
-                  Mulai Mengerjakan Soal
-                </Button>
-              )
-            }
+            render={(text, record: any) => (
+              <Button
+                type="link"
+                style={{
+                  color: "#3A9699",
+                }}
+              >
+                Lihat Detail
+              </Button>
+            )}
           />
         </Table>
       </Card>
