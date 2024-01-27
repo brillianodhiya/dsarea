@@ -72,7 +72,20 @@ const SubSoalForm: React.FC<{
   remove: (index: number) => void;
   subOpt: any;
   indexParent: number;
-}> = ({ move, index, subField, id, form, remove, subOpt, indexParent }) => {
+  field: any;
+  no: number;
+}> = ({
+  move,
+  index,
+  subField,
+  id,
+  form,
+  remove,
+  subOpt,
+  indexParent,
+  field,
+  no,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -158,6 +171,24 @@ const SubSoalForm: React.FC<{
 
   const [imgSoal, setImgSoal] = React.useState(undefined);
   const [audioSoal, setAudioSoal] = React.useState(undefined);
+
+  React.useEffect(() => {
+    const dataForm = form.getFieldsValue([
+      ["soal", field.name, "jawaban", subField.name, "image"],
+    ]);
+    // console.log();
+    const _img = dataForm.soal[no - 1].jawaban[id - 1].image;
+
+    setImgSoal(_img);
+
+    const dataFormAudio = form.getFieldsValue([
+      ["soal", field.name, "jawaban", subField.name, "audio"],
+    ]);
+    // console.log(dataForm.soal[id - 1]);
+    const _audio = dataFormAudio.soal[no - 1].jawaban[id - 1].audio;
+
+    setAudioSoal(_audio);
+  }, []);
 
   return (
     <div
@@ -449,6 +480,21 @@ const SoalForm: React.FC<{
   const [audioSoal, setAudioSoal] = React.useState(undefined);
   const [type, setType] = React.useState("pilihan");
 
+  // jika form data sudah ada isinya, maka isi state imgSoal dan audioSoal dengan data yang sudah ada melalui form.
+  React.useEffect(() => {
+    const dataForm = form.getFieldsValue([["soal", field.name, "image"]]);
+    // console.log(dataForm.soal[id - 1]);
+    const _img = dataForm.soal[id - 1].image;
+
+    setImgSoal(_img);
+
+    const dataFormAudio = form.getFieldsValue([["soal", field.name, "audio"]]);
+    // console.log(dataForm.soal[id - 1]);
+    const _audio = dataFormAudio.soal[id - 1].audio;
+
+    setAudioSoal(_audio);
+  }, []);
+
   return (
     <div
       title={`Soal ${field.name + 1}`}
@@ -700,6 +746,8 @@ const SoalForm: React.FC<{
                         subField={subField}
                         key={subField.key}
                         indexParent={index}
+                        field={field}
+                        no={id}
                       />
                     ))}
                     <Button

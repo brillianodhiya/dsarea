@@ -2,9 +2,11 @@
 import { ClockCircleOutlined, UpOutlined } from "@ant-design/icons";
 import { Card } from "@dsarea/@/components/DragnDrop/Card";
 import DynamicFormAddSoal from "@dsarea/@/components/Form/DynamicForm";
+import LoadingNonFullscreen from "@dsarea/@/components/LoadingComponent/LoadingComponentParent";
 import SelectCategory from "@dsarea/@/components/Select/SelectCategory";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { useQuery } from "@tanstack/react-query";
 import {
   Button,
   Col,
@@ -13,7 +15,6 @@ import {
   Input,
   InputNumber,
   Row,
-  Spin,
   Tooltip,
   Typography,
   message,
@@ -218,11 +219,52 @@ const JudulForm = ({ onChange, value }: { onChange?: any; value?: any }) => {
   );
 };
 
-export default function EditSoal() {
+export default function EditSoal(props: {
+  params: {
+    id: string;
+  };
+}) {
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
   const [titleSoal, setTitleSoal] = React.useState("Judul Soal...");
   const router = useRouter();
+
+  // console.log(props.params.id, "id");
+
+  const id = props.params.id;
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["sub_category", "detail", id],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(
+        "/api/soal/sub/category/detail/" + id
+      );
+      return res.data.data;
+    },
+    initialData: {
+      id: 0,
+      title: "Loading Soal",
+      category_id: 1,
+      duration: 120,
+      rules: "loading...",
+      createdAt: "2024-01-09T09:46:38.000Z",
+      updatedAt: "2024-01-09T09:46:38.000Z",
+      soal: [],
+    },
+  });
+
+  React.useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        title: data.title,
+        category_id: data.category_id,
+        duration: data.duration,
+        rules: data.rules,
+        soal: data.soal,
+      });
+      setTitleSoal(data.title);
+    }
+  }, [data]);
 
   return (
     <div>
@@ -235,7 +277,7 @@ export default function EditSoal() {
           },
         ]}
       />
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading || isFetching}>
         <DndProvider backend={HTML5Backend}>
           <Form form={form} layout="vertical" name="formaddSoal">
             <div
@@ -245,7 +287,7 @@ export default function EditSoal() {
               }}
             >
               <Row>
-                <Col xxl={0} xl={0} lg={0} md={24} sm={24} xs={24}>
+                <Col xxl={0} xl={0} lg={0} md={0} sm={0} xs={0}>
                   <KonfigurasiSoal
                     FooterAction={
                       <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
@@ -382,7 +424,7 @@ export default function EditSoal() {
             </div>
           </Form>
         </DndProvider>
-      </Spin>
+      </LoadingNonFullscreen>
     </div>
   );
 }
