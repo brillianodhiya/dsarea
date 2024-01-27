@@ -45,21 +45,26 @@ const ViewInformasiModal: React.FC<ModalProps> = ({
       }
     >
       <Spin spinning={loading}>
-        <Image
-          src={data.image}
-          width={1000}
-          height={1000}
-          alt="image-cover"
-          // className=" aspect-square object-contain object-center mb-4"
-          // style={{
-          //   // padding: 0,
-          //   // margin: 0,
-          //   width: "100%",
-          //   height: 220,
-          //   // objectFit: "cover",
-          // }}
-          className="w-full h-[220px] aspect-video object-contain object-center mb-4"
-        />
+        <div
+          style={{
+            marginLeft: "-24px",
+            marginRight: "-24px",
+          }}
+        >
+          <Image
+            alt={data.tile}
+            src={data.image}
+            width={1000}
+            height={1000}
+            style={{
+              width: "100%",
+              height: 200,
+              objectFit: "contain",
+              background: "#EDF3EF",
+              marginBottom: 10,
+            }}
+          />
+        </div>
 
         <Typography.Text strong>{data.title}</Typography.Text>
         <Typography>{data.desc ? data.desc : "-"}</Typography>

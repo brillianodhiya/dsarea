@@ -25,6 +25,22 @@ export default function Page() {
   //   ],
   // });
 
+  const data = [
+    {
+      id: 1,
+      status: "active",
+    },
+    {
+      id: 2,
+      status: "selesai",
+    },
+    {
+      id: 3,
+      status: "expired",
+    },
+  ];
+  const isFetching = false;
+
   const onChange = (key: string) => {
     setActiveTabs(key);
   };
@@ -32,17 +48,17 @@ export default function Page() {
     {
       key: "active",
       label: "Sedang Dikerjakan",
-      children: <ListSoal />,
+      children: <ListSoal data={data} isFetching={isFetching} />,
     },
     {
       key: "selesai",
       label: "Selesai",
-      children: <ListSoal />,
+      children: <ListSoal data={data} isFetching={isFetching} />,
     },
     {
       key: "expired",
       label: "Expired",
-      children: <ListSoal />,
+      children: <ListSoal data={data} isFetching={isFetching} />,
     },
   ];
   return (

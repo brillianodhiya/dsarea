@@ -1,3 +1,9 @@
+import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+
 export default function Page() {
-  return <>Dashboard</>;
+  return (
+    <>
+      <CustomHeader title="Dashboard" />
+    </>
+  );
 }
