@@ -68,8 +68,8 @@ export default function Page() {
                   return {
                     invoice: val.invoice,
                     status: val.status,
-                    name: val.ds_user.name,
-                    product: val.ds_product.nama_product,
+                    name: val?.ds_user?.name,
+                    product: val?.ds_product?.nama_product,
                     tanggal_transaksi: val.tanggal_transaksi,
                     tanggal_pembayaran: val.tanggal_pembayaran,
                     voucher: val.voucher,
@@ -78,7 +78,7 @@ export default function Page() {
                     total_pembayaran: val.total_pembayaran,
                   };
                 })}
-                filename={"export-transaction" + moment().unix()}
+                filename={"export-transaction" + moment().unix() + ".csv"}
                 headers={[
                   { label: "No. Transaksi", key: "invoice" },
                   { label: "Status", key: "status" },

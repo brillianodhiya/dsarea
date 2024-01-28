@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
-import { Button, Modal, Space, Spin, Typography } from "antd";
+import { Button, Modal, Space, Typography } from "antd";
 import moment from "moment";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   name: string;
@@ -50,7 +51,7 @@ const ViewVoucherModal: React.FC<ModalProps> = ({
         </div>
       }
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <div
           style={{
             marginTop: "24px",
@@ -166,7 +167,7 @@ const ViewVoucherModal: React.FC<ModalProps> = ({
             {data.diskon}%
           </Typography>
         </div>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

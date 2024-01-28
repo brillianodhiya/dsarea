@@ -64,6 +64,9 @@ export default function Page() {
           }}
           rowKey={"id"}
           size="middle"
+          scroll={{
+            x: 1000,
+          }}
         >
           <Column
             title="Nama Siswa"
@@ -132,6 +135,8 @@ export default function Page() {
             title="Action"
             dataIndex="action"
             key="action"
+            fixed="right"
+            width={80}
             render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />

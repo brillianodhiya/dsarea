@@ -1,6 +1,6 @@
-import { Spin } from "antd/lib";
+import LoadingFullscreen from "@dsarea/@/components/LoadingComponent/LoadingComponent";
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
-  return <Spin spinning={true} fullscreen />;
+  return <LoadingFullscreen />;
 }

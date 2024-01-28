@@ -5,7 +5,6 @@ import {
   Button,
   Modal,
   Space,
-  Spin,
   Tabs,
   TabsProps,
   Tag,
@@ -16,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { formatRupiah, getStatus, pickRandomItem } from "@dsarea/@/lib/utils";
 import { FieldTimeOutlined } from "@ant-design/icons";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface ModalProps {
   open: boolean;
@@ -71,7 +71,7 @@ const ViewProductModal: React.FC<ModalProps> = ({ open, onSubmit, data }) => {
         </div>
       }
     >
-      <Spin spinning={loading || isFetching}>
+      <LoadingNonFullscreen spinning={loading || isFetching}>
         <div>
           <div
             style={{
@@ -217,7 +217,7 @@ const ViewProductModal: React.FC<ModalProps> = ({ open, onSubmit, data }) => {
           </div>
           <Tabs defaultActiveKey="1" items={items} />
         </div>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

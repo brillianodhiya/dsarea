@@ -259,6 +259,9 @@ export default function Page(props: any) {
               ),
           }}
           dataSource={data2}
+          scroll={{
+            x: 1000,
+          }}
         />
       </Card>
     </div>

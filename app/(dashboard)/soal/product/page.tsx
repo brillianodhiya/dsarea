@@ -139,7 +139,7 @@ export default function Home() {
           }}
           rowKey={"id"}
           scroll={{
-            x: 800,
+            x: 1800,
           }}
           expandable={{
             expandedRowRender: (record: any) => (

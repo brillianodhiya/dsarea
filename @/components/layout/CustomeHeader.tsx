@@ -1,10 +1,17 @@
 "use client";
-import { Avatar, Badge, Breadcrumb, Button, Layout, Typography } from "antd";
+import {
+  Avatar,
+  Badge,
+  Breadcrumb,
+  Button,
+  Grid,
+  Layout,
+  Typography,
+} from "antd";
 import { Bell } from "lucide-react";
 import DropdownLogout from "../Dropdown/DropdownLogout";
 import React, { useContext, useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 
@@ -14,6 +21,8 @@ type HeaderProps = {
   subMenu?: any;
 };
 
+const { useBreakpoint } = Grid;
+
 const CustomHeader: React.FC<HeaderProps> = ({
   title,
   isSubMenu = false,
@@ -21,7 +30,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
 }) => {
   const { Header } = Layout;
   const router = useRouter();
-
+  const screens = useBreakpoint();
   const { data } = useContext(ProfileContext);
 
   // buat state untuk menyimpan status fullscreen
@@ -48,6 +57,8 @@ const CustomHeader: React.FC<HeaderProps> = ({
     };
   }, []);
 
+  // console.log(screens, "screen");
+
   return (
     <Header
       style={{
@@ -65,14 +76,16 @@ const CustomHeader: React.FC<HeaderProps> = ({
     >
       {isSubMenu ? (
         <div>
-          <Breadcrumb
-            separator=">"
-            items={[
-              {
-                title: "Home",
-              },
-            ].concat(subMenu)}
-          />
+          {screens.md ? (
+            <Breadcrumb
+              separator=">"
+              items={[
+                {
+                  title: "Home",
+                },
+              ].concat(subMenu)}
+            />
+          ) : null}
           <div
             style={{
               display: "flex",
@@ -105,7 +118,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 24,
+          gap: screens.md ? 24 : 16,
         }}
       >
         <Badge count={100}>

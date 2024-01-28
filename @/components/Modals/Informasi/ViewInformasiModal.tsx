@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
-import { Button, Modal, Space, Spin, Typography } from "antd";
+import { Button, Modal, Space, Typography } from "antd";
 import Image from "next/image";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   title: string;
@@ -44,7 +45,7 @@ const ViewInformasiModal: React.FC<ModalProps> = ({
         </div>
       }
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <div
           style={{
             marginLeft: "-24px",
@@ -68,7 +69,7 @@ const ViewInformasiModal: React.FC<ModalProps> = ({
 
         <Typography.Text strong>{data.title}</Typography.Text>
         <Typography>{data.desc ? data.desc : "-"}</Typography>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

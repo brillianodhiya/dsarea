@@ -1,9 +1,9 @@
 "use client";
-import { Card, Col, Row, Select, Spin, Typography } from "antd";
-import dynamic from "next/dynamic";
+import { Card, Col, Row, Select, Typography } from "antd";
 import ReportData from "./components/ReportData";
 import LineChart from "./components/LineChart";
 import React from "react";
+import LoadingNonFullscreen from "../LoadingComponent/LoadingComponentParent";
 interface TransactionType {
   data: any;
   year: string;
@@ -61,7 +61,7 @@ export const DashboardTransaction: React.FC<TransactionType> = ({
       </Row>
       <Row gutter={[24, 24]} justify={"space-between"}>
         <Col xl={18} xs={24}>
-          <Spin spinning={isFetching}>
+          <LoadingNonFullscreen spinning={isFetching}>
             <div
               style={{
                 position: "relative",
@@ -75,7 +75,7 @@ export const DashboardTransaction: React.FC<TransactionType> = ({
                 loading={isFetching}
               />
             </div>
-          </Spin>
+          </LoadingNonFullscreen>
         </Col>
         <Col xl={6} xs={24}>
           <ReportData data={data} loading={isFetching} />

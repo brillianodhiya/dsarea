@@ -8,10 +8,13 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Affix,
   Button,
   Col,
   Collapse,
+  Drawer,
   Form,
+  Grid,
   Input,
   InputNumber,
   Row,
@@ -45,6 +48,8 @@ type Soal = {
   }>;
 };
 
+const { useBreakpoint } = Grid;
+
 // Membuat fungsi untuk mengembalikan array dari value image dan audio
 function getImageAndAudio(obj: { soal: Soal[] }): string[] {
   // Membuat array kosong untuk menyimpan hasil
@@ -69,9 +74,17 @@ function getImageAndAudio(obj: { soal: Soal[] }): string[] {
 }
 
 const KonfigurasiSoal = ({ FooterAction, title, form }: KonfigurasiProps) => {
+  const screens = useBreakpoint();
+
   return (
     <div className="w-full relative">
-      <div className="bg-[#F3F3F3] border border-solid border-[#F3F3F3] h-[93vh] flex flex-col overflow-y-scroll fixed">
+      <div
+        className={
+          screens.md
+            ? "bg-[#F3F3F3] border border-solid border-[#F3F3F3] h-[93vh] flex flex-col overflow-y-scroll fixed"
+            : "bg-[#F3F3F3] border border-solid border-[#F3F3F3] h-[93vh] flex flex-col overflow-y-scroll fixed"
+        }
+      >
         <Collapse
           bordered={false}
           defaultActiveKey={["Konfigurasi Soal", "List Soal"]}
@@ -82,7 +95,7 @@ const KonfigurasiSoal = ({ FooterAction, title, form }: KonfigurasiProps) => {
           style={{
             background: "#fff",
             borderRadius: 0,
-            width: "21vw",
+            width: screens.md ? "21vw" : "100%",
             position: "relative",
           }}
           //   style={{ background: token.colorBgContainer }}
@@ -228,7 +241,8 @@ export default function EditSoal(props: {
   const [loading, setLoading] = React.useState(false);
   const [titleSoal, setTitleSoal] = React.useState("Judul Soal...");
   const router = useRouter();
-
+  const screens = useBreakpoint();
+  const [open, setOpen] = React.useState(false);
   // console.log(props.params.id, "id");
 
   const id = props.params.id;
@@ -287,41 +301,6 @@ export default function EditSoal(props: {
               }}
             >
               <Row>
-                <Col xxl={0} xl={0} lg={0} md={0} sm={0} xs={0}>
-                  <KonfigurasiSoal
-                    FooterAction={
-                      <div className="w-full text-center flex flex-row justify-center gap-3 my-4">
-                        <Button
-                          style={{
-                            width: "40%",
-                          }}
-                          onClick={() => {
-                            form
-                              .validateFields()
-                              .then((values) => {
-                                console.log(values);
-                              })
-                              .catch((info) => {
-                                // console.log("Validate Failed:", info);
-                              });
-                          }}
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          type="primary"
-                          style={{
-                            width: "40%",
-                          }}
-                        >
-                          Preview
-                        </Button>
-                      </div>
-                    }
-                    title={titleSoal}
-                    form={form}
-                  />
-                </Col>
                 <Col
                   xxl={18}
                   xl={18}
@@ -330,7 +309,7 @@ export default function EditSoal(props: {
                   sm={24}
                   xs={24}
                   style={{
-                    padding: "3em 6em",
+                    padding: screens.md ? "3em 6em" : "3em 1em",
                   }}
                 >
                   <Form.Item
@@ -343,6 +322,9 @@ export default function EditSoal(props: {
                     name="title"
                     initialValue={"Judul Soal..."}
                     valuePropName="value"
+                    style={{
+                      marginBottom: "34px",
+                    }}
                   >
                     <JudulForm value={titleSoal} onChange={setTitleSoal} />
                   </Form.Item>
@@ -421,6 +403,104 @@ export default function EditSoal(props: {
                   />
                 </Col>
               </Row>
+              <Affix
+                offsetBottom={40}
+                style={{
+                  display: screens.md ? "none" : "block",
+                  zIndex: 1000,
+                }}
+              >
+                <Button
+                  type="primary"
+                  onClick={() => setOpen(!open)}
+                  style={{
+                    marginLeft: "20px",
+                  }}
+                >
+                  Soal Setting
+                </Button>
+              </Affix>
+              <Drawer
+                title="Setting Soal"
+                onClose={() => setOpen(!open)}
+                open={open}
+                styles={{
+                  body: {
+                    padding: 0,
+                  },
+                }}
+              >
+                <KonfigurasiSoal
+                  FooterAction={
+                    <div className="w-full text-center flex flex-row justify-center gap-3 mt-4 mb-10">
+                      <Button
+                        style={{
+                          width: "40%",
+                        }}
+                        onClick={() => {
+                          form
+                            .validateFields()
+                            .then((values) => {
+                              const _data = getImageAndAudio(values);
+                              setLoading(true);
+                              axiosClientInstance
+                                .post("/api/soal/sub/category/create", {
+                                  ...values,
+                                  bulk_file: _data,
+                                })
+                                .then((ok) => {
+                                  setLoading(false);
+                                  message.success(ok.data.message);
+                                  router.push("/soal/paket-soal");
+                                })
+                                .catch((err) => {
+                                  setLoading(false);
+                                  message.error(err.response.data.message);
+                                });
+                            })
+                            .catch((info) => {
+                              // console.log("Validate Failed:", info);
+                            });
+                        }}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        type="primary"
+                        style={{
+                          width: "40%",
+                        }}
+                        onClick={() => {
+                          form
+                            .validateFields()
+                            .then((values) => {
+                              const _data = getImageAndAudio(values);
+                              // console.log(values, "values");
+                              window.localStorage.setItem(
+                                "preview-soal",
+                                JSON.stringify({
+                                  ...values,
+                                  bulk_file: _data,
+                                })
+                              );
+                              window.open(
+                                "/soal/paket-soal/preview-soal/0",
+                                "_blank"
+                              );
+                            })
+                            .catch((info) => {
+                              // console.log("Validate Failed:", info);
+                            });
+                        }}
+                      >
+                        Preview
+                      </Button>
+                    </div>
+                  }
+                  title={titleSoal}
+                  form={form}
+                />
+              </Drawer>
             </div>
           </Form>
         </DndProvider>

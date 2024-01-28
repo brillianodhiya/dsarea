@@ -9,13 +9,13 @@ import {
   Modal,
   Radio,
   Space,
-  Spin,
   message,
 } from "antd";
 import { PercentageOutlined } from "@ant-design/icons";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
 import moment from "moment";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   name: string;
@@ -86,7 +86,7 @@ const AddVourcherModal: React.FC<VourcherModalProps> = ({
           });
       }}
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Form
           form={form}
           layout="vertical"
@@ -184,7 +184,7 @@ const AddVourcherModal: React.FC<VourcherModalProps> = ({
             />
           </Form.Item>
         </Form>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

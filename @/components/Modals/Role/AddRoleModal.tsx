@@ -9,10 +9,10 @@ import {
   Select,
   Space,
 } from "antd";
-import { Spin } from "antd/lib";
 import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   title: string;
@@ -111,7 +111,7 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
         }
       }}
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Input placeholder="Search anything..." suffix={<SearchOutlined />} />
         <div
           id="scrollableDiv"
@@ -160,7 +160,7 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
             )}
           />
         </div>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

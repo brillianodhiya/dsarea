@@ -1,6 +1,7 @@
 "use client";
 
 import { CloudUploadOutlined, LoadingOutlined } from "@ant-design/icons";
+import LoadingNonFullscreen from "@dsarea/@/components/LoadingComponent/LoadingComponentParent";
 import SelectCategory from "@dsarea/@/components/Select/SelectCategory";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
@@ -14,7 +15,6 @@ import {
   Radio,
   Row,
   Space,
-  Spin,
   Upload,
   UploadProps,
   message,
@@ -95,7 +95,7 @@ const AddProduct = (props: Props) => {
           },
         ]}
       />
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Form
           form={form}
           layout="vertical"
@@ -418,7 +418,7 @@ const AddProduct = (props: Props) => {
             </Col>
           </Row>
         </Form>
-      </Spin>
+      </LoadingNonFullscreen>
     </div>
   );
 };

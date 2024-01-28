@@ -1,13 +1,9 @@
 import React from "react";
-import { Form, Input, Modal, Space, Switch, Upload, message } from "antd";
-import { Spin } from "antd/lib";
+import { Form, Input, Modal, Space, Switch, message } from "antd";
 import type { UploadProps } from "antd";
-import {
-  CloudUploadOutlined,
-  LoadingOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+
 import Image from "next/image";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 interface Values {
   image: any;
   title: string;
@@ -144,7 +140,7 @@ const EditBannerModal: React.FC<EditBannerModalProps> = ({
         setChecked(true);
       }}
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Form
           form={form}
           layout="vertical"
@@ -234,7 +230,7 @@ const EditBannerModal: React.FC<EditBannerModalProps> = ({
             <Input.TextArea disabled rows={2} placeholder="Description" />
           </Form.Item>
         </Form>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

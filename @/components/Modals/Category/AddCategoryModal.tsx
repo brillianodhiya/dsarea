@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Modal } from "antd";
-import { Spin } from "antd/lib";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   title: string;
@@ -40,7 +40,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
           });
       }}
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Form
           form={form}
           layout="vertical"
@@ -63,7 +63,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
             <Input.TextArea rows={4} placeholder="Description" />
           </Form.Item>
         </Form>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

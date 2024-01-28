@@ -2,13 +2,15 @@
 import React, { useContext } from "react";
 import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Dropdown, Space, Typography } from "antd";
+import { Dropdown, Grid, Space, Typography } from "antd";
 import LogOutIcon from "../icons/LogOutIcon";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 import { deleteCookie } from "cookies-next";
+const { useBreakpoint } = Grid;
 
 const DropdownLogout: React.FC = () => {
   const { data } = useContext(ProfileContext);
+  const screens = useBreakpoint();
 
   const items: MenuProps["items"] = [
     {
@@ -31,23 +33,25 @@ const DropdownLogout: React.FC = () => {
           userSelect: "none",
         }}
       >
-        <div>
-          <Typography
-            style={{
-              fontWeight: 600,
-            }}
-          >
-            {data?.email}
-          </Typography>
-          <Typography
-            style={{
-              color: "#7A7A7A",
-              textTransform: "capitalize",
-            }}
-          >
-            {data?.ds_user_role?.name}
-          </Typography>
-        </div>
+        {screens.lg ? (
+          <div>
+            <Typography
+              style={{
+                fontWeight: 600,
+              }}
+            >
+              {data?.email}
+            </Typography>
+            <Typography
+              style={{
+                color: "#7A7A7A",
+                textTransform: "capitalize",
+              }}
+            >
+              {data?.ds_user_role?.name}
+            </Typography>
+          </div>
+        ) : null}
         <DownOutlined />
       </Space>
     </Dropdown>

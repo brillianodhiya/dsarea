@@ -49,6 +49,7 @@ export const DashboardRecentTransaction: React.FC<Props> = ({
           }}
           rowKey={"id"}
           size="middle"
+          scroll={{ x: 1000 }}
         >
           <Column
             title="No. Transaction"

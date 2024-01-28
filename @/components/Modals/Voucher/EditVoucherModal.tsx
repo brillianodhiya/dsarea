@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  DatePicker,
-  DatePickerProps,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-} from "antd";
-import { Spin } from "antd/lib";
+import { DatePicker, Form, Input, InputNumber, Modal } from "antd";
 import { PercentageOutlined } from "@ant-design/icons";
-import moment from "moment";
+import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 
 interface Values {
   name: string;
@@ -61,7 +53,7 @@ const EditVoucherModal: React.FC<EditVoucherModalProps> = ({
           });
       }}
     >
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Form
           form={form}
           layout="vertical"
@@ -145,7 +137,7 @@ const EditVoucherModal: React.FC<EditVoucherModalProps> = ({
             />
           </Form.Item>
         </Form>
-      </Spin>
+      </LoadingNonFullscreen>
     </Modal>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
-import { Spin, Upload, UploadFile, UploadProps, message } from "antd";
+import { Upload, UploadFile, UploadProps, message } from "antd";
+import LoadingNonFullscreen from "../LoadingComponent/LoadingComponentParent";
 
 interface UploadImageProps {
   onChange?: (value: any) => void;
@@ -60,7 +61,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
 
   return (
     <div>
-      <Spin spinning={loading}>
+      <LoadingNonFullscreen spinning={loading}>
         <Upload
           {...props}
           accept=".jpg,.jpeg,.png,.gif"
@@ -141,7 +142,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
             </div>
           </div>
         </Upload>
-      </Spin>
+      </LoadingNonFullscreen>
     </div>
   );
 };

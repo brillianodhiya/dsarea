@@ -73,6 +73,9 @@ export default function Home() {
           pagination={{
             hideOnSinglePage: true,
           }}
+          scroll={{
+            x: 1000,
+          }}
         >
           <Column
             title="Product"

@@ -8,6 +8,7 @@ import {
   Typography,
   Space,
   MenuProps,
+  Grid,
 } from "antd";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -96,11 +97,15 @@ const itemsSuperAdmin: MenuItem[] = [
   ),
 ];
 
+const { useBreakpoint } = Grid;
+
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   profileData,
 }) => {
   // console.log(profileData);
+  const screens = useBreakpoint();
+
   React.useEffect(() => {
     if (profileData.error) {
       deleteCookie("DS-X-Access-Agent-Token");
@@ -197,14 +202,25 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               // collapsible
               collapsed={collapsed}
               breakpoint="md"
-              collapsedWidth="80"
+              collapsedWidth={screens.sm ? "80" : "0"}
+              zeroWidthTriggerStyle={{
+                display: "none",
+              }}
               onCollapse={(collapsed, type) => {
                 setCollapsed(collapsed);
               }}
-              style={{
-                width: 500,
-                display: isFullscreen ? "none" : undefined,
-              }}
+              style={
+                !screens.sm
+                  ? {
+                      display: collapsed ? "none" : undefined,
+                      width: 500,
+                      // position: collapsed ? undefined : "absolute",
+                    }
+                  : {
+                      width: 500,
+                      display: isFullscreen ? "none" : undefined,
+                    }
+              }
             >
               <Space
                 style={{
@@ -321,11 +337,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 style={{
                   borderWidth: 2,
                   borderColor: "#AAD2D3",
-                  marginLeft: -20,
+                  marginLeft: !screens.sm ? 5 : -20,
                   marginTop: 14,
                   borderRadius: 12,
                   position: "absolute",
                   backgroundColor: "#EBF5F5",
+                  top: screens.sm ? 0 : 65,
+                  zIndex: 999,
                 }}
               />
               <Content
@@ -335,6 +353,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   minHeight: 280,
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
+                  position: !collapsed && !screens.sm ? "absolute" : undefined,
                 }}
               >
                 {children}

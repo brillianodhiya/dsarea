@@ -1,11 +1,21 @@
 import React, { useRef } from "react";
 import { CloseOutlined, HolderOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Space, Typography, Image, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Space,
+  Typography,
+  Image,
+  Select,
+  Grid,
+} from "antd";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import type { Identifier, XYCoord } from "dnd-core";
 import UploadImage from "./UploadImage";
 import UploadSound from "./UploadSound";
+const { useBreakpoint } = Grid;
 
 // Membuat fungsi yang bernama angkaKeHuruf
 function angkaKeHuruf(angka: number): string {
@@ -86,6 +96,8 @@ const SubSoalForm: React.FC<{
   field,
   no,
 }) => {
+  const screens = useBreakpoint();
+
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -211,6 +223,7 @@ const SubSoalForm: React.FC<{
           justifyContent: "left",
           width: "100%",
           gap: "8px",
+          flexWrap: screens.md ? "nowrap" : "wrap",
         }}
       >
         <div
@@ -275,6 +288,7 @@ const SubSoalForm: React.FC<{
           flexDirection: "row",
           gap: "8px",
           alignItems: "flex-start",
+          flexWrap: screens.md ? "nowrap" : "wrap",
         }}
       >
         {imgSoal != undefined ? (
@@ -397,6 +411,8 @@ const SoalForm: React.FC<{
   form: any;
   remove: (index: number) => void;
 }> = ({ move, index, field, id, form, remove }) => {
+  const screens = useBreakpoint();
+
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -493,6 +509,13 @@ const SoalForm: React.FC<{
     const _audio = dataFormAudio.soal[id - 1].audio;
 
     setAudioSoal(_audio);
+
+    const dataFormOption = form.getFieldsValue([["soal", field.name, "type"]]);
+
+    const _type = dataFormOption.soal[id - 1].type;
+    if (_type !== undefined && _type != type) {
+      setType(_type);
+    }
   }, []);
 
   return (
@@ -510,7 +533,13 @@ const SoalForm: React.FC<{
       }}
       data-handler-id-soal={handlerId}
     >
-      <div className="w-full flex flex-row gap-3 align-top">
+      <div
+        className={
+          screens.md
+            ? "w-full flex flex-row gap-3 align-top"
+            : "w-full flex flex-row gap-3 align-top flex-wrap"
+        }
+      >
         <div
           className="w-1/4 flex flex-row gap-2 items-center"
           style={{
@@ -594,6 +623,7 @@ const SoalForm: React.FC<{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          flexWrap: screens.md ? "nowrap" : "wrap",
         }}
       >
         <div
@@ -602,6 +632,7 @@ const SoalForm: React.FC<{
             flexDirection: "row",
             gap: "8px",
             alignItems: "flex-start",
+            flexWrap: screens.md ? "nowrap" : "wrap",
           }}
         >
           {imgSoal != undefined ? (
@@ -778,12 +809,20 @@ const SoalForm: React.FC<{
 };
 
 const DynamicFormAddSoal: React.FC<DynamiCFormAddSoal> = ({ form }) => {
+  const screens = useBreakpoint();
+
   return (
     <>
       {/* <DndProvider backend={HTML5Backend}> */}
       <Form.List name="soal">
         {(fields, { add, remove, move }) => (
-          <div style={{ display: "flex", gap: 16, flexDirection: "column" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: screens.md ? 16 : "6em",
+              flexDirection: "column",
+            }}
+          >
             {fields.map((field, index) => (
               <SoalForm
                 field={field}
