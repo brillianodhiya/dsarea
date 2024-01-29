@@ -3,17 +3,20 @@ import { SearchOutlined } from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { formatRupiah } from "@dsarea/@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Empty, Input, Row, Segmented, Skeleton, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
 import SkeletonImage from "antd/es/skeleton/Image";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Page() {
   const [activeMenu, setActiveMenu] = React.useState("bootcamp");
   const [page, setPage] = React.useState(10);
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["kelas", page, activeMenu],
@@ -35,7 +38,7 @@ export default function Page() {
 
   const filteredData = data.filter((e: any) => e.id !== "id");
 
-  console.log(process.env.NEXT_PUBLIC_URL_COURSE_MAYAR);
+  // console.log(process.env.NEXT_PUBLIC_URL_COURSE_MAYAR);
   return (
     <div>
       <CustomHeader title="Kelas" />
@@ -73,6 +76,7 @@ export default function Page() {
               placeholder="Search anything..."
               suffix={<SearchOutlined />}
               className="!w-[250px]"
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </Col>
         </Row>
@@ -140,39 +144,40 @@ export default function Page() {
               <Empty description="Data not found" />
             </Col>
           ) : (
-            data
+            searchFromValue(data, searchText)
               .filter((e: any) => e.id !== "id")
               .map((e: any, i: any) => (
-                <Col xs={24} sm={12} md={12} lg={8} xl={4} key={i}>
-                  <Card
-                    loading={isFetching}
-                    hoverable
-                    style={{
-                      maxWidth: 252,
-                    }}
-                    cover={
-                      <div>
-                        <Tag
-                          style={{
-                            position: "absolute",
-                            margin: 10,
-                            borderRadius: 100,
-                            // maxWidth: 200,
-                            textAlign: "center",
-                            right: 0,
-                            width: "max-content",
-                          }}
-                          color="#AFCF5B"
-                        >
-                          {activeMenu == "bootcamp"
-                            ? "Kelas Cohort/Bootcamp"
-                            : activeMenu === "online"
-                            ? "Kelas Online"
-                            : activeMenu === "digital-product"
-                            ? "Product Digital"
-                            : "Bundling"}
-                        </Tag>
-                        {/* <SkeletonImage
+                <Col xs={24} sm={12} md={12} lg={8} xl={8} key={i}>
+                  <Link href={e.link} target="_blank">
+                    <Card
+                      loading={isFetching}
+                      hoverable
+                      style={{
+                        maxWidth: 252,
+                      }}
+                      cover={
+                        <div>
+                          <Tag
+                            style={{
+                              position: "absolute",
+                              margin: 10,
+                              borderRadius: 100,
+                              // maxWidth: 200,
+                              textAlign: "center",
+                              right: 0,
+                              width: "max-content",
+                            }}
+                            color="#AFCF5B"
+                          >
+                            {activeMenu == "bootcamp"
+                              ? "Kelas Cohort/Bootcamp"
+                              : activeMenu === "online"
+                              ? "Kelas Online"
+                              : activeMenu === "digital-product"
+                              ? "Product Digital"
+                              : "Bundling"}
+                          </Tag>
+                          {/* <SkeletonImage
                       active
                       style={{
                         // display: "inline-block",
@@ -182,22 +187,28 @@ export default function Page() {
                       }}
                     /> */}
 
-                        <Image
-                          alt="cover image"
-                          src={
-                            e.coverImage ? e.coverImage.url : "/card-image.svg"
-                          }
-                          width={250}
-                          height={333}
-                          className="w-full aspect-square object-contain object-center"
-                        />
-                      </div>
-                    }
-                  >
-                    {/* <Skeleton loading={isFetching} active> */}
-                    <Meta title={e.name} description={formatRupiah(e.amount)} />
-                    {/* </Skeleton> */}
-                  </Card>
+                          <Image
+                            alt="cover image"
+                            src={
+                              e.coverImage
+                                ? e.coverImage.url
+                                : "/card-image.svg"
+                            }
+                            width={250}
+                            height={333}
+                            className="w-full aspect-square object-contain object-center"
+                          />
+                        </div>
+                      }
+                    >
+                      {/* <Skeleton loading={isFetching} active> */}
+                      <Meta
+                        title={e.name}
+                        description={formatRupiah(e.amount)}
+                      />
+                      {/* </Skeleton> */}
+                    </Card>
+                  </Link>
                 </Col>
               ))
           )}

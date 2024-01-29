@@ -30,7 +30,7 @@ export default function Category() {
   const queryClient = useQueryClient();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["category", countFetch],
+    queryKey: ["categorylist", countFetch],
     queryFn: async () => {
       const res = await axiosClientInstance.get("/api/soal/category/list");
       return res.data.data;
@@ -38,8 +38,8 @@ export default function Category() {
     initialData: [
       {
         id: 0,
-        name: "test",
-        desc: "test",
+        // name: "test",
+        // desc: "test",
       },
     ],
   });
@@ -154,7 +154,7 @@ export default function Category() {
           </Col>
         </Row>
         <Table
-          dataSource={searchFromValue(data ? data : [], searchText)}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -175,6 +175,13 @@ export default function Category() {
               ) : (
                 <Typography className="!text-[#3A9699]">{text}</Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.name.localeCompare(b.name);
+                  }
             }
           />
           <Column

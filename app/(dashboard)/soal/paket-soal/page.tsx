@@ -14,7 +14,6 @@ import { Eye, PencilLine } from "lucide-react";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useFullscreen from "@dsarea/@/lib/Fullscreen";
 
 export default function Home() {
   const [countFetch, setCountFetch] = React.useState(0);
@@ -109,6 +108,13 @@ export default function Home() {
                 <Typography className="!text-[#3A9699]">{text}</Typography>
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => {
+                    return a.title.localeCompare(b.title);
+                  }
+            }
           />
           <Column
             title="Kategori"
@@ -121,6 +127,13 @@ export default function Home() {
                 <Typography className="!text-[#3A9699]">{text}</Typography>
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => {
+                    return a.ds_category.name.localeCompare(b.ds_category.name);
+                  }
+            }
           />
           <Column
             title="Jumlah Soal"
@@ -128,6 +141,13 @@ export default function Home() {
             key="total"
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => {
+                    return a.total - b.total;
+                  }
             }
           />
           <Column
@@ -140,6 +160,13 @@ export default function Home() {
               ) : (
                 <Typography>{text} Menit</Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => {
+                    return a.duration - b.duration;
+                  }
             }
           />
           <Column

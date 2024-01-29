@@ -6,8 +6,19 @@ import EditVoucherModal from "@dsarea/@/components/Modals/Voucher/EditVoucherMod
 import ViewVoucherModal from "@dsarea/@/components/Modals/Voucher/ViewVoucherModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, Col, Input, Row, Space, Table, Typography, message } from "antd";
+import {
+  Card,
+  Col,
+  Input,
+  Row,
+  Space,
+  Table,
+  Tag,
+  Typography,
+  message,
+} from "antd";
 import Button from "antd/lib/button";
 import SkeletonButton from "antd/lib/skeleton/Button";
 import SkeletonInput from "antd/lib/skeleton/Input";
@@ -30,6 +41,7 @@ export default function Page() {
   });
   const [loading, setLoading] = React.useState(false);
   const queryClient = useQueryClient();
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["voucher"],
@@ -98,7 +110,7 @@ export default function Page() {
               "/api/voucher/edit/" + dataSelected.id,
               {
                 name: values.name,
-                code: values.code,
+                // code: values.code,
                 kuota: values.kuota,
                 expired_at: values.expired_at?.format("YYYY-MM-DD HH:mm:ss"),
                 diskon: values.diskon,
@@ -148,6 +160,7 @@ export default function Page() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
               <Button
                 type="primary"
@@ -161,14 +174,14 @@ export default function Page() {
           </Col>
         </Row>
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
           rowKey={"id"}
           size="middle"
           scroll={{
-            x: 1000,
+            x: 1200,
           }}
         >
           <Column
@@ -182,6 +195,13 @@ export default function Page() {
               ) : (
                 <Typography className="!text-[#3A9699]">{text}</Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.name.localeCompare(b.name);
+                  }
             }
           />
           <Column
@@ -197,6 +217,13 @@ export default function Page() {
                 </Typography.Paragraph>
               )
             }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.code.localeCompare(b.code);
+                  }
+            }
           />
           <Column
             title="Quota"
@@ -205,6 +232,13 @@ export default function Page() {
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
             }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.kuota - b.kuota;
+                  }
+            }
           />
           <Column
             title="Sisa Quota"
@@ -212,6 +246,13 @@ export default function Page() {
             key="sisa_kuota"
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.sisa_kuota - b.sisa_kuota;
+                  }
             }
           />
           <Column
@@ -227,6 +268,15 @@ export default function Page() {
                 </Typography>
               )
             }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return (
+                      moment(a.expired_at).unix() - moment(b.expired_at).unix()
+                    );
+                  }
+            }
           />
           <Column
             title="Diskon"
@@ -239,13 +289,33 @@ export default function Page() {
                 <div>{text}%</div>
               )
             }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.diskon - b.diskon;
+                  }
+            }
           />
           <Column
             title="Status"
             dataIndex="status"
             key="status"
             render={(text) =>
-              isFetching ? <SkeletonInput active size={"small"} /> : text
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : (
+                <>
+                  <Tag color={text == "expired" ? "red" : "green"}>{text}</Tag>
+                </>
+              )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => {
+                    return a.status.localeCompare(b.status);
+                  }
             }
           />
 

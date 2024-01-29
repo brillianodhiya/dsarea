@@ -6,6 +6,9 @@ export function searchFromValue(array: ObjectItem[], value: any): ObjectItem[] {
   // Membuat array kosong untuk menyimpan hasil filter
   let result: ObjectItem[] = [];
 
+  // Mengubah array menjadi Array yang valid dengan operator spread
+  array = [...array];
+
   // Melakukan iterasi untuk setiap objek di array
   for (let obj of array) {
     // Mendapatkan array yang berisi nilai-nilai dari objek

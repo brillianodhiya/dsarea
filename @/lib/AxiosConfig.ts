@@ -2,7 +2,6 @@
 import { cookies } from "next/headers";
 import { deleteCookie, getCookie } from "cookies-next";
 import axios, { AxiosRequestHeaders } from "axios";
-import { redirect } from "next/navigation";
 
 // Membuat instance axios dengan konfigurasi dasar
 export const axiosInstance = axios.create({
@@ -41,7 +40,7 @@ axiosInstance.interceptors.response.use(
       // redirect('/')
       deleteCookie("DS-X-Access-Agent-Token");
       deleteCookie("DS-X-Access-Agent-Role");
-      window.location.href = '/';
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }
