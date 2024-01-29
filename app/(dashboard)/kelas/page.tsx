@@ -34,6 +34,8 @@ export default function Page() {
   });
 
   const filteredData = data.filter((e: any) => e.id !== "id");
+
+  console.log(process.env.NEXT_PUBLIC_URL_COURSE_MAYAR);
   return (
     <div>
       <CustomHeader title="Kelas" />
@@ -43,7 +45,7 @@ export default function Page() {
           <Col>
             <Segmented
               onChange={(e: any) => {
-                console.log(e);
+                // console.log(e);
                 setActiveMenu(e);
               }}
               options={[

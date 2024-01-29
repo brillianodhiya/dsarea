@@ -122,6 +122,8 @@ export default function Page() {
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
             }
+            // fixed="left"
+            // width={140}
           />
           <Column
             title="Status"
@@ -171,6 +173,12 @@ export default function Page() {
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) =>
+                    a.tanggal_transaksi.length - b.tanggal_transaksi.length
+            }
           />
           <Column
             title="Tanggal Pembayaran"
@@ -185,6 +193,12 @@ export default function Page() {
                 "-"
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) =>
+                    a.tanggal_pembayaran - b.tanggal_pembayaran
+            }
           />
           <Column
             title="Voucher"
@@ -192,6 +206,9 @@ export default function Page() {
             key="voucher"
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+            sorter={
+              isFetching ? undefined : (a: any, b: any) => a.voucher - b.voucher
             }
           />
           <Column
@@ -207,6 +224,11 @@ export default function Page() {
                 "-"
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.discount - b.discount
+            }
           />
           <Column
             title="Harga"
@@ -219,6 +241,10 @@ export default function Page() {
                 formatRupiah(text)
               )
             }
+            align="right"
+            sorter={
+              isFetching ? undefined : (a: any, b: any) => a.harga - b.harga
+            }
           />
           <Column
             title="Total Pembayaran"
@@ -230,6 +256,12 @@ export default function Page() {
               ) : (
                 formatRupiah(text)
               )
+            }
+            align="right"
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.total_pembayaran - b.total_pembayaran
             }
           />
         </Table>

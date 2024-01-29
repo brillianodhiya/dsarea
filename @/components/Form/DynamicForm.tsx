@@ -295,7 +295,7 @@ const SubSoalForm: React.FC<{
           <Space align="start">
             <Image
               alt={imgSoal + "Image Soal" + id}
-              src={"https://api-dsarea.aitilokal.com/api/attach/" + imgSoal}
+              src={process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + imgSoal}
               width={140}
               style={{
                 position: "relative",
@@ -345,17 +345,23 @@ const SubSoalForm: React.FC<{
             <audio id="audio" controls>
               <source
                 id="source"
-                src={"https://api-dsarea.aitilokal.com/api/attach/" + audioSoal}
+                src={
+                  process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
+                }
                 type="audio/mp3"
               />
               <source
                 id="source"
-                src={"https://api-dsarea.aitilokal.com/api/attach/" + audioSoal}
+                src={
+                  process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
+                }
                 type="audio/ogg"
               />
               <source
                 id="source"
-                src={"https://api-dsarea.aitilokal.com/api/attach/" + audioSoal}
+                src={
+                  process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
+                }
                 type="audio/wav"
               />
               Your browser does not support the audio element.
@@ -639,7 +645,7 @@ const SoalForm: React.FC<{
             <Space align="start">
               <Image
                 alt={imgSoal + "Image Soal" + id}
-                src={"https://api-dsarea.aitilokal.com/api/attach/" + imgSoal}
+                src={process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + imgSoal}
                 width={200}
                 style={{
                   position: "relative",
@@ -681,21 +687,21 @@ const SoalForm: React.FC<{
                 <source
                   id="source"
                   src={
-                    "https://api-dsarea.aitilokal.com/api/attach/" + audioSoal
+                    process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
                   }
                   type="audio/mp3"
                 />
                 <source
                   id="source"
                   src={
-                    "https://api-dsarea.aitilokal.com/api/attach/" + audioSoal
+                    process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
                   }
                   type="audio/ogg"
                 />
                 <source
                   id="source"
                   src={
-                    "https://api-dsarea.aitilokal.com/api/attach/" + audioSoal
+                    process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + audioSoal
                   }
                   type="audio/wav"
                 />

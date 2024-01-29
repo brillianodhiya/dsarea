@@ -17,7 +17,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
   const [loading, setLoading] = React.useState(false);
   const props: UploadProps = {
     name: "file",
-    action: "https://api-dsarea.aitilokal.com" + "/api/upload/file",
+    action: process.env.NEXT_PUBLIC_URL_BE + "/api/upload/file",
     headers: {
       authorization:
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZV9pZCI6MSwidXNlcl9pZCI6IjEwMDU3NDMyOTAwNDQ4NzI4MDQ2MyIsImVtYWlsIjoiYnJpbGxpZGhpeWFAZ21haWwuY29tIiwibmFtZSI6IkJyaWxsaWFubyBEaGl5YSBVbGhhcSIsImlhdCI6MTcwNDk5NjgzOSwiZXhwIjoxNzM2MTAwODM5fQ.JPWvVftUAB19t2i-8SG7EzIQmg9iFlWeU_ELauPRbH0",
@@ -51,7 +51,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
           uid: "-1",
           name: "image.png",
           status: "done",
-          url: "https://api-dsarea.aitilokal.com/api/attach/" + value,
+          url: process.env.NEXT_PUBLIC_URL_BE + "/api/attach/" + value,
         },
       ]);
     } else {

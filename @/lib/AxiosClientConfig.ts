@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 // Membuat instance axios dengan konfigurasi dasar
 export const axiosClientInstance = axios.create({
-  baseURL: "https://api-dsarea.aitilokal.com", // Sesuaikan dengan URL API Anda
+  baseURL: process.env.NEXT_PUBLIC_URL_BE, // Sesuaikan dengan URL API Anda
 });
 
 // Menambahkan interceptor permintaan untuk menambahkan header Authorization
@@ -26,7 +26,6 @@ axiosClientInstance.interceptors.request.use(
   }
 );
 
-
 axiosClientInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -39,8 +38,7 @@ axiosClientInstance.interceptors.response.use(
       // redirect('/')
       deleteCookie("DS-X-Access-Agent-Token");
       deleteCookie("DS-X-Access-Agent-Role");
-      window.location.href = '/';
-
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }

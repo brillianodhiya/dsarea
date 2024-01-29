@@ -470,7 +470,8 @@ export default function AddSoal() {
                     soalNow.image
                       ? soalNow.image.includes("http")
                         ? soalNow.image
-                        : "https://api-dsarea.aitilokal.com/api/attach/" +
+                        : process.env.NEXT_PUBLIC_URL_BE +
+                          "/api/attach/" +
                           soalNow.image
                       : ""
                   }
@@ -491,7 +492,8 @@ export default function AddSoal() {
                       soalNow.audio
                         ? soalNow.audio.includes("http")
                           ? soalNow.audio
-                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
                             soalNow.audio
                         : ""
                     }
@@ -503,7 +505,8 @@ export default function AddSoal() {
                       soalNow.audio
                         ? soalNow.audio.includes("http")
                           ? soalNow.audio
-                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
                             soalNow.audio
                         : ""
                     }
@@ -515,7 +518,8 @@ export default function AddSoal() {
                       soalNow.audio
                         ? soalNow.audio.includes("http")
                           ? soalNow.audio
-                          : "https://api-dsarea.aitilokal.com/api/attach/" +
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
                             soalNow.audio
                         : ""
                     }
@@ -602,7 +606,8 @@ export default function AddSoal() {
                             val.image
                               ? val.image.includes("http")
                                 ? val.image
-                                : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                : process.env.NEXT_PUBLIC_URL_BE +
+                                  "/api/attach/" +
                                   val.image
                               : ""
                           }
@@ -623,7 +628,8 @@ export default function AddSoal() {
                               val.audio
                                 ? val.audio.includes("http")
                                   ? val.audio
-                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                  : process.env.NEXT_PUBLIC_URL_BE +
+                                    "/api/attach/" +
                                     val.audio
                                 : ""
                             }
@@ -635,7 +641,8 @@ export default function AddSoal() {
                               val.audio
                                 ? val.audio.includes("http")
                                   ? val.audio
-                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                  : process.env.NEXT_PUBLIC_URL_BE +
+                                    "/api/attach/" +
                                     val.audio
                                 : ""
                             }
@@ -647,7 +654,8 @@ export default function AddSoal() {
                               val.audio
                                 ? val.audio.includes("http")
                                   ? val.audio
-                                  : "https://api-dsarea.aitilokal.com/api/attach/" +
+                                  : process.env.NEXT_PUBLIC_URL_BE +
+                                    "/api/attach/" +
                                     val.audio
                                 : ""
                             }
