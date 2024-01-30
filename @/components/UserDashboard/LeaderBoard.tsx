@@ -1,6 +1,6 @@
-import { List, Select, Typography } from "antd";
+import { List, Select, Space, Typography } from "antd";
 import React from "react";
-
+import Image from "next/image";
 interface DataType {
   data: any;
   isLoading: boolean;
@@ -26,7 +26,7 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
 
   let sortedArray = sortByScoreDescending(dataArray);
 
-  console.log(sortedArray);
+  const myId = 99;
 
   return (
     <div className="flex flex-col my-4 gap-4">
@@ -56,22 +56,110 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
             <div>Score</div>
           </div>
         }
-        footer={<div>Footer</div>}
-        bordered
-        dataSource={sortedArray}
-        renderItem={(item) => (
-          <List.Item
-            actions={[<Typography.Text type="secondary">100</Typography.Text>]}
-          >
+        footer={
+          myId > 10 && (
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
+                paddingRight: 10,
               }}
             >
-              <div>Nama</div>
-              <div>Score</div>
+              <Space align="center">
+                <div
+                  style={{
+                    display: "flex",
+                    width: "24px",
+                    height: "24px",
+                    padding: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderWidth: 1,
+                    borderColor: "#AAD2D3",
+                    backgroundColor: "#EBF5F5",
+                    borderRadius: 100,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#3A9699",
+                    }}
+                  >
+                    {myId}
+                  </div>
+                </div>
+                <Space direction="vertical" size={0}>
+                  <div style={{ fontSize: 12, color: "#3A9699" }}>
+                    email@email.com
+                  </div>
+                  <div style={{ fontSize: 12, color: "#7A7A7A" }}>Anda</div>
+                </Space>
+              </Space>
+              <div style={{ fontSize: 12, color: "#3A9699" }}>100</div>
             </div>
+          )
+        }
+        bordered
+        dataSource={sortedArray}
+        renderItem={(item, index) => (
+          <List.Item
+            actions={[
+              <Typography.Text
+                style={{
+                  color: myId == index + 1 ? "#3A9699" : "#000",
+                }}
+                type="secondary"
+              >
+                100
+              </Typography.Text>,
+            ]}
+          >
+            <Space>
+              <div>
+                {index === 0 ? (
+                  <Image
+                    src={"/number-one.svg"}
+                    alt={`number one ${index}`}
+                    width={24}
+                    height={24}
+                  />
+                ) : index === 1 ? (
+                  <Image
+                    src={"/number-two.svg"}
+                    alt={`number two ${index}`}
+                    width={24}
+                    height={24}
+                  />
+                ) : index === 2 ? (
+                  <Image
+                    src={"/number-three.svg"}
+                    alt={`number three ${index}`}
+                    width={24}
+                    height={24}
+                  />
+                ) : myId === index + 1 ? (
+                  <div>asd {/* Your content for myid equal to index */}</div>
+                ) : (
+                  <div
+                    style={{
+                      paddingRight: 8,
+                      paddingLeft: 8,
+                    }}
+                  >
+                    {index + 1}
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  color: myId == index + 1 ? "#3A9699" : "#000",
+                }}
+              >
+                user@email.com
+              </div>
+            </Space>
           </List.Item>
         )}
       />
