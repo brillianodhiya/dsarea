@@ -751,7 +751,31 @@ const SoalForm: React.FC<{
           style={{
             width: "200px",
           }}
-          onChange={(v) => setType(v)}
+          onChange={(v) => {
+            setType(v);
+            form.setFieldsValue({
+              soal: [
+                ...form.getFieldsValue().soal.map((item: any, i: number) => {
+                  if (i == index) {
+                    if (v == "pilihan") {
+                      return {
+                        ...item,
+                        type: v,
+                      };
+                    } else {
+                      return {
+                        ...item,
+                        type: v,
+                        jawaban: [],
+                      };
+                    }
+                  } else {
+                    return item;
+                  }
+                }),
+              ],
+            });
+          }}
         >
           <Select.Option value="pilihan">Pilihan Ganda</Select.Option>
           <Select.Option value="essay">Essay</Select.Option>
@@ -861,13 +885,13 @@ const DynamicFormAddSoal: React.FC<DynamiCFormAddSoal> = ({ form }) => {
       </Form.List>
       {/* </DndProvider> */}
 
-      {/* <Form.Item noStyle shouldUpdate>
+      <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
             <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
         )}
-      </Form.Item> */}
+      </Form.Item>
     </>
   );
 };

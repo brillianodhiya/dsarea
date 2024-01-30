@@ -138,7 +138,16 @@ const KonfigurasiSoal = ({ FooterAction, title, form }: KonfigurasiProps) => {
                       }}
                     />
                   </Form.Item>
-                  <Form.Item name="rules" label="Tata Cara Pengerjaan Soal">
+                  <Form.Item
+                    name="rules"
+                    label="Tata Cara Pengerjaan Soal"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Tata cara tidak boleh kosong!",
+                      },
+                    ]}
+                  >
                     <Input.TextArea
                       rows={4}
                       placeholder="Tata Cara Pengerjaan Soal"

@@ -437,3 +437,14 @@
 :where(.css-dev-only-do-not-override-dkbvqv).ant-radio-button-wrapper:hover {
   color: #3a9699 !important;
 }
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-pagination
+  .ant-pagination-item-active
+  a {
+  color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-pagination
+  .ant-pagination-item-active {
+  border-color: #3a9699 !important;
+}
