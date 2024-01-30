@@ -25,12 +25,11 @@ export default function Category() {
     name: "",
     desc: "",
   });
-  const [countFetch, setCountFetch] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const queryClient = useQueryClient();
 
   const { data, isFetching } = useQuery({
-    queryKey: ["categorylist", countFetch],
+    queryKey: ["categorylist"],
     queryFn: async () => {
       const res = await axiosClientInstance.get("/api/soal/category/list");
       return res.data.data;
@@ -59,7 +58,7 @@ export default function Category() {
               }
             );
             queryClient.invalidateQueries({
-              queryKey: ["category"],
+              queryKey: ["categorylist"],
             });
             setLoading(false);
             form.resetFields();
@@ -90,7 +89,7 @@ export default function Category() {
               }
             );
             queryClient.invalidateQueries({
-              queryKey: ["category"],
+              queryKey: ["categorylist"],
             });
             setLoading(false);
             form.resetFields();
