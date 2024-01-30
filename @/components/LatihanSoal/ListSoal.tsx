@@ -8,7 +8,17 @@ import ListNumberIcon from "../icons/ListNumberIcon";
 import DurationIcon from "../icons/DurationIcon";
 import MultiUserIcon from "../icons/MultiUsersIcon";
 
-export const ListSoal = ({ data, isFetching }: any) => {
+interface dataType {
+  data: any;
+  isFetching: boolean;
+  showBadge?: boolean;
+}
+
+export const ListSoal: React.FC<dataType> = ({
+  data,
+  isFetching,
+  showBadge = true,
+}) => {
   const filteredData = data.filter((e: any) => e.id !== 0);
   const router = useRouter();
   const pathname = usePathname();
@@ -46,27 +56,29 @@ export const ListSoal = ({ data, isFetching }: any) => {
                 }}
                 hoverable
               >
-                <Tag
-                  style={{
-                    position: "absolute",
-                    // margin: 6,
-                    borderRadius: 100,
-                    // maxWidth: 200,
-                    textAlign: "center",
-                    right: 0,
-                    width: "max-content",
-                    color: e.status == "selesai" ? "#7A7A7A" : "#FFF",
-                  }}
-                  color={
-                    e.status == "active"
-                      ? "#32D583"
-                      : e.status == "expired"
-                      ? "#F04438"
-                      : "#F7F7F7"
-                  }
-                >
-                  {e.status}
-                </Tag>
+                {showBadge && (
+                  <Tag
+                    style={{
+                      position: "absolute",
+                      // margin: 6,
+                      borderRadius: 100,
+                      // maxWidth: 200,
+                      textAlign: "center",
+                      right: 0,
+                      width: "max-content",
+                      color: e.status == "selesai" ? "#7A7A7A" : "#FFF",
+                    }}
+                    color={
+                      e.status == "active"
+                        ? "#32D583"
+                        : e.status == "expired"
+                        ? "#F04438"
+                        : "#F7F7F7"
+                    }
+                  >
+                    {e.status}
+                  </Tag>
+                )}
                 <Image
                   alt={"alt"}
                   src={"/card-image.svg"}

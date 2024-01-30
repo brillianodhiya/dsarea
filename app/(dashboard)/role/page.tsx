@@ -150,7 +150,7 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="capitalize">
-                  {record.ds_user_role.name}
+                  {record?.ds_user_role?.name}
                 </Typography>
               )
             }
