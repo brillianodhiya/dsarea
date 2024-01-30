@@ -9,6 +9,7 @@ import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import AddRoleModal from "@dsarea/@/components/Modals/Role/AddRoleModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
@@ -31,6 +32,7 @@ export default function Page() {
   const [openAddModal, setOpenAddModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const queryClient = useQueryClient();
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["Role"],
@@ -93,6 +95,7 @@ export default function Page() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
               <Button
                 type="primary"
@@ -107,7 +110,7 @@ export default function Page() {
         </Row>
 
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -131,6 +134,11 @@ export default function Page() {
                 </Space>
               )
             }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.name.length - b.name.length
+            }
           />
           <Column
             title="Email"
@@ -138,6 +146,11 @@ export default function Page() {
             key="email"
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.email.length - b.email.length
             }
           />
 
@@ -153,6 +166,12 @@ export default function Page() {
                   {record?.ds_user_role?.name}
                 </Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) =>
+                    a.ds_user_role.name.length - b.ds_user_role.name.length
             }
           />
           <Column
@@ -177,6 +196,11 @@ export default function Page() {
                   )}
                 </Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.status.length - b.status.length
             }
           />
 

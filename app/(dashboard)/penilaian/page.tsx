@@ -2,13 +2,17 @@
 import { SearchOutlined } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { Card, Col, Input, Progress, Row, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
 import { Eye } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function Home() {
+  const [searchText, setSearchText] = React.useState("");
+
   const data = [
     {
       id: "1",
@@ -65,11 +69,12 @@ export default function Home() {
               placeholder="Search anything..."
               suffix={<SearchOutlined />}
               className="!w-[250px]"
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </Col>
         </Row>
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -84,6 +89,9 @@ export default function Home() {
             render={(text, record: any) => (
               <Typography className="!text-[#3A9699]">{text}</Typography>
             )}
+            sorter={(a, b) => {
+              return a.product.localeCompare(b.product);
+            }}
           />
           <Column
             title="Tanggal"
@@ -92,14 +100,29 @@ export default function Home() {
             render={(text, record) => (
               <Typography>{moment().format("DD/MM/YYYY HH:mm")}</Typography>
             )}
+            sorter={(a: any, b: any) =>
+              moment(a.tanggal_transaksi).unix() -
+              moment(b.tanggal_transaksi).unix()
+            }
           />
-          <Column title="Jml. Soal" dataIndex="soal" key="soal" />
-          <Column title="Jml. Siswa" dataIndex="siswa" key="siswa" />
+          <Column
+            title="Jml. Soal"
+            dataIndex="soal"
+            key="soal"
+            sorter={(a: any, b: any) => a.soal - b.soal}
+          />
+          <Column
+            title="Jml. Siswa"
+            dataIndex="siswa"
+            key="siswa"
+            sorter={(a: any, b: any) => a.siswa - b.siswa}
+          />
           <Column
             title="Status Penilaian"
             dataIndex="status"
             key="status"
             render={(text, record) => <Progress percent={text} />}
+            sorter={(a: any, b: any) => a.status - b.status}
           />
           <Column
             title="Action"

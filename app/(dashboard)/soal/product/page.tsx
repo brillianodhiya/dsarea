@@ -27,6 +27,7 @@ import SkeletonButton from "antd/es/skeleton/Button";
 import Button from "antd/lib/button";
 import SkeletonInput from "antd/lib/skeleton/Input";
 import Column from "antd/lib/table/Column";
+import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -268,7 +269,8 @@ export default function Home() {
             sorter={
               isFetching
                 ? false
-                : (a: any, b: any) => a.expired_at.length - b.expired_at.length
+                : (a: any, b: any) =>
+                    moment(a.start_date).unix() - moment(b.start_date).unix()
             }
             render={(text, record) =>
               isFetching ? (
@@ -285,7 +287,8 @@ export default function Home() {
             sorter={
               isFetching
                 ? false
-                : (a: any, b: any) => a.expired_at.length - b.expired_at.length
+                : (a: any, b: any) =>
+                    moment(a.end_date).unix() - moment(b.end_date).unix()
             }
             render={(text, record) =>
               isFetching ? (
@@ -323,6 +326,11 @@ export default function Home() {
                   )}
                 </>
               )
+            }
+            sorter={
+              isFetching
+                ? false
+                : (a: any, b: any) => a.status.length - b.status.length
             }
           />
           <Column

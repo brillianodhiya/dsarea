@@ -9,6 +9,7 @@ import AddBannerModal from "@dsarea/@/components/Modals/Banner/AddBannerModal";
 import EditBannerModal from "@dsarea/@/components/Modals/Banner/EditBannerModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Card,
@@ -43,6 +44,7 @@ export default function Page() {
   const [loading, setLoading] = React.useState(false);
   const [countFetch, setCountFetch] = React.useState(0);
   const queryClient = useQueryClient();
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["Banner"],
@@ -163,6 +165,7 @@ export default function Page() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
               <Button
                 type="primary"
@@ -176,7 +179,7 @@ export default function Page() {
           </Col>
         </Row>
 
-        {data.map((e: any, i: any) => (
+        {searchFromValue(data, searchText).map((e: any, i: any) => (
           <Card
             style={{
               marginTop: 20,

@@ -343,7 +343,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   position: "absolute",
                   backgroundColor: "#EBF5F5",
                   top: screens.sm ? 0 : 65,
-                  zIndex: 999,
+                  zIndex: 700,
                 }}
               />
               <Content

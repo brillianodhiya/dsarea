@@ -7,6 +7,7 @@ import {
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, Card, Col, Input, Row, Space, Table, Typography } from "antd";
 import SkeletonButton from "antd/lib/skeleton/Button";
@@ -19,6 +20,7 @@ import React from "react";
 
 export default function Page() {
   const router = useRouter();
+  const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
     queryKey: ["Siswa"],
@@ -52,13 +54,14 @@ export default function Page() {
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
                 className="!w-[250px]"
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </Space>
           </Col>
         </Row>
 
         <Table
-          dataSource={data}
+          dataSource={searchFromValue(data, searchText)}
           pagination={{
             hideOnSinglePage: true,
           }}
@@ -82,6 +85,11 @@ export default function Page() {
                 </Space>
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.name.localeCompare(b.name)
+            }
           />
           <Column
             title="Email"
@@ -89,6 +97,11 @@ export default function Page() {
             key="email"
             render={(text) =>
               isFetching ? <SkeletonInput active size={"small"} /> : text
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.email.localeCompare(b.email)
             }
           />
 
@@ -104,6 +117,12 @@ export default function Page() {
                   {moment(record.last_access).format("DD/MM/YYYY HH:mm")}
                 </div>
               )
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) =>
+                    moment(a.last_access).unix() - moment(b.last_access).unix()
             }
           />
           <Column
@@ -128,6 +147,11 @@ export default function Page() {
                   )}
                 </Typography>
               )
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.status.localeCompare(b.status)
             }
           />
 

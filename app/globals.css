@@ -395,3 +395,10 @@
 .ant-typography .ant-typography-copy {
   color: #3a9699 !important;
 }
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-table-wrapper
+  .ant-table-column-sorter-up.active,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-table-wrapper
+  .ant-table-column-sorter-down.active {
+  color: #3a9699 !important;
+}

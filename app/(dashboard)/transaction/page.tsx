@@ -124,6 +124,11 @@ export default function Page() {
             }
             // fixed="left"
             // width={140}
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.invoice.localeCompare(b.invoice)
+            }
           />
           <Column
             title="Status"
@@ -136,6 +141,11 @@ export default function Page() {
               ) : (
                 <CustomBadge value={text} status={text} />
               )
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) => a.status.localeCompare(b.status)
             }
           />
 
@@ -153,6 +163,12 @@ export default function Page() {
                 </Typography>
               )
             }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) =>
+                    a.ds_user.name.localeCompare(b.ds_user.name)
+            }
           />
           <Column
             title="Product"
@@ -164,6 +180,14 @@ export default function Page() {
               ) : (
                 record.ds_product.nama_product
               )
+            }
+            sorter={
+              isFetching
+                ? undefined
+                : (a: any, b: any) =>
+                    a.ds_product.nama_product.localeCompare(
+                      b.ds_product.nama_product
+                    )
             }
           />
           <Column
@@ -177,7 +201,8 @@ export default function Page() {
               isFetching
                 ? undefined
                 : (a: any, b: any) =>
-                    a.tanggal_transaksi.length - b.tanggal_transaksi.length
+                    moment(a.tanggal_transaksi).unix() -
+                    moment(b.tanggal_transaksi).unix()
             }
           />
           <Column
@@ -197,7 +222,8 @@ export default function Page() {
               isFetching
                 ? undefined
                 : (a: any, b: any) =>
-                    a.tanggal_pembayaran - b.tanggal_pembayaran
+                    moment(a.tanggal_pembayaran).unix() -
+                    moment(b.tanggal_pembayaran).unix()
             }
           />
           <Column
