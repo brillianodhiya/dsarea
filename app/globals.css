@@ -402,3 +402,38 @@
   .ant-table-column-sorter-down.active {
   color: #3a9699 !important;
 }
+
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  color: #3a9699 !important;
+}
+
+:where(
+    .css-dev-only-do-not-override-dkbvqv
+  ).ant-radio-button-wrapper-checked:not(
+    .ant-radio-button-wrapper-disabled
+  ):first-child {
+  border-color: #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-calendar
+  .ant-picker-cell-in-view.ant-picker-cell-selected
+  .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-calendar
+  .ant-picker-cell-in-view.ant-picker-cell-range-start
+  .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-calendar
+  .ant-picker-cell-in-view.ant-picker-cell-range-end
+  .ant-picker-cell-inner {
+  background-color: #3a9699 !important;
+}
+:where(.css-dev-only-do-not-override-dkbvqv).ant-picker-calendar
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border: 1px solid #3a9699 !important;
+}
+
+:where(.css-dev-only-do-not-override-dkbvqv).ant-radio-button-wrapper:hover {
+  color: #3a9699 !important;
+}

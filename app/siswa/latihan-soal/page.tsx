@@ -1,85 +1,36 @@
-"use client";
-import { SearchOutlined } from "@ant-design/icons";
-import { ListSoal } from "@dsarea/@/components/LatihanSoal/ListSoal";
+import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
+import ContainerLatihanSoal from "./Container";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
-import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
-import { useQuery } from "@tanstack/react-query";
-import { Input, Tabs, TabsProps } from "antd";
-import { useState } from "react";
 
-export default function Page() {
-  const [activeTabs, setActiveTabs] = useState("active");
+const getListData = async () => {
+  try {
+    const res = await axiosInstance.get(
+      "/api/users/siswa/list/product/owned?status=active"
+    );
 
-  // const { data, isFetching } = useQuery({
-  //   queryKey: ["list-soal", activeTabs],
-  //   queryFn: async () => {
-  //     const res = await axiosClientInstance.get(
-  //       `/api/users/siswa/list/product/owned?status=${activeTabs}`
-  //     );
-  //     return res.data.data;
-  //   },
-  //   initialData: [
-  //     {
-  //       id: 0,
-  //     },
-  //   ],
-  // });
+    // console.log(res.data);
+    return {
+      error: false,
+      ...res.data,
+    };
+  } catch (error) {
+    // console.log(error);
+    return {
+      error: true,
+    };
+  }
+};
 
-  const data = [
-    {
-      id: 1,
-      status: "active",
-    },
-    {
-      id: 2,
-      status: "selesai",
-    },
-    {
-      id: 3,
-      status: "expired",
-    },
-  ];
-  const isFetching = false;
+export default async function Page() {
+  const data = await getListData();
 
-  const onChange = (key: string) => {
-    setActiveTabs(key);
-  };
-  const items: TabsProps["items"] = [
-    {
-      key: "active",
-      label: "Sedang Dikerjakan",
-      children: <ListSoal data={data} isFetching={isFetching} />,
-    },
-    {
-      key: "selesai",
-      label: "Selesai",
-      children: <ListSoal data={data} isFetching={isFetching} />,
-    },
-    {
-      key: "expired",
-      label: "Expired",
-      children: <ListSoal data={data} isFetching={isFetching} />,
-    },
-  ];
+  console.log(data, "data");
+
   return (
     <>
       <CustomHeader title="Latihan Soal" />
-      <div className="p-6">
-        <Tabs
-          defaultActiveKey={activeTabs}
-          items={items}
-          onChange={onChange}
-          tabBarExtraContent={{
-            right: (
-              <Input
-                placeholder="Search anything..."
-                suffix={<SearchOutlined />}
-                className="!w-[250px]"
-              />
-            ),
-          }}
-        />
-      </div>
+
+      <ContainerLatihanSoal />
     </>
   );
 }

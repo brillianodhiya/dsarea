@@ -12,7 +12,7 @@ export const BannerCarousel: React.FC<BannerType> = ({ data, loading }) => {
     <Carousel
       autoplay
       style={{
-        backgroundColor: "blue",
+        backgroundColor: "#3a9699",
         borderRadius: 8,
         height: 280,
       }}
@@ -26,20 +26,22 @@ export const BannerCarousel: React.FC<BannerType> = ({ data, loading }) => {
           className=" h-[240px]  bg-red-500"
           style={{
             width: "100%",
+            height: "282px",
+            position: "relative",
           }}
         >
           <Image
             alt={e.title + i}
-            // src={"/card-image.svg"}
             src={e.image}
             width={1000}
             height={1000}
             style={{
               objectFit: "contain",
-              // aspectRatio: 16 / 9,
-              borderRadius: 10,
-              height: 240,
+              objectPosition: "center",
+              borderRadius: 8,
+              height: "280px",
               width: "100%",
+              position: "relative",
             }}
           />
         </div>
