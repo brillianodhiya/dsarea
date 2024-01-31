@@ -9,28 +9,21 @@ const getListData = async () => {
     );
 
     // console.log(res.data);
-    return {
-      error: false,
-      ...res.data,
-    };
+    return res.data.data;
   } catch (error) {
     // console.log(error);
-    return {
-      error: true,
-    };
+    return [];
   }
 };
 
 export default async function Page() {
   const data = await getListData();
 
-  console.log(data, "data");
-
   return (
     <>
       <CustomHeader title="Latihan Soal" />
 
-      <ContainerLatihanSoal />
+      <ContainerLatihanSoal data={data} />
     </>
   );
 }

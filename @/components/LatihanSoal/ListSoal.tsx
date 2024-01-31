@@ -7,6 +7,7 @@ import { formatRupiah } from "@dsarea/@/lib/utils";
 import ListNumberIcon from "../icons/ListNumberIcon";
 import DurationIcon from "../icons/DurationIcon";
 import MultiUserIcon from "../icons/MultiUsersIcon";
+import { ImageDsArea } from "../Image/ImageDsArea";
 
 interface dataType {
   data: any;
@@ -22,6 +23,8 @@ export const ListSoal: React.FC<dataType> = ({
   const filteredData = data.filter((e: any) => e.id !== 0);
   const router = useRouter();
   const pathname = usePathname();
+
+  console.log(data, "data");
   return (
     <>
       {isFetching ? (
@@ -79,15 +82,9 @@ export const ListSoal: React.FC<dataType> = ({
                     {e.status}
                   </Tag>
                 )}
-                <Image
-                  alt={"alt"}
-                  src={"/card-image.svg"}
-                  width={500}
-                  height={140}
-                  className="w-full h-[100px] object-contain object-center"
-                />
+                <ImageDsArea src={e.image} />
                 <div className="text-lg font-semibold mt-2">
-                  Excel For Advance
+                  {e.nama_product}
                 </div>
                 <Typography
                   style={{
