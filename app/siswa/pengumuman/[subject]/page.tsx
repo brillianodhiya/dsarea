@@ -24,10 +24,7 @@ const { Column } = Table;
 export default function Page() {
   const submenu = [
     {
-      title: "Penilaian",
-    },
-    {
-      title: "Sub Menu",
+      title: "Pengumuman",
     },
   ];
 

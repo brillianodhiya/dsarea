@@ -32,11 +32,11 @@ export default function Page() {
     <>
       <CustomHeader title="Dashboard" />
       <Row gutter={[24, 24]} className="p-4">
-        <Col span={19}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={19}>
           <BannerCarousel data={dataCarousel} loading={loadingCarousel} />
           <ActiveCourse />
         </Col>
-        <Col span={5}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={5}>
           <EventCalendar data={[]} isFetching={false} />
           <LeaderBoard data={[]} isLoading={false} />
         </Col>
