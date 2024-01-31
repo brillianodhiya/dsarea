@@ -1,11 +1,8 @@
 "use client";
 import { formatRupiah } from "@dsarea/@/lib/utils";
-import { Button, Card, Progress, Space, Tag, Typography } from "antd";
+import { Button, Card, Typography } from "antd";
 import moment from "moment";
-import Image from "next/image";
-import MultiUserIcon from "../icons/MultiUsersIcon";
-import DurationIcon from "../icons/DurationIcon";
-import ListNumberIcon from "../icons/ListNumberIcon";
+
 import { usePathname, useRouter } from "next/navigation";
 import { ImageDsArea } from "../Image/ImageDsArea";
 

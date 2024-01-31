@@ -10,7 +10,7 @@ import MultiUserIcon from "../icons/MultiUsersIcon";
 import { ImageDsArea } from "../Image/ImageDsArea";
 
 interface dataType {
-  data: any;
+  data: any[];
   isFetching: boolean;
   showBadge?: boolean;
 }
@@ -91,7 +91,7 @@ export const ListSoal: React.FC<dataType> = ({
                     fontSize: 12,
                   }}
                 >
-                  Expired at : {moment().format("DD/MM/YYYY HH:mm")}
+                  Expired at : {moment(e.expired_at).format("DD/MM/YYYY HH:mm")}
                 </Typography>
                 <Typography
                   style={{
@@ -101,7 +101,10 @@ export const ListSoal: React.FC<dataType> = ({
                 >
                   Harga
                 </Typography>
-                <Typography.Text strong> {formatRupiah(75000)}</Typography.Text>
+                <Typography.Text strong>
+                  {" "}
+                  {formatRupiah(e.harga)}
+                </Typography.Text>
                 <div
                   style={{
                     display: "flex",
@@ -117,16 +120,20 @@ export const ListSoal: React.FC<dataType> = ({
                       color: "#7A7A7A",
                     }}
                   >
-                    0%
+                    {Math.floor((e.total_jawab / e.total_soal) * 100)}%
                   </div>
-                  <Progress showInfo={false} />
+                  <Progress
+                    showInfo={false}
+                    percent={Math.floor((e.total_jawab / e.total_soal) * 100)}
+                  />
                   <div
                     style={{
                       fontWeight: 700,
                       color: "#7A7A7A",
                     }}
                   >
-                    1/<span style={{ fontWeight: 400 }}>4</span>
+                    {e.total_jawab}/
+                    <span style={{ fontWeight: 400 }}>{e.total_soal}</span>
                   </div>
                 </div>
                 <div
@@ -145,7 +152,7 @@ export const ListSoal: React.FC<dataType> = ({
                         fontSize: 12,
                       }}
                     >
-                      90
+                      {e.total_soal}
                     </div>
                   </Space>
                   <Space>
@@ -157,7 +164,7 @@ export const ListSoal: React.FC<dataType> = ({
                         fontSize: 12,
                       }}
                     >
-                      90 min.
+                      {e.total_duration} min.
                     </div>
                   </Space>
                   <Space>

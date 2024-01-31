@@ -37,10 +37,20 @@ type HeaderProps = {
   }[];
 };
 
-const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data }) => {
+const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data: dataInitial }) => {
   const [activeTabs, setActiveTabs] = useState("active");
   const [searchText, setSearchText] = useState("");
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["product", "siswa", activeTabs],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(
+        `/api/users/siswa/list/product/owned?status=` + activeTabs
+      );
+      return res.data.data;
+    },
+    initialData: dataInitial,
+  });
   // const data = [
   //   {
   //     id: 1,
@@ -55,7 +65,6 @@ const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data }) => {
   //     status: "expired",
   //   },
   // ];
-  const isFetching = false;
 
   const onChange = (key: string) => {
     setActiveTabs(key);
@@ -67,7 +76,7 @@ const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data }) => {
       children: (
         <ListSoal
           data={searchFromValue(data, searchText)}
-          isFetching={isFetching}
+          isFetching={isLoading}
         />
       ),
     },
@@ -77,7 +86,7 @@ const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data }) => {
       children: (
         <ListSoal
           data={searchFromValue(data, searchText)}
-          isFetching={isFetching}
+          isFetching={isLoading}
         />
       ),
     },
@@ -87,7 +96,7 @@ const ContainerLatihanSoal: React.FC<HeaderProps> = ({ data }) => {
       children: (
         <ListSoal
           data={searchFromValue(data, searchText)}
-          isFetching={isFetching}
+          isFetching={isLoading}
         />
       ),
     },
