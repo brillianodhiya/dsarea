@@ -23,6 +23,10 @@ import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import ImgCrop from "antd-img-crop";
+import dayjs from "dayjs";
+
+const { RangePicker } = DatePicker;
 
 type Props = {};
 
@@ -39,6 +43,8 @@ const AddProduct = (props: Props) => {
 
   const [imageUrl, setImageUrl] = React.useState<string>();
   const [imageLoading, setImageLoading] = React.useState(false);
+  const [imageFile, setImageFile] = React.useState<any>(undefined);
+  const [idProduct, setIdProduct] = React.useState(0);
 
   const dummyRequest = ({ file, onSuccess }: any) => {
     setTimeout(() => {
@@ -64,6 +70,7 @@ const AddProduct = (props: Props) => {
           setImageUrl(url);
           setImageLoading(false);
         });
+        setImageFile(info.file.originFileObj);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -89,7 +96,6 @@ const AddProduct = (props: Props) => {
     const dataForEdit = JSON.parse(
       window.localStorage.getItem("edit-product") || ""
     );
-
     if (dataForEdit) {
       const categoryID = dataForEdit.category.map((v: any) => v.name) || [];
       form.setFieldsValue({
@@ -121,11 +127,12 @@ const AddProduct = (props: Props) => {
         category_id: categoryID,
         having_expired: dataForEdit.having_expired,
         expired_date: [
-          moment(dataForEdit.start_date),
-          moment(dataForEdit.end_date),
+          dayjs(dataForEdit.start_date),
+          dayjs(dataForEdit.end_date),
         ],
       });
       setImageUrl(dataForEdit.image);
+      setIdProduct(dataForEdit.id);
     }
   }, []);
 
@@ -181,46 +188,48 @@ const AddProduct = (props: Props) => {
             >
               <Form.Item
                 name={"image"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Gambar tidak boleh kosong!",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Gambar tidak boleh kosong!",
+                //   },
+                // ]}
                 valuePropName="file"
               >
-                <Upload.Dragger {...propsUpload} accept=".png,.jpg">
-                  {imageUrl ? (
-                    <Image
-                      src={imageUrl}
-                      alt="banner image"
-                      width={1000}
-                      height={1000}
-                      style={{
-                        width: "100%",
-                        height: 100,
-                        objectFit: "contain",
-                      }}
-                    />
-                  ) : (
-                    <>
-                      {imageLoading ? (
-                        <LoadingOutlined />
-                      ) : (
-                        <>
-                          <CloudUploadOutlined
-                            style={{
-                              fontSize: 44,
-                              color: "#667085",
-                            }}
-                          />
-                          <p className="ant-upload-text">Click to upload</p>
-                          <p className="ant-upload-hint">png atau jpeg</p>
-                        </>
-                      )}
-                    </>
-                  )}
-                </Upload.Dragger>
+                <ImgCrop rotationSlider>
+                  <Upload.Dragger {...propsUpload} accept=".png,.jpg">
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt="banner image"
+                        width={1000}
+                        height={1000}
+                        style={{
+                          width: "100%",
+                          height: 100,
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      <>
+                        {imageLoading ? (
+                          <LoadingOutlined />
+                        ) : (
+                          <>
+                            <CloudUploadOutlined
+                              style={{
+                                fontSize: 44,
+                                color: "#667085",
+                              }}
+                            />
+                            <p className="ant-upload-text">Click to upload</p>
+                            <p className="ant-upload-hint">png atau jpeg</p>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </Upload.Dragger>
+                </ImgCrop>
               </Form.Item>
             </Col>
             <Col span={24}>
@@ -256,7 +265,7 @@ const AddProduct = (props: Props) => {
                 >
                   <Form.Item
                     name="expired_date"
-                    //   label="DatePicker"
+                    label="Display Date"
                     //   noStyle
                     rules={[
                       {
@@ -266,12 +275,13 @@ const AddProduct = (props: Props) => {
                       },
                     ]}
                   >
-                    <DatePicker.RangePicker
+                    <RangePicker
                       style={{
                         margin: "8px 0px",
                       }}
                       showTime
                       format="YYYY-MM-DD HH:mm:ss"
+                      placeholder={["Start Time", "End Time"]}
                     />
                   </Form.Item>
                   <Form.Item
@@ -408,15 +418,14 @@ const AddProduct = (props: Props) => {
                         .validateFields()
                         .then((values) => {
                           console.log(values, "values");
-                          // const formData = new FormData();
-                          // formData.append(
-                          //   "image",
-                          //   values.image.file.originFileObj
-                          // );
-                          // formData.append("nama_product", values.nama_product);
-                          // formData.append("desc", values.desc);
-                          // formData.append("benefit", values.benefit);
-                          // formData.append("harga", values.harga);
+                          const formData = new FormData();
+                          if (imageFile) {
+                            formData.append("image", imageFile);
+                          }
+                          formData.append("nama_product", values.nama_product);
+                          formData.append("desc", values.desc);
+                          formData.append("benefit", values.benefit);
+                          formData.append("harga", values.harga);
                           // values.category_id.map((v: any) => {
                           //   formData.append("category_id", v);
                           // });
@@ -424,24 +433,35 @@ const AddProduct = (props: Props) => {
                           //   "having_expired",
                           //   values.having_expired
                           // );
-                          // formData.append("expired_date", values.expired_date);
+                          formData.append(
+                            "expired_date",
+                            values.expired_date[1].format("YYYY-MM-DD HH:mm:ss")
+                          );
+                          formData.append(
+                            "start_date",
+                            values.expired_date[0].format("YYYY-MM-DD HH:mm:ss")
+                          );
 
-                          // setLoading(true);
-                          // axiosClientInstance
-                          //   .post("/api/soal/product/create", formData, {
-                          //     headers: {
-                          //       "Content-Type": "multipart/form-data",
-                          //     },
-                          //   })
-                          //   .then((ok) => {
-                          //     setLoading(false);
-                          //     message.success(ok.data.message);
-                          //     router.push("/soal/product");
-                          //   })
-                          //   .catch((err) => {
-                          //     setLoading(false);
-                          //     message.error(err.response.data.message);
-                          //   });
+                          setLoading(true);
+                          axiosClientInstance
+                            .patch(
+                              "/api/soal/product/edit/" + idProduct,
+                              formData,
+                              {
+                                headers: {
+                                  "Content-Type": "multipart/form-data",
+                                },
+                              }
+                            )
+                            .then((ok) => {
+                              setLoading(false);
+                              message.success(ok.data.message);
+                              router.push("/soal/product");
+                            })
+                            .catch((err) => {
+                              setLoading(false);
+                              message.error(err.response.data.message);
+                            });
                         })
                         .catch((info) => {
                           // console.log("Validate Failed:", info);
