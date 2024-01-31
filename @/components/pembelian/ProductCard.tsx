@@ -50,7 +50,7 @@ export const ProductCard: React.FC<dataType> = (props) => {
       }}
     >
       <Image
-        alt={props.nama_product}
+        alt={" "}
         src={props.image ? props.image : "/card-image.svg"}
         width={1000}
         height={1000}
