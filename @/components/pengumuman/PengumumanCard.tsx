@@ -26,14 +26,14 @@ export const PengumumanCard: React.FC<dataType> = () => {
       <Tag
         style={{
           position: "absolute",
-          // margin: 6,
           borderRadius: 100,
-          // maxWidth: 200,
           textAlign: "center",
           right: 0,
           width: "max-content",
+          color: "#7A7A7A",
+          fontSize: 12,
+          fontWeight: 600,
         }}
-        // color="#32D583"
       >
         Selesai
       </Tag>

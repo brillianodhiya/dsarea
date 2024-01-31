@@ -245,7 +245,29 @@ const AddProduct = (props: Props) => {
                   >
                     <Input placeholder="Input Nama Produk" />
                   </Form.Item>
-                  <Form.Item name="harga" label="Harga" initialValue={0}>
+                  <Form.Item
+                    name="harga"
+                    label="Harga"
+                    initialValue={0}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Masukkan harga produk!",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (value >= 10000 || value === 0) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(
+                              "Harga tidak boleh kurang dari Rp 10.000,00"
+                            )
+                          );
+                        },
+                      }),
+                    ]}
+                  >
                     <InputNumber
                       addonBefore={
                         <span

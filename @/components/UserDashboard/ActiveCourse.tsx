@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ListSoal } from "../LatihanSoal/ListSoal";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
+import { ListCource } from "./ListCource";
 
 interface DataType {}
 
@@ -27,6 +28,21 @@ export const ActiveCourse: React.FC<DataType> = ({}) => {
     },
     {
       id: 21,
+      image: null,
+      expired_at: "2024-02-10 10:00:00",
+      nama_product: "testing 1 category",
+      harga: 10000,
+      category_name: ["TKP SKD CPNS1"],
+      total_duration: "240",
+      score: 0,
+      benefit: "untung belipat",
+      desc: "testing",
+      total_soal: 5,
+      total_jawab: 0,
+      status: "active",
+    },
+    {
+      id: 22,
       image: null,
       expired_at: "2024-02-10 10:00:00",
       nama_product: "testing 1 category",
@@ -68,7 +84,7 @@ export const ActiveCourse: React.FC<DataType> = ({}) => {
           </Link>
         </div>
       </div>
-      <ListSoal data={data} isFetching={false} showBadge={false} />
+      <ListCource data={data} isFetching={false} />
     </>
   );
 };
