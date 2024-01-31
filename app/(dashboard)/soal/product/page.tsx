@@ -166,7 +166,7 @@ export default function Home() {
                       objectFit: "cover",
                       width: "200px",
                       height: "auto",
-                      margin: "auto",
+                      // margin: "auto",
                       aspectRatio: "1/1",
                       backgroundPosition: "center",
                       backgroundImage: "url(/card-image.svg)",
