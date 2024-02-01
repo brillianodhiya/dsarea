@@ -88,7 +88,8 @@ export const ProductCard: React.FC<dataType> = (props) => {
           style={{
             width: "100%",
           }}
-          type="primary"
+          type={props.is_buying ? "default" : "primary"}
+          disabled={props.is_buying}
         >
           Beli Sekarang
         </Button>
