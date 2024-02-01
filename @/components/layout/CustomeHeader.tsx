@@ -57,8 +57,6 @@ const CustomHeader: React.FC<HeaderProps> = ({
     };
   }, []);
 
-  // console.log(screens, "screen");
-
   return (
     <Header
       style={{
@@ -96,7 +94,13 @@ const CustomHeader: React.FC<HeaderProps> = ({
             onClick={() => router.back()}
           >
             <ArrowLeftOutlined />
-            <Typography.Text strong className="!text-xl">
+            <Typography.Text
+              style={{
+                fontSize: screens.xs ? 14 : 20,
+              }}
+              strong
+              // className="!text-xl"
+            >
               {title}
             </Typography.Text>
           </div>

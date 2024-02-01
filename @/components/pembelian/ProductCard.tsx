@@ -5,6 +5,8 @@ import moment from "moment";
 
 import { usePathname, useRouter } from "next/navigation";
 import { ImageDsArea } from "../Image/ImageDsArea";
+import { useState } from "react";
+import ViewProductModal from "../Modals/Product/ViewProductModal";
 
 interface dataType {
   id: number;
@@ -37,63 +39,73 @@ interface dataType {
 export const ProductCard: React.FC<dataType> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [openViewModal, setOpenViewModal] = useState(false);
 
   return (
-    <Card
-      style={{
-        boxShadow:
-          "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",
-      }}
-    >
-      <ImageDsArea src={props.image} />
+    <>
+      <ViewProductModal
+        onSubmit={() => setOpenViewModal(false)}
+        data={props}
+        open={openViewModal}
+        buy={true}
+      />
+      <Card
+        style={{
+          boxShadow:
+            "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",
+        }}
+      >
+        <ImageDsArea src={props.image} />
 
-      <div className="text-lg font-semibold mt-2">{props.nama_product}</div>
-      <Typography
-        style={{
-          fontSize: 12,
-        }}
-      >
-        Expired at : {moment(props.end_date).format("DD/MM/YYYY HH:mm")}
-      </Typography>
-      <Typography
-        style={{
-          fontWeight: 400,
-          color: "#7A7A7A",
-        }}
-      >
-        Harga
-      </Typography>
-      <div
-        style={{
-          fontSize: 24,
-          fontWeight: 600,
-        }}
-      >
-        {formatRupiah(props.harga)}
-      </div>
-      <div className="flex flex-row justify-between gap-2 mt-4">
-        <Button
+        <div className="text-lg font-semibold mt-2">{props.nama_product}</div>
+        <Typography
           style={{
-            width: "100%",
-            borderWidth: 1,
-            borderColor: "#3A9699",
-            color: "#3A9699",
+            fontSize: 12,
           }}
-          type="link"
         >
-          Lihat Detail
-        </Button>
+          Expired at : {moment(props.end_date).format("DD/MM/YYYY HH:mm")}
+        </Typography>
+        <Typography
+          style={{
+            fontWeight: 400,
+            color: "#7A7A7A",
+          }}
+        >
+          Harga
+        </Typography>
+        <div
+          style={{
+            fontSize: 24,
+            fontWeight: 600,
+          }}
+        >
+          {formatRupiah(props.harga)}
+        </div>
+        <div className="flex flex-row justify-between gap-2 mt-4">
+          <Button
+            style={{
+              width: "100%",
+              borderWidth: 1,
+              borderColor: "#3A9699",
+              color: "#3A9699",
+            }}
+            type="link"
+            onClick={() => setOpenViewModal(true)}
+          >
+            Lihat Detail
+          </Button>
 
-        <Button
-          style={{
-            width: "100%",
-          }}
-          type={props.is_buying ? "default" : "primary"}
-          disabled={props.is_buying}
-        >
-          Beli Sekarang
-        </Button>
-      </div>
-    </Card>
+          <Button
+            style={{
+              width: "100%",
+            }}
+            type={props.is_buying ? "default" : "primary"}
+            disabled={props.is_buying}
+          >
+            Beli Sekarang
+          </Button>
+        </div>
+      </Card>
+    </>
   );
 };
