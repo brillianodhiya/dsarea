@@ -16,15 +16,23 @@ import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { formatRupiah, getStatus, pickRandomItem } from "@dsarea/@/lib/utils";
 import { FieldTimeOutlined } from "@ant-design/icons";
 import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   open: boolean;
   onSubmit: () => void;
   data: any;
+  buy?: boolean;
 }
 
-const ViewProductModal: React.FC<ModalProps> = ({ open, onSubmit, data }) => {
+const ViewProductModal: React.FC<ModalProps> = ({
+  open,
+  onSubmit,
+  data,
+  buy = false,
+}) => {
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const { data: dataModal, isFetching } = useQuery({
     queryKey: ["category", data.id],
@@ -64,11 +72,41 @@ const ViewProductModal: React.FC<ModalProps> = ({ open, onSubmit, data }) => {
         onSubmit();
       }}
       footer={
-        <div>
-          <Space>
-            <Button onClick={onSubmit}>Close</Button>
-          </Space>
-        </div>
+        <>
+          {buy ? (
+            <div>
+              <Space>
+                <Button
+                  onClick={onSubmit}
+                  style={{
+                    width: "100%",
+                    borderWidth: 1,
+                    borderColor: "#3A9699",
+                    color: "#3A9699",
+                  }}
+                  type="link"
+                >
+                  Close
+                </Button>
+                <Button
+                  type={data.is_buying ? "default" : "primary"}
+                  disabled={data.is_buying}
+                  onClick={() => {
+                    router.push(`/siswa/pembelian/product/${data.id}`);
+                  }}
+                >
+                  Beli Sekarang
+                </Button>
+              </Space>
+            </div>
+          ) : (
+            <div>
+              <Space>
+                <Button onClick={onSubmit}>Close</Button>
+              </Space>
+            </div>
+          )}
+        </>
       }
     >
       <LoadingNonFullscreen spinning={loading || isFetching}>
@@ -81,7 +119,7 @@ const ViewProductModal: React.FC<ModalProps> = ({ open, onSubmit, data }) => {
           >
             <Image
               alt={data.nama_product}
-              src={data.image}
+              src={data.image ?? "/card-image.svg"}
               width={1000}
               height={1000}
               style={{

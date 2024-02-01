@@ -85,6 +85,12 @@ const itemsSiswa: MenuItem[] = [
       "product"
     ),
     getItem(
+      <Link className="sub-menu-item" href={"/siswa/pembelian/kelas"}>
+        Kelas
+      </Link>,
+      "kelas"
+    ),
+    getItem(
       <Link className="sub-menu-item" href={"/siswa/pembelian/riwayat"}>
         Riwayat
       </Link>,
@@ -122,7 +128,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
   };
 
   const useOpens = () => {
-    if (["product", "riwayat"].includes(key)) {
+    if (["product", "kelas", "riwayat"].includes(key)) {
       return ["sub1"];
     } else {
       return [];
