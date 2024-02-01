@@ -101,6 +101,7 @@ export const ProductCard: React.FC<dataType> = (props) => {
             }}
             type={props.is_buying ? "default" : "primary"}
             disabled={props.is_buying}
+            onClick={() => router.push("/siswa/pembelian/product/" + props.id)}
           >
             Beli Sekarang
           </Button>

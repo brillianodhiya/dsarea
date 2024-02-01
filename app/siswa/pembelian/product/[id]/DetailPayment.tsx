@@ -32,6 +32,8 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
   const router = useRouter();
   const screens = useBreakpoint();
 
+  console.log(dataProudct.data[0].image);
+
   const onFinish = async (values: any) => {
     const body = {
       voucher_id: discountId,
@@ -130,7 +132,9 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
                   >
                     Harga
                   </div>
-                  <div className="font-semibold">{formatRupiah(75000)}</div>
+                  <div className="font-semibold">
+                    {formatRupiah(dataProudct.data[0].harga)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -239,7 +243,9 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
               <div className="py-6">
                 <div className="flex justify-between">
                   <div className="font-normal">Harga</div>
-                  <div className="font-normal">{formatRupiah(75000)}</div>
+                  <div className="font-normal">
+                    {formatRupiah(dataProudct.data[0].harga)}
+                  </div>
                 </div>
                 <div className="flex justify-between mt-2">
                   <div className="font-normal">Discount</div>
@@ -250,7 +256,12 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
           >
             <div className="flex justify-between">
               <div>Total Harga</div>
-              <div>{formatRupiah(75000 - (75000 * discount) / 100)}</div>
+              <div>
+                {formatRupiah(
+                  dataProudct.data[0].harga -
+                    (dataProudct.data[0].harga * discount) / 100
+                )}
+              </div>
             </div>
           </Card>
         </Col>
