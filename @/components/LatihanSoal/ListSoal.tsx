@@ -184,11 +184,16 @@ export const ListSoal: React.FC<dataType> = ({
                       color: "#7A7A7A",
                     }}
                   >
-                    {Math.floor((e.total_jawab / e.total_soal) * 100)}%
+                    {Math.floor(
+                      (parseFloat(e.total_sub_soal_done) / e.total_sub) * 100
+                    )}
+                    %
                   </div>
                   <Progress
                     showInfo={false}
-                    percent={Math.floor((e.total_jawab / e.total_soal) * 100)}
+                    percent={Math.floor(
+                      (parseFloat(e.total_sub_soal_done) / e.total_sub) * 100
+                    )}
                   />
                   <div
                     style={{
@@ -196,8 +201,8 @@ export const ListSoal: React.FC<dataType> = ({
                       color: "#7A7A7A",
                     }}
                   >
-                    {e.total_jawab}/
-                    <span style={{ fontWeight: 400 }}>{e.total_soal}</span>
+                    {e.total_sub_soal_done}/
+                    <span style={{ fontWeight: 400 }}>{e.total_sub}</span>
                   </div>
                 </div>
                 <div
@@ -228,7 +233,7 @@ export const ListSoal: React.FC<dataType> = ({
                         fontSize: 12,
                       }}
                     >
-                      {e.total_duration} min.
+                      {e.total_durasi} min.
                     </div>
                   </Space>
                   <Space>
@@ -240,7 +245,7 @@ export const ListSoal: React.FC<dataType> = ({
                         fontSize: 12,
                       }}
                     >
-                      40
+                      {e.total_peserta}
                     </div>
                   </Space>
                 </div>
