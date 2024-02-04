@@ -24,7 +24,6 @@ export const ListSoal: React.FC<dataType> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(data, "data");
   return (
     <>
       {isFetching ? (

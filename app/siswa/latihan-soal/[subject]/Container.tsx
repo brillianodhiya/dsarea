@@ -4,14 +4,12 @@ import DurationIcon from "@dsarea/@/components/icons/DurationIcon";
 import NoteIcon from "@dsarea/@/components/icons/NoteIcon";
 import SwipeIcon from "@dsarea/@/components/icons/SwipeIcon";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
-import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { pickRandomItem } from "@dsarea/@/lib/utils";
 import {
   Badge,
   Button,
   Card,
   Col,
-  Collapse,
-  CollapseProps,
   Row,
   Space,
   Table,
@@ -19,10 +17,15 @@ import {
   Typography,
 } from "antd";
 import moment from "moment";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 const { Column } = Table;
 
 type HeaderProps = {
   data: {
+    participant: string;
+    rank: string;
+    total_dilewati: string;
     id: number;
     expired_at: string;
     nama_product: string;
@@ -50,24 +53,31 @@ type HeaderProps = {
 const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
   data: dataInitial,
 }) => {
-  const data = [
+  const [categoryColor, setCategoryColor] = React.useState<
     {
-      id: 0,
-      title: "Test",
-      kategori: "TKP",
-      duration: 30,
-      score: 30,
-      status: "expired",
-    },
-    {
-      id: 0,
-      title: "Test",
-      kategori: "TKP",
-      duration: 30,
-      score: 30,
-      status: "active",
-    },
-  ];
+      name: string;
+      color: string;
+    }[]
+  >([]);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  console.log(pathname);
+
+  React.useEffect(() => {
+    const arr: React.SetStateAction<{ name: string; color: string }[]> = [];
+    dataInitial.category_name.map((val) => {
+      const keys = {
+        name: val,
+        color: pickRandomItem(),
+      };
+      arr.push(keys);
+    });
+    setCategoryColor(arr);
+  }, [dataInitial]);
+
+  console.log(categoryColor, "category");
+
   return (
     <>
       <Card className="!m-6">
@@ -80,28 +90,27 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
             }}
           >
             <Typography.Text strong className="!text-xl">
-              Penilaian : Try Outs
+              {dataInitial.nama_product}
             </Typography.Text>
             <div className="flex items-center gap-x-2">
-              <Tag>Matematika</Tag>
-              <Tag
-                color="#EBF5F5"
-                style={{
-                  borderRadius: 100,
-                }}
-              >
-                <Typography
-                  style={{
-                    color: "#3A9699",
-                  }}
-                >
-                  TKP SKD CPNS
-                </Typography>
-              </Tag>
+              {categoryColor.map((item, index) => {
+                return (
+                  <Tag
+                    key={item.name}
+                    color={item.color}
+                    style={{
+                      borderRadius: 100,
+                    }}
+                  >
+                    {item.name}
+                  </Tag>
+                );
+              })}
             </div>
             <div>
               <Typography>
-                Expired at : {moment().format("DD/MM/YYYY HH:mm")}
+                Expired at :{" "}
+                {moment(dataInitial.expired_at).format("DD/MM/YYYY HH:mm")}
               </Typography>
             </div>
             <div
@@ -115,7 +124,7 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
               <Space>
                 <TimeIcon />
                 <Typography.Text strong style={{ color: "#FDB022" }}>
-                  90 min
+                  {dataInitial.total_duration} min
                 </Typography.Text>
               </Space>
               <Space>
@@ -125,11 +134,11 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
 
               <Space>
                 <Badge color="#3A9699" />
-                Total Pertanyaan : 90
+                Total Pertanyaan : {dataInitial.total_soal}
               </Space>
             </div>
           </Col>
-          <Col>
+          {/* <Col>
             <Typography>Tanggal Pengerjaan</Typography>
             <Space>
               <CalendarOutlined
@@ -139,58 +148,75 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
               />
               {moment().format("DD/MM/YYYY HH:mm")}
             </Space>
-          </Col>
+          </Col> */}
           <Col>
-            <div className="bg-[#EBF5F5] rounded-md p-2">
-              Total Score
-              <Typography.Paragraph strong>223</Typography.Paragraph>
+            <div className="bg-[#EBF5F5] rounded-md px-2 py-2">
+              <span>Total Score</span>
+              <Typography.Paragraph
+                strong
+                style={{
+                  fontSize: 24,
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                {dataInitial.score}
+              </Typography.Paragraph>
             </div>
-            <div>Peringkat : 30/40 siswa</div>
+            {dataInitial.rank ? (
+              <div>
+                Peringkat : {dataInitial.rank}/{dataInitial.participant} siswa
+              </div>
+            ) : (
+              <div>Partisipasi : {dataInitial.participant} siswa</div>
+            )}
           </Col>
         </Row>
         <div className="flex flex-row gap-4 my-4 flex-wrap">
           <Space>
             <NoteIcon />
             <div>Dikerjakan</div>
-            <div className="font-semibold">90</div>
+            <div className="font-semibold">{dataInitial.total_jawab}</div>
           </Space>
           <Space>
             <SwipeIcon />
-            <div>Dikerjakan</div>
-            <div className="font-semibold">90</div>
+            <div>Dilewati</div>
+            <div className="font-semibold">{dataInitial.total_dilewati}</div>
           </Space>
           <Space>
             <DurationIcon />
-            <div>Durasi Pengerjaan</div>
-            <div className="font-semibold">85 min</div>
+            <div>Total Durasi Pengerjaan</div>
+            <div className="font-semibold">
+              {dataInitial.total_duration} min
+            </div>
           </Space>
         </div>
         <Table
-          dataSource={data}
+          dataSource={dataInitial.sub_category}
           pagination={{
             hideOnSinglePage: true,
           }}
           size="small"
+          rowKey={"id"}
+          scroll={{
+            x: 1000,
+          }}
         >
           <Column title="Test" dataIndex="title" key="title" />
           <Column
             title="Kategori"
-            dataIndex="kategori"
-            key="kategori"
+            dataIndex="category_name"
+            key="category_name"
             render={(text) => (
               <Tag
-                color="#EBF5F5"
+                color={
+                  categoryColor.find((val) => val.name == text)?.color || ""
+                }
                 style={{
                   borderRadius: 100,
                 }}
               >
-                <Typography
-                  style={{
-                    color: "#3A9699",
-                  }}
-                >
-                  TKP SKD CPNS
-                </Typography>
+                {text}
               </Tag>
             )}
           />
@@ -203,6 +229,11 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
             )}
           />
           <Column title="Score" dataIndex="score" key="score" />
+          <Column
+            title="Tanggal Pengerjaan"
+            dataIndex="tanggal_pengerjaan"
+            key="tanggal_pengerjaan"
+          />
           <Column
             align="center"
             dataIndex="status"
@@ -219,6 +250,11 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                     borderColor: "#3A9699",
                     borderWidth: 1,
                   }}
+                  onClick={() =>
+                    router.push(
+                      `${pathname}/preview-soal/${record.category_id}/${record.sub_id}`
+                    )
+                  }
                 >
                   Mulai Mengerjakan Soal
                 </Button>
