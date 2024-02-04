@@ -885,13 +885,13 @@ const DynamicFormAddSoal: React.FC<DynamiCFormAddSoal> = ({ form }) => {
       </Form.List>
       {/* </DndProvider> */}
 
-      <Form.Item noStyle shouldUpdate>
+      {/* <Form.Item noStyle shouldUpdate>
         {() => (
           <Typography>
             <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
           </Typography>
         )}
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 };
