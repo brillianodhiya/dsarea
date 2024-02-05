@@ -55,9 +55,14 @@ export const ProductCard: React.FC<dataType> = (props) => {
             "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",
         }}
       >
-        <ImageDsArea src={props.image} />
+        <ImageDsArea src={props.image} width={250} />
 
-        <div className="text-lg font-semibold mt-2">{props.nama_product}</div>
+        <p className="text-lg font-semibold mt-2" title={props.nama_product}>
+          {/* berikan ... ketika karakter melebihi 20 karakter  */}
+          {props.nama_product.length > 20
+            ? props.nama_product.slice(0, 20) + "..."
+            : props.nama_product}
+        </p>
         <Typography
           style={{
             fontSize: 12,
