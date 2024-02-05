@@ -148,9 +148,15 @@ export const ListSoal: React.FC<dataType> = ({
                   </Tag>
                 )}
                 <ImageDsArea src={e.image} />
-                <div className="text-lg font-semibold mt-2">
-                  {e.nama_product}
-                </div>
+                <p
+                  className="text-lg font-semibold mt-2"
+                  title={e.nama_product}
+                >
+                  {/* berikan ... ketika karakter melebihi 20 karakter  */}
+                  {e.nama_product.length > 20
+                    ? e.nama_product.slice(0, 20) + "..."
+                    : e.nama_product}
+                </p>
                 <Typography
                   style={{
                     fontSize: 12,

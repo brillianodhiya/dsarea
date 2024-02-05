@@ -2,7 +2,7 @@ import Image from "next/image";
 
 interface dataType {
   src?: string;
-  width?: 250;
+  width?: number;
 }
 
 export const ImageDsArea: React.FC<dataType> = ({ width = 250, src }) => {
