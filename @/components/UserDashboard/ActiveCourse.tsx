@@ -1,62 +1,16 @@
+"use client";
 import Link from "next/link";
 import { ListSoal } from "../LatihanSoal/ListSoal";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import { ListCource } from "./ListCource";
 
-interface DataType {}
+interface DataType {
+  data: any;
+}
 
-export const ActiveCourse: React.FC<DataType> = ({}) => {
+const ActiveCourse: React.FC<DataType> = ({ data }) => {
   const router = useRouter();
-
-  const data = [
-    {
-      id: 18,
-      image:
-        "http://api-dsarea.aitilokal.com/api/attach/MTcwNjQzODA5NzUzNzEuUE5HLi1zcGxhc2gtLmltYWdlL3BuZw",
-      expired_at: "2024-02-10 10:00:00",
-      nama_product: "testing131image",
-      harga: 10000,
-      category_name: ["TKP SKD CPNS1", "CPNS 2"],
-      total_duration: "360",
-      score: 0,
-      benefit: "untung belipat",
-      desc: "testing",
-      total_soal: 8,
-      total_jawab: 0,
-      status: "active",
-    },
-    {
-      id: 21,
-      image: null,
-      expired_at: "2024-02-10 10:00:00",
-      nama_product: "testing 1 category",
-      harga: 10000,
-      category_name: ["TKP SKD CPNS1"],
-      total_duration: "240",
-      score: 0,
-      benefit: "untung belipat",
-      desc: "testing",
-      total_soal: 5,
-      total_jawab: 0,
-      status: "active",
-    },
-    {
-      id: 22,
-      image: null,
-      expired_at: "2024-02-10 10:00:00",
-      nama_product: "testing 1 category",
-      harga: 10000,
-      category_name: ["TKP SKD CPNS1"],
-      total_duration: "240",
-      score: 0,
-      benefit: "untung belipat",
-      desc: "testing",
-      total_soal: 5,
-      total_jawab: 0,
-      status: "active",
-    },
-  ];
 
   return (
     <>
@@ -69,7 +23,7 @@ export const ActiveCourse: React.FC<DataType> = ({}) => {
         }}
       >
         <div className="font-semibold text-md">
-          Program yang seadng berjalan
+          Program yang sedang berjalan
         </div>
         <div>
           <Link
@@ -78,7 +32,7 @@ export const ActiveCourse: React.FC<DataType> = ({}) => {
             }}
             href={"/siswa/latihan-soal"}
             type="text"
-            // onClick={() => router.push('/siswa/latihan-soal')}
+            onClick={() => router.push("/siswa/latihan-soal")}
           >
             View All
           </Link>
@@ -88,3 +42,5 @@ export const ActiveCourse: React.FC<DataType> = ({}) => {
     </>
   );
 };
+
+export default ActiveCourse;
