@@ -119,6 +119,8 @@ export const ListSoal: React.FC<dataType> = ({
                 style={{
                   boxShadow:
                     "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",
+                  maxWidth: 300,
+                  height: "100%",
                 }}
                 hoverable
               >

@@ -50,9 +50,13 @@ export const ProductCard: React.FC<dataType> = (props) => {
         buy={true}
       />
       <Card
+        bodyStyle={{
+          maxWidth: 300,
+        }}
         style={{
           boxShadow:
             "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",
+          height: "100%",
         }}
       >
         <ImageDsArea src={props.image} width={250} />
