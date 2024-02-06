@@ -62,7 +62,22 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(pathname);
+  const requestFullscreen = () => {
+    // cek apakah browser mendukung fitur fullscreen
+    if (document.fullscreenEnabled) {
+      // cek apakah sudah ada elemen yang fullscreen
+      if (!document.fullscreenElement) {
+        // jika tidak, maka buat elemen body menjadi fullscreen
+        document.body.requestFullscreen().catch((err) => {
+          // tangani error jika ada
+          console.error(err);
+        });
+      }
+    } else {
+      // jika browser tidak mendukung fitur fullscreen, tampilkan pesan error
+      // alert("Browser Anda tidak mendukung fitur fullscreen.");
+    }
+  };
 
   React.useEffect(() => {
     const arr: React.SetStateAction<{ name: string; color: string }[]> = [];
@@ -75,8 +90,6 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
     });
     setCategoryColor(arr);
   }, [dataInitial]);
-
-  console.log(categoryColor, "category");
 
   return (
     <>
@@ -250,11 +263,13 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                     borderColor: "#3A9699",
                     borderWidth: 1,
                   }}
-                  onClick={() =>
+                  onClick={() => {
+                    requestFullscreen();
+
                     router.push(
                       `${pathname}/preview-soal/${record.category_id}/${record.sub_id}`
-                    )
-                  }
+                    );
+                  }}
                 >
                   Mulai Mengerjakan Soal
                 </Button>
