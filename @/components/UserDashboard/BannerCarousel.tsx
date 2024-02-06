@@ -4,10 +4,9 @@ import Image from "next/image";
 import React from "react";
 interface BannerType {
   data: any;
-  loading: boolean;
 }
 
-export const BannerCarousel: React.FC<BannerType> = ({ data, loading }) => {
+export const BannerCarousel: React.FC<BannerType> = ({ data }) => {
   return (
     <Carousel
       autoplay
