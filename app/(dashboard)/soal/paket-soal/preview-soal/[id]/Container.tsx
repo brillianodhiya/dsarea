@@ -132,7 +132,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
 
   useEffect(() => {
     console.log(dataSoal, "data");
-    if (dataSoal.soal.length > 0) {
+    if (dataSoal?.soal?.length > 0) {
       setSoal(dataSoal.soal);
       setNo(dataSoal.soal[0].no);
       setSoalNow(dataSoal.soal[0]);
