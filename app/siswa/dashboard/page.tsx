@@ -29,7 +29,7 @@ export default function Page() {
     queryKey: ["list-course"],
     queryFn: async () => {
       const res = await axiosClientInstance.get(
-        "/api/users/siswa/list/product/owned?status=active&limit=3"
+        "/api/users/siswa/list/product/owned?status=active&limit=6"
       );
       return res.data.data;
     },
@@ -47,12 +47,15 @@ export default function Page() {
   return (
     <>
       <CustomHeader title="Dashboard" />
-      <Row gutter={[24, 24]} className="p-4">
-        <Col xs={24} sm={24} md={24} lg={24} xl={19}>
+      <Row
+        gutter={[24, 24]}
+        className="w-full p-4 max-h-[90vh] overflow-y-scroll overflow-x-hidden"
+      >
+        <Col xs={24} sm={24} md={24} lg={14} xl={16} xxl={18}>
           <BannerCarousel data={dataCarousel} />
           <ActiveCourse data={dataCourse} />
         </Col>
-        <Col xs={24} sm={24} md={24} lg={24} xl={5}>
+        <Col xs={24} sm={24} md={24} lg={10} xl={8} xxl={6}>
           <EventCalendar data={[]} isFetching={false} />
           <LeaderBoard data={[]} isLoading={false} />
         </Col>

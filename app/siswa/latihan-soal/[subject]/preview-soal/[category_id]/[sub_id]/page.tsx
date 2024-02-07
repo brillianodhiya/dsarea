@@ -11,6 +11,8 @@ async function getData(
       const res = await axiosInstance.get(
         `/api/users/siswa/soal/sub/product/owned/${product_id}/${category_id}/${sub_id}`
       );
+
+      console.log(res);
       return res.data.data;
     } catch (error) {
       console.log(error);

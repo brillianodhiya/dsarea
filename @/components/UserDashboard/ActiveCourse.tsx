@@ -1,8 +1,5 @@
 "use client";
 import Link from "next/link";
-import { ListSoal } from "../LatihanSoal/ListSoal";
-import { Button } from "antd";
-import { useRouter } from "next/navigation";
 import { ListCource } from "./ListCource";
 
 interface DataType {
@@ -10,8 +7,6 @@ interface DataType {
 }
 
 const ActiveCourse: React.FC<DataType> = ({ data }) => {
-  const router = useRouter();
-
   return (
     <>
       <div
@@ -32,7 +27,7 @@ const ActiveCourse: React.FC<DataType> = ({ data }) => {
             }}
             href={"/siswa/latihan-soal"}
             type="text"
-            onClick={() => router.push("/siswa/latihan-soal")}
+            onClick={() => window.location.assign("/siswa/latihan-soal")}
           >
             View All
           </Link>

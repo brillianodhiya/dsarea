@@ -8,6 +8,7 @@ import {
   Typography,
   Space,
   MenuProps,
+  Grid,
 } from "antd";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -26,6 +27,7 @@ import KelasIcon from "../icons/KelasIcon";
 import BannerIcon from "../icons/BannerIcon";
 
 const { Sider, Content } = Layout;
+const { useBreakpoint } = Grid;
 
 const queryClient = new QueryClient();
 
@@ -101,6 +103,8 @@ const itemsSiswa: MenuItem[] = [
 
 const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
   // console.log(profileData);
+  const screens = useBreakpoint();
+
   React.useEffect(() => {
     if (profileData.error) {
       deleteCookie("DS-X-Access-Agent-Token");
@@ -175,14 +179,22 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
             <Sider
               collapsed={collapsed}
               breakpoint="md"
-              collapsedWidth="80"
+              collapsedWidth={screens.sm ? "80" : "0"}
               onCollapse={(collapsed) => {
                 setCollapsed(collapsed);
               }}
-              style={{
-                width: 500,
-                display: isFullscreen ? "none" : undefined,
-              }}
+              style={
+                !screens.sm
+                  ? {
+                      display: collapsed ? "none" : undefined,
+                      width: 500,
+                      // position: collapsed ? undefined : "absolute",
+                    }
+                  : {
+                      width: 500,
+                      display: isFullscreen ? "none" : undefined,
+                    }
+              }
             >
               <Space
                 style={{
@@ -236,11 +248,13 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                 style={{
                   borderWidth: 2,
                   borderColor: "#AAD2D3",
-                  marginLeft: -20,
+                  marginLeft: !screens.sm ? 5 : -20,
                   marginTop: 14,
                   borderRadius: 12,
                   position: "absolute",
                   backgroundColor: "#EBF5F5",
+                  top: screens.sm ? 0 : 65,
+                  zIndex: 700,
                 }}
               />
               <Content
@@ -248,6 +262,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                   minHeight: 280,
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
+                  // position: !collapsed && !screens.sm ? "absolute" : undefined,
                 }}
               >
                 {children}

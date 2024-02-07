@@ -50,7 +50,7 @@ const ListProduct: React.FC<HeaderProps> = ({ data }) => {
         className="!w-[250px]"
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center max-h-[86vh] overflow-y-scroll overflow-x-hidden">
         <Row gutter={[24, 24]} className="mt-4" justify={"start"}>
           {searchFromValue(data, searchText).map((e: any, i) => (
             <Col key={i}>

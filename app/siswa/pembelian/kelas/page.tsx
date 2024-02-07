@@ -80,11 +80,13 @@ export default function Page() {
             />
           </Col>
         </Row>
+
         <Row
           gutter={[24, 24]}
           justify={
             filteredData.length === 0 && !isFetching ? "center" : "start"
           }
+          className="max-h-[86vh] overflow-y-scroll overflow-x-hidden"
         >
           {isFetching ? (
             <Card

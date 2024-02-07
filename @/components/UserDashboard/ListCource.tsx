@@ -115,7 +115,7 @@ export const ListCource: React.FC<dataType> = ({
           {data.map((e: any, i: any) => (
             <Col key={i}>
               <Card
-                onClick={() => router.push(`${pathname}/${e.id}`)}
+                onClick={() => router.push(`/siswa/latihan-soal/${e.id}`)}
                 style={{
                   boxShadow:
                     "0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.10)",

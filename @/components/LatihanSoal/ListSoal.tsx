@@ -111,7 +111,10 @@ export const ListSoal: React.FC<dataType> = ({
           />
         </Col>
       ) : (
-        <Row gutter={[24, 24]}>
+        <Row
+          gutter={[24, 24]}
+          className="max-h-[80vh] overflow-y-scroll overflow-x-hidden"
+        >
           {data.map((e: any, i: any) => (
             <Col key={i}>
               <Card
