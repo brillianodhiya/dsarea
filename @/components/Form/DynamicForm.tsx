@@ -9,6 +9,7 @@ import {
   Image,
   Select,
   Grid,
+  InputNumber,
 } from "antd";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -274,7 +275,11 @@ const SubSoalForm: React.FC<{
           />
         </Form.Item>
         <Form.Item noStyle name={[subField.name, "nilai"]} required>
-          <Input placeholder="Score" />
+          <InputNumber style={{
+            width: "100%",
+          }} placeholder="Score"
+          min={0}
+          />
         </Form.Item>
         <CloseOutlined
           onClick={() => {
