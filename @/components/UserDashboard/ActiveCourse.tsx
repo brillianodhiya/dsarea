@@ -17,7 +17,12 @@ const ActiveCourse: React.FC<DataType> = ({ data }) => {
           marginBottom: 10,
         }}
       >
-        <div className="font-semibold text-md">
+        <div
+          className="font-semibold"
+          style={{
+            fontSize: 18,
+          }}
+        >
           Program yang sedang berjalan
         </div>
         <div>
