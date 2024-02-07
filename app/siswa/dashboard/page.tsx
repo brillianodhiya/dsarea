@@ -56,7 +56,30 @@ export default function Page() {
           <ActiveCourse data={dataCourse} />
         </Col>
         <Col xs={24} sm={24} md={24} lg={10} xl={8} xxl={6}>
-          <EventCalendar data={[]} isFetching={false} />
+          <EventCalendar
+            data={[]}
+            isFetching={false}
+            event={[
+              {
+                id: 1,
+                title: "PowerPoint (E-learning)",
+                start: "2024-02-01",
+                end: "2024-02-05",
+              },
+              {
+                id: 2,
+                title: "Excel for Advance",
+                start: "2024-02-02",
+                end: "2024-02-05",
+              },
+              {
+                id: 3,
+                title: "Event 3",
+                start: "2024-02-03",
+                end: "2024-02-05",
+              },
+            ]}
+          />
           <LeaderBoard data={[]} isLoading={false} />
         </Col>
       </Row>
