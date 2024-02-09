@@ -34,8 +34,15 @@ type HeaderProps = {
     duration: number;
     rules: string;
     soal: {
+      product_id: number;
+      soal_id: number;
+      sub_id: number;
       no: number;
       type: "pilihan" | "essay";
+      jawaban_user?: {
+        key?: string;
+        jawaban?: string;
+      };
       soal: string;
       jawaban: {
         key: string;
@@ -57,10 +64,16 @@ type HeaderProps = {
 const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   const [soal, setSoal] = React.useState<
     {
+      product_id: number;
+      soal_id: number;
+      sub_id: number;
       no: number;
       type: "pilihan" | "essay";
       soal: string;
-      jawaban_user?: string;
+      jawaban_user?: {
+        key?: string;
+        jawaban?: string;
+      };
       answered?: boolean;
       skipped?: boolean;
       jawaban: {
@@ -82,7 +95,13 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     duration: number;
     rules: string;
     soal: {
-      jawaban_user?: string;
+      product_id: number;
+      soal_id: number;
+      sub_id: number;
+      jawaban_user?: {
+        key?: string;
+        jawaban?: string;
+      };
       answered?: boolean;
       skipped?: boolean;
       no: number;
@@ -109,12 +128,18 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
 
   const [no, setNo] = useState(0);
   const [soalNow, setSoalNow] = useState<{
+    product_id: number;
+    soal_id: number;
+    sub_id: number;
     image?: string;
     audio?: string;
     no: number;
     type: "pilihan" | "essay";
     soal: string;
-    jawaban_user?: string;
+    jawaban_user?: {
+      key?: string;
+      jawaban?: string;
+    };
     answered?: boolean;
     skipped?: boolean;
     jawaban: {
@@ -131,6 +156,9 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     type: "pilihan",
     soal: "",
     jawaban: [],
+    product_id: 0,
+    soal_id: 0,
+    sub_id: 0,
   });
   const [selectedKey, setSelectedKey] = React.useState("");
   const [essayAnswer, setEssayAnswer] = React.useState("");
@@ -142,10 +170,8 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       .post("/api/users/siswa/jawab/soal/" + type, body)
       .then((res) => {
         setLoading(false);
-        if (res.data.status == "success") {
-          console.log("berhasil");
-          callback();
-        }
+        console.log("berhasil");
+        callback();
       })
       .catch((err) => {
         setLoading(false);
@@ -162,18 +188,19 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       if (selectedKey == "") {
         _now.skipped = true;
         _now.answered = false;
+        _now.jawaban_user.key = "";
       } else {
-        _now.jawaban_user = selectedKey;
+        _now.jawaban_user.key = selectedKey;
         _now.answered = true;
         _now.skipped = false;
       }
     } else {
       if (essayAnswer.length > 0) {
-        _now.jawaban_user = essayAnswer;
+        _now.jawaban_user.jawaban = essayAnswer;
         _now.answered = true;
         _now.skipped = false;
       } else {
-        _now.jawaban_user = "";
+        _now.jawaban_user.jawaban = "";
         _now.answered = false;
         _now.skipped = true;
       }
@@ -182,10 +209,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     // console.log(_now, "jawaban user");
 
     if (_next.type == "pilihan") {
-      setSelectedKey(_next.jawaban_user || "");
+      setSelectedKey(_next.jawaban_user.key || "");
       setEssayAnswer("");
     } else {
-      setEssayAnswer(_next.jawaban_user || "");
+      setEssayAnswer(_next.jawaban_user.jawaban || "");
       setSelectedKey("");
     }
     setSoalNow(_next);
@@ -207,13 +234,26 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
 
       let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
 
-      if (jawaban_id.length > 0) {
+      if (jawaban_id.length > 0 && _now.type == "pilihan") {
         handleSendToServer(
           {
             jawaban_id: jawaban_id[0].jawaban_id,
-            product_id: detailSoal.product_id,
-            sub_id: detailSoal.sub_id,
-            soal_id: detailSoal.category_id,
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            soal_id: soalNow.soal_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no + 1);
+          }
+        );
+      } else if (essayAnswer.length > 0 && _now.type == "essay") {
+        handleSendToServer(
+          {
+            jawaban: essayAnswer,
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            soal_id: soalNow.soal_id,
           },
           _now.type,
           () => {
@@ -221,18 +261,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
           }
         );
       } else {
-        handleSendToServer(
-          {
-            jawaban: essayAnswer,
-            product_id: detailSoal.product_id,
-            sub_id: detailSoal.sub_id,
-            soal_id: detailSoal.category_id,
-          },
-          _now.type,
-          () => {
-            handleExecutionNextNumber(_next, _now, no + 1);
-          }
-        );
+        handleExecutionNextNumber(_next, _now, no + 1);
       }
     }
   };
@@ -243,13 +272,26 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       const _now = soalNow;
       let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
 
-      if (jawaban_id.length > 0) {
+      if (jawaban_id.length > 0 && _now.type == "pilihan") {
         handleSendToServer(
           {
             jawaban_id: jawaban_id[0].jawaban_id,
-            product_id: detailSoal.product_id,
-            sub_id: detailSoal.sub_id,
-            soal_id: detailSoal.category_id,
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            soal_id: soalNow.soal_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no - 1);
+          }
+        );
+      } else if (essayAnswer.length > 0 && _now.type == "essay") {
+        handleSendToServer(
+          {
+            jawaban: essayAnswer,
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            soal_id: soalNow.soal_id,
           },
           _now.type,
           () => {
@@ -257,18 +299,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
           }
         );
       } else {
-        handleSendToServer(
-          {
-            jawaban: essayAnswer,
-            product_id: detailSoal.product_id,
-            sub_id: detailSoal.sub_id,
-            soal_id: detailSoal.category_id,
-          },
-          _now.type,
-          () => {
-            handleExecutionNextNumber(_next, _now, no - 1);
-          }
-        );
+        handleExecutionNextNumber(_next, _now, no - 1);
       }
     }
   };
@@ -279,13 +310,26 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
 
     let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
 
-    if (jawaban_id.length > 0) {
+    if (jawaban_id.length > 0 && _now.type == "pilihan") {
       handleSendToServer(
         {
           jawaban_id: jawaban_id[0].jawaban_id,
-          product_id: detailSoal.product_id,
-          sub_id: detailSoal.sub_id,
-          soal_id: detailSoal.category_id,
+          product_id: soalNow.product_id,
+          sub_id: soalNow.sub_id,
+          soal_id: soalNow.soal_id,
+        },
+        _now.type,
+        () => {
+          handleExecutionNextNumber(_next, _now, item.no);
+        }
+      );
+    } else if (essayAnswer.length > 0 && _now.type == "essay") {
+      handleSendToServer(
+        {
+          jawaban: essayAnswer,
+          product_id: soalNow.product_id,
+          sub_id: soalNow.sub_id,
+          soal_id: soalNow.soal_id,
         },
         _now.type,
         () => {
@@ -293,18 +337,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
         }
       );
     } else {
-      handleSendToServer(
-        {
-          jawaban: essayAnswer,
-          product_id: detailSoal.product_id,
-          sub_id: detailSoal.sub_id,
-          soal_id: detailSoal.category_id,
-        },
-        _now.type,
-        () => {
-          handleExecutionNextNumber(_next, _now, item.no);
-        }
-      );
+      handleExecutionNextNumber(_next, _now, item.no);
     }
   };
 
@@ -338,6 +371,13 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       setNo(dataSoal.soal[0].no);
       setSoalNow(dataSoal.soal[0]);
       setDetail(dataSoal);
+      if (dataSoal.soal[0].type == "pilihan") {
+        setSelectedKey(dataSoal.soal[0]?.jawaban_user?.key || "");
+        setEssayAnswer("");
+      } else {
+        setEssayAnswer(dataSoal.soal[0]?.jawaban_user?.jawaban || "");
+        setSelectedKey("");
+      }
     } else {
       const localData = window.localStorage.getItem("preview-soal")
         ? JSON.parse(window.localStorage.getItem("preview-soal") || "")
@@ -487,10 +527,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
               margin: "0px 1.2vw",
             }}
           >
-            {soal.map((item: any, index: number) => {
+            {soal.map((item, index: number) => {
               let color = "#F3F3F3";
               let fontColor = "#333333";
-              if (item.answered) {
+              if (item.jawaban_user?.jawaban || item.jawaban_user?.key) {
                 color = "#A7EDCA";
                 fontColor = "#32D583";
               } else if (item.skipped) {
