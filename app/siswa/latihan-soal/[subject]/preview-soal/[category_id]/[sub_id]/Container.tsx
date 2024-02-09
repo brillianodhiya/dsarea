@@ -223,7 +223,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -415,7 +415,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
 
   const router = useRouter();
 
-  console.log(soal, "datasoal");
+  // console.log(soal, "datasoal");
 
   // const { data, isFetching } = useQuery({
   //   queryKey: ["category", detail.category_id],
@@ -454,7 +454,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       const localData = window.localStorage.getItem("preview-soal")
         ? JSON.parse(window.localStorage.getItem("preview-soal") || "")
         : {};
-      console.log(localData);
+      // console.log(localData);
       if (Object.keys(localData).length > 0) {
         setSoal(localData.soal);
         if (localData.soal.length > 0) {

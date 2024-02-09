@@ -28,6 +28,7 @@ const { Countdown } = Statistic;
 
 type HeaderProps = {
   dataSoal: {
+    title: string;
     category_id: number;
     duration: number;
     rules: string;
@@ -60,6 +61,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
     }[]
   >([]);
   const [detail, setDetail] = React.useState<{
+    title: string;
     category_id: number;
     duration: number;
     rules: string;
@@ -79,6 +81,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
     duration: 0,
     rules: "",
     soal: [],
+    title: "",
   });
   const [no, setNo] = useState(0);
   const [soalNow, setSoalNow] = useState<{
@@ -390,7 +393,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                   margin: 0,
                 }}
               >
-                Matematika
+                {detail.title}
               </Typography>
               <Typography
                 style={{
