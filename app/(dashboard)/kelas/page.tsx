@@ -85,6 +85,7 @@ export default function Page() {
           justify={
             filteredData.length === 0 && !isFetching ? "center" : "start"
           }
+          className="max-h-[86vh] overflow-y-scroll overflow-x-hidden"
         >
           {isFetching ? (
             <Card
@@ -92,6 +93,7 @@ export default function Page() {
               hoverable
               style={{
                 maxWidth: 252,
+                marginBottom: 10,
               }}
               cover={
                 <div>
@@ -147,13 +149,14 @@ export default function Page() {
             searchFromValue(data, searchText)
               .filter((e: any) => e.id !== "id")
               .map((e: any, i: any) => (
-                <Col xs={24} sm={12} md={12} lg={8} xl={8} key={i}>
+                <Col key={i}>
                   <Link href={e.link} target="_blank">
                     <Card
                       loading={isFetching}
                       hoverable
                       style={{
                         maxWidth: 252,
+                        marginBottom: 10,
                       }}
                       cover={
                         <div>

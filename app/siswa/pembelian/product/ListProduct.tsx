@@ -47,10 +47,10 @@ const ListProduct: React.FC<HeaderProps> = ({ data }) => {
       <Input
         placeholder="Search anything..."
         suffix={<SearchOutlined />}
-        className="!w-[calc(100%-30px)]"
+        className="!w-[calc(300px)]"
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <div className="w-full flex justify-center max-h-[86vh] overflow-y-scroll overflow-x-hidden">
+      <div className="w-full flex justify-center max-h-[80vh] overflow-y-scroll overflow-x-hidden">
         <Row gutter={[24, 24]} className="mt-4" justify={"start"}>
           {searchFromValue(data, searchText).map((e: any, i) => (
             <Col key={i}>

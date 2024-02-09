@@ -14,7 +14,7 @@ export default function Page() {
         <Input
           placeholder="Search anything..."
           suffix={<SearchOutlined />}
-          className="!w-[calc(100%-30px)]"
+          className="!w-[calc(300px)]"
         />
 
         <Row gutter={[24, 24]} className="mt-4">
