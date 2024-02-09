@@ -14,6 +14,7 @@ import { Eye, PencilLine } from "lucide-react";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import screenfull from "screenfull";
 
 export default function Home() {
   const [countFetch, setCountFetch] = React.useState(0);
@@ -44,19 +45,8 @@ export default function Home() {
 
   // fungsi untuk meminta fullscreen
   const requestFullscreen = () => {
-    // cek apakah browser mendukung fitur fullscreen
-    if (document.fullscreenEnabled) {
-      // cek apakah sudah ada elemen yang fullscreen
-      if (!document.fullscreenElement) {
-        // jika tidak, maka buat elemen body menjadi fullscreen
-        document.body.requestFullscreen().catch((err) => {
-          // tangani error jika ada
-          console.error(err);
-        });
-      }
-    } else {
-      // jika browser tidak mendukung fitur fullscreen, tampilkan pesan error
-      // alert("Browser Anda tidak mendukung fitur fullscreen.");
+    if (screenfull.isEnabled) {
+      screenfull.request();
     }
   };
 

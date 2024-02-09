@@ -6,14 +6,14 @@ import {
   ClockCircleOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import LoadingNonFullscreen from "@dsarea/@/components/LoadingComponent/LoadingComponentParent";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Button,
   Col,
   Image,
   Input,
+  Modal,
   Popover,
   Row,
   Space,
@@ -23,6 +23,7 @@ import {
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import screenfull from "screenfull";
 
 const { Countdown } = Statistic;
 
@@ -163,14 +164,61 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   const [selectedKey, setSelectedKey] = React.useState("");
   const [essayAnswer, setEssayAnswer] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [isFullScreen, setIsFullscreen] = React.useState(true);
 
+  // React.useEffect(() => {
+  //   if (screenfull.isEnabled) {
+  //     screenfull.on("change", () => {
+  //       if (screenfull.isFullscreen) {
+  //         // console.log("is fullscreen");
+  //         setIsFullscreen(true);
+  //       } else {
+  //         // console.log("is not fullscreen");
+  //         setIsFullscreen(false);
+  //       }
+  //     });
+  //   }
+  // }, []);
+
+  // karena setIsFullscreen di trigger beberapa kali useEffect di bawah jadi trigger 2x benarkan
+  // maka gunakan useCallback untuk menghemat proses yang
+  // tidak perlu di trigger berkali-kali
+  const handleSetIsFullscreen = React.useCallback(() => {
+    setIsFullscreen(screenfull.isFullscreen);
+  }, [screenfull.isFullscreen]);
+
+  React.useEffect(() => {
+    if (screenfull.isEnabled) {
+      screenfull.on("change", handleSetIsFullscreen);
+    }
+    return () => {
+      if (screenfull.isEnabled) {
+        screenfull.off("change", handleSetIsFullscreen);
+      }
+    };
+  }, [screenfull.isEnabled, handleSetIsFullscreen]);
+
+  React.useEffect(() => {
+    if (!isFullScreen) {
+      Modal.warning({
+        title: "Perhatian!",
+        content:
+          "Anda tidak dapat keluar dari mode fullscreen, silahkan selesaikan ujian terlebih dahulu",
+        onOk: () => {
+          Modal.destroyAll();
+          screenfull.request();
+        },
+      });
+    }
+  }, [isFullScreen]);
+
+  // console.log(isFullScreen, "isfullscreen");
   const handleSendToServer = (body: any, type: string, callback: () => any) => {
     setLoading(true);
     axiosClientInstance
       .post("/api/users/siswa/jawab/soal/" + type, body)
       .then((res) => {
         setLoading(false);
-        console.log("berhasil");
         callback();
       })
       .catch((err) => {
@@ -188,19 +236,43 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       if (selectedKey == "") {
         _now.skipped = true;
         _now.answered = false;
-        _now.jawaban_user.key = "";
+        if (_now.jawaban_user) {
+          _now.jawaban_user.key = "";
+        } else {
+          _now.jawaban_user = {
+            key: "",
+          };
+        }
       } else {
-        _now.jawaban_user.key = selectedKey;
+        if (_now.jawaban_user) {
+          _now.jawaban_user.key = selectedKey;
+        } else {
+          _now.jawaban_user = {
+            key: selectedKey,
+          };
+        }
         _now.answered = true;
         _now.skipped = false;
       }
     } else {
       if (essayAnswer.length > 0) {
-        _now.jawaban_user.jawaban = essayAnswer;
+        if (_now.jawaban_user) {
+          _now.jawaban_user.jawaban = essayAnswer;
+        } else {
+          _now.jawaban_user = {
+            jawaban: essayAnswer,
+          };
+        }
         _now.answered = true;
         _now.skipped = false;
       } else {
-        _now.jawaban_user.jawaban = "";
+        if (_now.jawaban_user) {
+          _now.jawaban_user.jawaban = "";
+        } else {
+          _now.jawaban_user = {
+            jawaban: "",
+          };
+        }
         _now.answered = false;
         _now.skipped = true;
       }
@@ -209,10 +281,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     // console.log(_now, "jawaban user");
 
     if (_next.type == "pilihan") {
-      setSelectedKey(_next.jawaban_user.key || "");
+      setSelectedKey(_next?.jawaban_user?.key || "");
       setEssayAnswer("");
     } else {
-      setEssayAnswer(_next.jawaban_user.jawaban || "");
+      setEssayAnswer(_next?.jawaban_user?.jawaban || "");
       setSelectedKey("");
     }
     setSoalNow(_next);
@@ -475,134 +547,135 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
           },
         ]}
       /> */}
-
-      <Row>
-        <Col
-          xxl={6}
-          xl={6}
-          lg={8}
-          md={8}
-          sm={0}
-          xs={0}
-          style={{
-            borderRight: "1px solid #F3F3F3",
-            height: "calc(100vh - 64px)",
-            overflowY: "scroll",
-          }}
-        >
-          <div
+      <LoadingNonFullscreen spinning={loading}>
+        <Row>
+          <Col
+            xxl={6}
+            xl={6}
+            lg={8}
+            md={8}
+            sm={0}
+            xs={0}
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              padding: "4px 1.2vw",
-              marginBottom: 16,
-              borderBottom: "1px solid #F3F3F3",
-            }}
-          >
-            <Typography
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: "#000",
-              }}
-            >
-              List Soal
-            </Typography>
-            <Popover content={content} trigger="hover">
-              <Button
-                type="text"
-                shape="circle"
-                icon={<QuestionCircleOutlined />}
-              />
-            </Popover>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: "18px",
-              margin: "0px 1.2vw",
-            }}
-          >
-            {soal.map((item, index: number) => {
-              let color = "#F3F3F3";
-              let fontColor = "#333333";
-              if (item.jawaban_user?.jawaban || item.jawaban_user?.key) {
-                color = "#A7EDCA";
-                fontColor = "#32D583";
-              } else if (item.skipped) {
-                color = "#F9AFA9";
-                fontColor = "#F04438";
-              }
-
-              if (item.no == no) {
-                color = "#3A9699";
-                fontColor = "#FFFFFF";
-              }
-              return (
-                <div
-                  key={item.no}
-                  onClick={() => {
-                    handleChangeNumber(item);
-                  }}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 8,
-                    backgroundColor: color,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    color: fontColor,
-                    fontWeight: 400,
-                    border: "1px solid #E0E0E0",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                    borderColor: fontColor == "#333333" ? undefined : fontColor,
-                  }}
-                >
-                  {item.no}
-                </div>
-              );
-            })}
-          </div>
-        </Col>
-        <Col
-          xxl={18}
-          xl={18}
-          lg={16}
-          md={16}
-          sm={24}
-          xs={24}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "calc(100vh - 64px)",
-            overflowY: "scroll",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              flexDirection: "row",
-              flexWrap: "wrap",
+              borderRight: "1px solid #F3F3F3",
+              height: "calc(100vh - 64px)",
+              overflowY: "scroll",
             }}
           >
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                margin: "12px 18px",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                padding: "4px 1.2vw",
+                marginBottom: 16,
+                borderBottom: "1px solid #F3F3F3",
               }}
             >
-              {/* <Typography
+              <Typography
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#000",
+                }}
+              >
+                List Soal
+              </Typography>
+              <Popover content={content} trigger="hover">
+                <Button
+                  type="text"
+                  shape="circle"
+                  icon={<QuestionCircleOutlined />}
+                />
+              </Popover>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: "18px",
+                margin: "0px 1.2vw",
+              }}
+            >
+              {soal.map((item, index: number) => {
+                let color = "#F3F3F3";
+                let fontColor = "#333333";
+                if (item.jawaban_user?.jawaban || item.jawaban_user?.key) {
+                  color = "#A7EDCA";
+                  fontColor = "#32D583";
+                } else if (item.skipped) {
+                  color = "#F9AFA9";
+                  fontColor = "#F04438";
+                }
+
+                if (item.no == no) {
+                  color = "#3A9699";
+                  fontColor = "#FFFFFF";
+                }
+                return (
+                  <div
+                    key={item.no}
+                    onClick={() => {
+                      handleChangeNumber(item);
+                    }}
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 8,
+                      backgroundColor: color,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      color: fontColor,
+                      fontWeight: 400,
+                      border: "1px solid #E0E0E0",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      borderColor:
+                        fontColor == "#333333" ? undefined : fontColor,
+                    }}
+                  >
+                    {item.no}
+                  </div>
+                );
+              })}
+            </div>
+          </Col>
+          <Col
+            xxl={18}
+            xl={18}
+            lg={16}
+            md={16}
+            sm={24}
+            xs={24}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "calc(100vh - 64px)",
+              overflowY: "scroll",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                flexDirection: "row",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  margin: "12px 18px",
+                }}
+              >
+                {/* <Typography
                 style={{
                   fontSize: 14,
                   color: "#7A7A7A",
@@ -619,85 +692,85 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                   {data.length > 0 ? data[0].name : ""}
                 </span>
               </Typography> */}
-              <Space wrap size={"small"}>
-                <div
-                  style={{
-                    border: "1px solid #D0E6E7",
-                    padding: "2px 6px",
-                    background:
-                      "linear-gradient(0deg, #EBF5F5, #EBF5F5), linear-gradient(0deg, #D0E6E7, #D0E6E7)",
-                    borderRadius: "6px",
-                    color: "#3A9699",
-                  }}
-                >
-                  {detailSoal.category_name}
-                </div>
-                <div
-                  style={{
-                    border: "1px solid #F3F3F3",
-                    padding: "2px 6px",
-                    background:
-                      "linear-gradient(0deg, #F7F7F7, #F7F7F7), linear-gradient(0deg, #F3F3F3, #F3F3F3)",
-                    borderRadius: "6px",
-                    color: "#525252",
-                  }}
-                >
-                  {detailSoal.sub_category_name}
-                </div>
-              </Space>
-              <Typography
-                style={{
-                  fontSize: 20,
-                  color: "#333333",
-                  fontWeight: "600",
-                  margin: 0,
-                }}
-              >
-                {detail.title}
-              </Typography>
-              <Typography
-                style={{
-                  color: "#32D583",
-                  fontSize: 14,
-                  fontWeight: 400,
-                  margin: 0,
-                }}
-              >
-                Pertanyaan ke {no} dari {soal.length}
-              </Typography>
-            </div>
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  margin: "12px 18px",
-                }}
-              >
+                <Space wrap size={"small"}>
+                  <div
+                    style={{
+                      border: "1px solid #D0E6E7",
+                      padding: "2px 6px",
+                      background:
+                        "linear-gradient(0deg, #EBF5F5, #EBF5F5), linear-gradient(0deg, #D0E6E7, #D0E6E7)",
+                      borderRadius: "6px",
+                      color: "#3A9699",
+                    }}
+                  >
+                    {detailSoal.category_name}
+                  </div>
+                  <div
+                    style={{
+                      border: "1px solid #F3F3F3",
+                      padding: "2px 6px",
+                      background:
+                        "linear-gradient(0deg, #F7F7F7, #F7F7F7), linear-gradient(0deg, #F3F3F3, #F3F3F3)",
+                      borderRadius: "6px",
+                      color: "#525252",
+                    }}
+                  >
+                    {detailSoal.sub_category_name}
+                  </div>
+                </Space>
                 <Typography
                   style={{
+                    fontSize: 20,
+                    color: "#333333",
+                    fontWeight: "600",
+                    margin: 0,
+                  }}
+                >
+                  {detail.title}
+                </Typography>
+                <Typography
+                  style={{
+                    color: "#32D583",
                     fontSize: 14,
                     fontWeight: 400,
                     margin: 0,
-                    color: "#7A7A7A",
                   }}
                 >
-                  Waktu Tersisa
+                  Pertanyaan ke {no} dari {soal.length}
                 </Typography>
+              </div>
+              <div>
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    gap: 4,
+                    flexDirection: "column",
+                    margin: "12px 18px",
                   }}
                 >
-                  <ClockCircleOutlined
+                  <Typography
                     style={{
-                      color: "#FDB022",
+                      fontSize: 14,
+                      fontWeight: 400,
+                      margin: 0,
+                      color: "#7A7A7A",
                     }}
-                  />
-                  {/* <Typography
+                  >
+                    Waktu Tersisa
+                  </Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      gap: 4,
+                    }}
+                  >
+                    <ClockCircleOutlined
+                      style={{
+                        color: "#FDB022",
+                      }}
+                    />
+                    {/* <Typography
                     style={{
                       fontSize: 14,
                       fontWeight: 400,
@@ -705,343 +778,347 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                       color: "#7A7A7A",
                     }}
                   > */}
-                  <Countdown
-                    value={dayjs(detail.end_duration).format()}
-                    valueStyle={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      margin: 0,
-                      color: "#7A7A7A",
-                    }}
-                    // onFinish={onFinish}
-                  />
-                  {/* </Typography> */}
+                    <Countdown
+                      value={dayjs(detail.end_duration).format()}
+                      valueStyle={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        margin: 0,
+                        color: "#7A7A7A",
+                      }}
+                      // onFinish={onFinish}
+                    />
+                    {/* </Typography> */}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              borderRadius: "8px",
-              border: "1px solid #F3F3F3",
-              width: "94%",
-              padding: "1% 2%",
-              position: "relative",
-            }}
-          >
-            <Typography
-              style={{
-                color: "#7A7A7A",
-              }}
-            >
-              Pertanyaan
-            </Typography>
-            <Typography
-              style={{
-                color: "#333333",
-                fontSize: 16,
-                fontWeight: "600",
-              }}
-            >
-              {soalNow.soal}
-            </Typography>
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                alignItems: "flex-start",
+                borderRadius: "8px",
+                border: "1px solid #F3F3F3",
+                width: "94%",
+                padding: "1% 2%",
+                position: "relative",
               }}
             >
-              {soalNow.image != undefined ? (
-                <Image
-                  alt={soalNow.image + "Image Soal" + no}
-                  src={
-                    soalNow.image
-                      ? soalNow.image.includes("http")
-                        ? soalNow.image
-                        : process.env.NEXT_PUBLIC_URL_BE +
-                          "/api/attach/" +
-                          soalNow.image
-                      : ""
-                  }
-                  width={200}
-                  style={{
-                    position: "relative",
-                  }}
-
-                  // className="w-[200px] object-contain aspect-auto"
-                />
-              ) : null}
-
-              {soalNow.audio != undefined ? (
-                <audio id="audio" controls>
-                  <source
-                    id="source"
-                    src={
-                      soalNow.audio
-                        ? soalNow.audio.includes("http")
-                          ? soalNow.audio
-                          : process.env.NEXT_PUBLIC_URL_BE +
-                            "/api/attach/" +
-                            soalNow.audio
-                        : ""
-                    }
-                    type="audio/mp3"
-                  />
-                  <source
-                    id="source"
-                    src={
-                      soalNow.audio
-                        ? soalNow.audio.includes("http")
-                          ? soalNow.audio
-                          : process.env.NEXT_PUBLIC_URL_BE +
-                            "/api/attach/" +
-                            soalNow.audio
-                        : ""
-                    }
-                    type="audio/ogg"
-                  />
-                  <source
-                    id="source"
-                    src={
-                      soalNow.audio
-                        ? soalNow.audio.includes("http")
-                          ? soalNow.audio
-                          : process.env.NEXT_PUBLIC_URL_BE +
-                            "/api/attach/" +
-                            soalNow.audio
-                        : ""
-                    }
-                    type="audio/wav"
-                  />
-                  Your browser does not support the audio element.
-                </audio>
-              ) : null}
-            </div>
-
-            {soalNow.type == "essay" ? (
-              <div
+              <Typography
                 style={{
-                  marginTop: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
+                  color: "#7A7A7A",
                 }}
               >
-                <Input.TextArea
-                  rows={4}
-                  value={essayAnswer}
-                  onChange={(e) => {
-                    setEssayAnswer(e.target.value);
-                  }}
-                />
+                Pertanyaan
+              </Typography>
+              <Typography
+                style={{
+                  color: "#333333",
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                {soalNow.soal}
+              </Typography>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                  alignItems: "flex-start",
+                }}
+              >
+                {soalNow.image != undefined ? (
+                  <Image
+                    alt={soalNow.image + "Image Soal" + no}
+                    src={
+                      soalNow.image
+                        ? soalNow.image.includes("http")
+                          ? soalNow.image
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
+                            soalNow.image
+                        : ""
+                    }
+                    width={200}
+                    style={{
+                      position: "relative",
+                    }}
+
+                    // className="w-[200px] object-contain aspect-auto"
+                  />
+                ) : null}
+
+                {soalNow.audio != undefined ? (
+                  <audio id="audio" controls>
+                    <source
+                      id="source"
+                      src={
+                        soalNow.audio
+                          ? soalNow.audio.includes("http")
+                            ? soalNow.audio
+                            : process.env.NEXT_PUBLIC_URL_BE +
+                              "/api/attach/" +
+                              soalNow.audio
+                          : ""
+                      }
+                      type="audio/mp3"
+                    />
+                    <source
+                      id="source"
+                      src={
+                        soalNow.audio
+                          ? soalNow.audio.includes("http")
+                            ? soalNow.audio
+                            : process.env.NEXT_PUBLIC_URL_BE +
+                              "/api/attach/" +
+                              soalNow.audio
+                          : ""
+                      }
+                      type="audio/ogg"
+                    />
+                    <source
+                      id="source"
+                      src={
+                        soalNow.audio
+                          ? soalNow.audio.includes("http")
+                            ? soalNow.audio
+                            : process.env.NEXT_PUBLIC_URL_BE +
+                              "/api/attach/" +
+                              soalNow.audio
+                          : ""
+                      }
+                      type="audio/wav"
+                    />
+                    Your browser does not support the audio element.
+                  </audio>
+                ) : null}
               </div>
-            ) : (
-              <div
-                style={{
-                  marginTop: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
-                }}
-              >
-                {soalNow.jawaban.map((val, idx) => {
-                  return (
-                    <div
-                      key={val.key}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 8,
-                        // cursor: "pointer",
-                      }}
-                      // onClick={() => {
-                      //   setSelectedKey(val.key);
-                      // }}
-                    >
+
+              {soalNow.type == "essay" ? (
+                <div
+                  style={{
+                    marginTop: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                  }}
+                >
+                  <Input.TextArea
+                    rows={4}
+                    value={essayAnswer}
+                    onChange={(e) => {
+                      setEssayAnswer(e.target.value);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div
+                  style={{
+                    marginTop: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                  }}
+                >
+                  {soalNow.jawaban.map((val, idx) => {
+                    return (
                       <div
+                        key={val.key}
                         style={{
                           display: "flex",
-                          flexDirection: "row",
-                          gap: 10,
-                          alignItems: "center",
-                          cursor: "pointer",
+                          flexDirection: "column",
+                          gap: 8,
+                          // cursor: "pointer",
                         }}
-                        onClick={() => {
-                          setSelectedKey(val.key);
-                        }}
+                        // onClick={() => {
+                        //   setSelectedKey(val.key);
+                        // }}
                       >
                         <div
                           style={{
-                            background:
-                              val.key == selectedKey ? "#3A9699" : "#F3F3F3",
-                            borderRight:
-                              val.key == selectedKey
-                                ? "1px solid #3A9699"
-                                : "1px solid #F3F3F3",
-                            color: val.key == selectedKey ? "#fff" : "#333333",
-                            // padding: "2px 8px",
-                            borderRadius: "4px",
-                            width: "26px",
-                            height: "26px",
                             display: "flex",
-                            justifyContent: "center",
+                            flexDirection: "row",
+                            gap: 10,
                             alignItems: "center",
-                            fontWeight: 500,
                             cursor: "pointer",
                           }}
                           onClick={() => {
                             setSelectedKey(val.key);
                           }}
                         >
-                          {val.key}
-                        </div>
-                        <div>{val.jawaban}</div>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "8px",
-                          alignItems: "flex-start",
-                        }}
-                      >
-                        {val.image != undefined ? (
-                          <Image
-                            alt={val.image + "Image Soal" + no}
-                            src={
-                              val.image
-                                ? val.image.includes("http")
-                                  ? val.image
-                                  : process.env.NEXT_PUBLIC_URL_BE +
-                                    "/api/attach/" +
-                                    val.image
-                                : ""
-                            }
-                            width={200}
+                          <div
                             style={{
-                              position: "relative",
+                              background:
+                                val.key == selectedKey ? "#3A9699" : "#F3F3F3",
+                              borderRight:
+                                val.key == selectedKey
+                                  ? "1px solid #3A9699"
+                                  : "1px solid #F3F3F3",
+                              color:
+                                val.key == selectedKey ? "#fff" : "#333333",
+                              // padding: "2px 8px",
+                              borderRadius: "4px",
+                              width: "26px",
+                              height: "26px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              fontWeight: 500,
+                              cursor: "pointer",
                             }}
+                            onClick={() => {
+                              setSelectedKey(val.key);
+                            }}
+                          >
+                            {val.key}
+                          </div>
+                          <div>{val.jawaban}</div>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            alignItems: "flex-start",
+                          }}
+                        >
+                          {val.image != undefined ? (
+                            <Image
+                              alt={val.image + "Image Soal" + no}
+                              src={
+                                val.image
+                                  ? val.image.includes("http")
+                                    ? val.image
+                                    : process.env.NEXT_PUBLIC_URL_BE +
+                                      "/api/attach/" +
+                                      val.image
+                                  : ""
+                              }
+                              width={200}
+                              style={{
+                                position: "relative",
+                              }}
 
-                            // className="w-[200px] object-contain aspect-auto"
-                          />
-                        ) : null}
+                              // className="w-[200px] object-contain aspect-auto"
+                            />
+                          ) : null}
 
-                        {val.audio != undefined ? (
-                          <audio id="audio" controls>
-                            <source
-                              id="source"
-                              src={
-                                val.audio
-                                  ? val.audio.includes("http")
-                                    ? val.audio
-                                    : process.env.NEXT_PUBLIC_URL_BE +
-                                      "/api/attach/" +
-                                      val.audio
-                                  : ""
-                              }
-                              type="audio/mp3"
-                            />
-                            <source
-                              id="source"
-                              src={
-                                val.audio
-                                  ? val.audio.includes("http")
-                                    ? val.audio
-                                    : process.env.NEXT_PUBLIC_URL_BE +
-                                      "/api/attach/" +
-                                      val.audio
-                                  : ""
-                              }
-                              type="audio/ogg"
-                            />
-                            <source
-                              id="source"
-                              src={
-                                val.audio
-                                  ? val.audio.includes("http")
-                                    ? val.audio
-                                    : process.env.NEXT_PUBLIC_URL_BE +
-                                      "/api/attach/" +
-                                      val.audio
-                                  : ""
-                              }
-                              type="audio/wav"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
-                        ) : null}
+                          {val.audio != undefined ? (
+                            <audio id="audio" controls>
+                              <source
+                                id="source"
+                                src={
+                                  val.audio
+                                    ? val.audio.includes("http")
+                                      ? val.audio
+                                      : process.env.NEXT_PUBLIC_URL_BE +
+                                        "/api/attach/" +
+                                        val.audio
+                                    : ""
+                                }
+                                type="audio/mp3"
+                              />
+                              <source
+                                id="source"
+                                src={
+                                  val.audio
+                                    ? val.audio.includes("http")
+                                      ? val.audio
+                                      : process.env.NEXT_PUBLIC_URL_BE +
+                                        "/api/attach/" +
+                                        val.audio
+                                    : ""
+                                }
+                                type="audio/ogg"
+                              />
+                              <source
+                                id="source"
+                                src={
+                                  val.audio
+                                    ? val.audio.includes("http")
+                                      ? val.audio
+                                      : process.env.NEXT_PUBLIC_URL_BE +
+                                        "/api/attach/" +
+                                        val.audio
+                                    : ""
+                                }
+                                type="audio/wav"
+                              />
+                              Your browser does not support the audio element.
+                            </audio>
+                          ) : null}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-              padding: "2% 3%",
-            }}
-          >
-            <Button
-              size="large"
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <div
               style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
-              }}
-              disabled={no == 1}
-              onClick={() => {
-                // if (no > 0) {
-                //   setSoalNow(soal[no - 1 - 1]);
-                //   setNo(no - 1);
-                //   setSelectedKey("");
-                // }
-                handlePreviouseQuestion();
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "2% 3%",
               }}
             >
-              <ArrowLeftOutlined /> Sebelumnya
-            </Button>
-            {no < soal.length ? (
               <Button
                 size="large"
-                type="primary"
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                 }}
-                onClick={handleNextQuestion}
-              >
-                Selanjutnya
-                <ArrowRightOutlined />
-              </Button>
-            ) : (
-              <Button
-                size="large"
-                type="primary"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
+                disabled={no == 1}
                 onClick={() => {
-                  router.back();
+                  // if (no > 0) {
+                  //   setSoalNow(soal[no - 1 - 1]);
+                  //   setNo(no - 1);
+                  //   setSelectedKey("");
+                  // }
+                  handlePreviouseQuestion();
                 }}
               >
-                Selesaikan
-                <ArrowRightOutlined />
+                <ArrowLeftOutlined /> Sebelumnya
               </Button>
-            )}
-          </div>
-        </Col>
-      </Row>
+              {no < soal.length ? (
+                <Button
+                  size="large"
+                  type="primary"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  onClick={handleNextQuestion}
+                >
+                  Selanjutnya
+                  <ArrowRightOutlined />
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  type="primary"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    // exit fullscreen tanpa trigger state
+                    screenfull.exit();
+                    router.back();
+                  }}
+                >
+                  Selesaikan
+                  <ArrowRightOutlined />
+                </Button>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </LoadingNonFullscreen>
     </div>
   );
 };

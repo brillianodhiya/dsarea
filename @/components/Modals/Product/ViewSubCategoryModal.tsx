@@ -17,6 +17,7 @@ import { formatRupiah, getStatus, pickRandomItem } from "@dsarea/@/lib/utils";
 import { FieldTimeOutlined } from "@ant-design/icons";
 import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
 import { usePathname, useRouter } from "next/navigation";
+import screenfull from "screenfull";
 
 interface ModalProps {
   open: boolean;
@@ -30,19 +31,8 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
   data,
 }) => {
   const requestFullscreen = () => {
-    // cek apakah browser mendukung fitur fullscreen
-    if (document.fullscreenEnabled) {
-      // cek apakah sudah ada elemen yang fullscreen
-      if (!document.fullscreenElement) {
-        // jika tidak, maka buat elemen body menjadi fullscreen
-        document.body.requestFullscreen().catch((err) => {
-          // tangani error jika ada
-          console.error(err);
-        });
-      }
-    } else {
-      // jika browser tidak mendukung fitur fullscreen, tampilkan pesan error
-      // alert("Browser Anda tidak mendukung fitur fullscreen.");
+    if (screenfull.isEnabled) {
+      screenfull.request();
     }
   };
 
