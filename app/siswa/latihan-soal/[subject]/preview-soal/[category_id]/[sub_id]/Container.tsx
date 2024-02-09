@@ -46,6 +46,9 @@ type HeaderProps = {
     }[];
   };
   detailSoal: {
+    sub_id?: any;
+    product_id?: any;
+    category_id?: any;
     category_name?: string;
     sub_category_name?: string;
   };
@@ -64,7 +67,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
         key: string;
         jawaban: string;
         nilai: string;
+        image?: string;
+        audio?: string;
         selected?: boolean;
+        jawaban_id?: number;
       }[];
     }[]
   >([]);
@@ -86,7 +92,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
         key: string;
         jawaban: string;
         nilai: string;
+        image?: string;
+        audio?: string;
         selected?: boolean;
+        jawaban_id?: number;
       }[];
     }[];
   }>({
@@ -115,6 +124,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       image?: string;
       audio?: string;
       selected?: boolean;
+      jawaban_id?: number;
     }[];
   }>({
     no: 0,
@@ -126,14 +136,15 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   const [essayAnswer, setEssayAnswer] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
-  const handleSendToServer = (body: any, type: string) => {
+  const handleSendToServer = (body: any, type: string, callback: () => any) => {
     setLoading(true);
     axiosClientInstance
-      .post("/api/soal/answer", body)
+      .post("/api/users/siswa/jawab/soal/" + type, body)
       .then((res) => {
         setLoading(false);
         if (res.data.status == "success") {
           console.log("berhasil");
+          callback();
         }
       })
       .catch((err) => {
@@ -194,7 +205,35 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       const _next = soal[no - 1 + 1];
       const _now = soalNow;
 
-      handleExecutionNextNumber(_next, _now, no + 1);
+      let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
+
+      if (jawaban_id.length > 0) {
+        handleSendToServer(
+          {
+            jawaban_id: jawaban_id[0].jawaban_id,
+            product_id: detailSoal.product_id,
+            sub_id: detailSoal.sub_id,
+            soal_id: detailSoal.category_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no + 1);
+          }
+        );
+      } else {
+        handleSendToServer(
+          {
+            jawaban: essayAnswer,
+            product_id: detailSoal.product_id,
+            sub_id: detailSoal.sub_id,
+            soal_id: detailSoal.category_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no + 1);
+          }
+        );
+      }
     }
   };
 
@@ -202,7 +241,35 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     if (no > 0) {
       const _next = soal[no - 1 - 1];
       const _now = soalNow;
-      handleExecutionNextNumber(_next, _now, no - 1);
+      let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
+
+      if (jawaban_id.length > 0) {
+        handleSendToServer(
+          {
+            jawaban_id: jawaban_id[0].jawaban_id,
+            product_id: detailSoal.product_id,
+            sub_id: detailSoal.sub_id,
+            soal_id: detailSoal.category_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no - 1);
+          }
+        );
+      } else {
+        handleSendToServer(
+          {
+            jawaban: essayAnswer,
+            product_id: detailSoal.product_id,
+            sub_id: detailSoal.sub_id,
+            soal_id: detailSoal.category_id,
+          },
+          _now.type,
+          () => {
+            handleExecutionNextNumber(_next, _now, no - 1);
+          }
+        );
+      }
     }
   };
 
@@ -210,7 +277,35 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
     const _next = item;
     const _now = soalNow;
 
-    handleExecutionNextNumber(_next, _now, item.no);
+    let jawaban_id = _now.jawaban.filter((val) => val.key == selectedKey);
+
+    if (jawaban_id.length > 0) {
+      handleSendToServer(
+        {
+          jawaban_id: jawaban_id[0].jawaban_id,
+          product_id: detailSoal.product_id,
+          sub_id: detailSoal.sub_id,
+          soal_id: detailSoal.category_id,
+        },
+        _now.type,
+        () => {
+          handleExecutionNextNumber(_next, _now, item.no);
+        }
+      );
+    } else {
+      handleSendToServer(
+        {
+          jawaban: essayAnswer,
+          product_id: detailSoal.product_id,
+          sub_id: detailSoal.sub_id,
+          soal_id: detailSoal.category_id,
+        },
+        _now.type,
+        () => {
+          handleExecutionNextNumber(_next, _now, item.no);
+        }
+      );
+    }
   };
 
   const router = useRouter();
