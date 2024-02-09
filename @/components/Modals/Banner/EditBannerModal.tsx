@@ -10,6 +10,7 @@ interface Values {
   description: string;
   modifier: string;
   status: boolean;
+  link?: string;
 }
 
 interface EditBannerModalProps {
@@ -25,6 +26,7 @@ interface EditBannerModalProps {
     status: boolean;
     createdAt: string;
     updatedAt: string;
+    link?: string;
   };
 }
 // type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -109,6 +111,7 @@ const EditBannerModal: React.FC<EditBannerModalProps> = ({
         title: dataSelected.title,
         description: dataSelected.desc,
         status: dataSelected.status,
+        link: dataSelected.link,
       });
       setImageUrl(dataSelected.image);
       setChecked(dataSelected.status);
@@ -225,7 +228,9 @@ const EditBannerModal: React.FC<EditBannerModalProps> = ({
           >
             <Input placeholder="Banner Name" disabled />
           </Form.Item>
-
+          <Form.Item name="link" label="Link" initialValue={""}>
+            <Input.TextArea rows={2} placeholder="Link" />
+          </Form.Item>
           <Form.Item name="description" label="Description" initialValue={""}>
             <Input.TextArea disabled rows={2} placeholder="Description" />
           </Form.Item>

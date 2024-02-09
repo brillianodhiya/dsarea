@@ -138,7 +138,7 @@ export default function Category() {
               <Input
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
-                className="!w-[250px]"
+                className="!w-[calc(100%-30px)]"
                 onChange={(e) => setSearchText(e.target.value)}
               />
               <Button

@@ -6,13 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatRupiah(angka: any) {
-  if (angka == 0) {
-    return "Gratis";
+  if (angka) {
+    if (angka == 0) {
+      return "Gratis";
+    }
+    var reverse = angka.toString().split("").reverse().join("");
+    var ribuan = reverse.match(/\d{1,3}/g);
+    var result = ribuan.join(".").split("").reverse().join("");
+    return "Rp" + result;
+  } else {
+    return "No Data";
   }
-  var reverse = angka.toString().split("").reverse().join("");
-  var ribuan = reverse.match(/\d{1,3}/g);
-  var result = ribuan.join(".").split("").reverse().join("");
-  return "Rp" + result;
 }
 
 // Fungsi untuk memeriksa apakah tanggal valid

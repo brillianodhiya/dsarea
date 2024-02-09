@@ -72,6 +72,10 @@ export default function Page() {
           formData.append("desc", values.description);
           formData.append("image", values.image.file.originFileObj);
           formData.append("status", values.status ? "1" : "0");
+          if (values.link) {
+            formData.append("link", values.link);
+          }
+
           try {
             setLoading(true);
             const res = await axiosClientInstance.post(
@@ -124,6 +128,7 @@ export default function Page() {
               {
                 id: dataSelected.id,
                 status: values.status,
+                link: values.link,
               }
             );
             queryClient.invalidateQueries({
@@ -164,7 +169,7 @@ export default function Page() {
               <Input
                 placeholder="Search anything..."
                 suffix={<SearchOutlined />}
-                className="!w-[250px]"
+                className="!w-[calc(100%-30px)]"
                 onChange={(e) => setSearchText(e.target.value)}
               />
               <Button

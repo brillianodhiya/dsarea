@@ -46,7 +46,7 @@ export default function Page() {
         <Input
           placeholder="Search anything..."
           suffix={<SearchOutlined />}
-          className="!w-[250px]"
+          className="!w-[calc(100%-30px)]"
         />
         <Card className="!mt-4">
           {data.map((e: any, i: any) => (

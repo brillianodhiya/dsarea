@@ -1,4 +1,14 @@
-import { Card, Col, Empty, Progress, Row, Space, Tag, Typography } from "antd";
+import {
+  Card,
+  Col,
+  Empty,
+  Grid,
+  Progress,
+  Row,
+  Space,
+  Tag,
+  Typography,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,6 +18,8 @@ import ListNumberIcon from "../icons/ListNumberIcon";
 import DurationIcon from "../icons/DurationIcon";
 import MultiUserIcon from "../icons/MultiUsersIcon";
 import { ImageDsArea } from "../Image/ImageDsArea";
+
+const { useBreakpoint } = Grid;
 
 interface dataType {
   data: any;
@@ -20,6 +32,8 @@ export const ListCource: React.FC<dataType> = ({
   isFetching,
   showBadge = true,
 }) => {
+  const screens = useBreakpoint();
+
   const filteredData = data.filter((e: any) => e.id !== 0);
   const router = useRouter();
   const pathname = usePathname();
@@ -111,7 +125,7 @@ export const ListCource: React.FC<dataType> = ({
           />
         </Col>
       ) : (
-        <Row gutter={[24, 24]}>
+        <Row gutter={[24, 24]} justify={screens.sm ? "start" : "center"}>
           {data.map((e: any, i: any) => (
             <Col key={i}>
               <Card

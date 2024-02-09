@@ -353,7 +353,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   minHeight: 280,
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
-                  // position: !collapsed && !screens.sm ? "absolute" : undefined,
+                  position: !collapsed && !screens.sm ? "absolute" : undefined,
                 }}
               >
                 {children}

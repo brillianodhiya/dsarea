@@ -496,3 +496,7 @@
 :where(.css-dev-only-do-not-override-dkbvqv).ant-progress .ant-progress-bg {
   background-color: #3a9699 !important;
 }
+
+.ant-layout-sider-zero-width-trigger {
+  display: none !important;
+}

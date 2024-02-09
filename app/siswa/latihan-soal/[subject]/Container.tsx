@@ -1,5 +1,7 @@
 "use client";
 import { CalendarOutlined } from "@ant-design/icons";
+import ViewProductModal from "@dsarea/@/components/Modals/Product/ViewProductModal";
+import ViewSubCategoryModal from "@dsarea/@/components/Modals/Product/ViewSubCategoryModal";
 import DurationIcon from "@dsarea/@/components/icons/DurationIcon";
 import NoteIcon from "@dsarea/@/components/icons/NoteIcon";
 import SwipeIcon from "@dsarea/@/components/icons/SwipeIcon";
@@ -59,25 +61,8 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
       color: string;
     }[]
   >([]);
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const requestFullscreen = () => {
-    // cek apakah browser mendukung fitur fullscreen
-    if (document.fullscreenEnabled) {
-      // cek apakah sudah ada elemen yang fullscreen
-      if (!document.fullscreenElement) {
-        // jika tidak, maka buat elemen body menjadi fullscreen
-        document.body.requestFullscreen().catch((err) => {
-          // tangani error jika ada
-          console.error(err);
-        });
-      }
-    } else {
-      // jika browser tidak mendukung fitur fullscreen, tampilkan pesan error
-      // alert("Browser Anda tidak mendukung fitur fullscreen.");
-    }
-  };
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const [selected, setSelected] = React.useState({});
 
   React.useEffect(() => {
     const arr: React.SetStateAction<{ name: string; color: string }[]> = [];
@@ -93,6 +78,11 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
 
   return (
     <>
+      <ViewSubCategoryModal
+        onSubmit={() => setOpenViewModal(false)}
+        data={selected}
+        open={openViewModal}
+      />
       <Card className="!m-6">
         <Row className="mb-4" justify={"space-between"} wrap gutter={[24, 24]}>
           <Col
@@ -210,7 +200,7 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
             hideOnSinglePage: true,
           }}
           size="small"
-          rowKey={"id"}
+          rowKey={"sub_id"}
           scroll={{
             x: 1000,
           }}
@@ -264,11 +254,9 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                     borderWidth: 1,
                   }}
                   onClick={() => {
-                    requestFullscreen();
-
-                    router.push(
-                      `${pathname}/preview-soal/${record.category_id}/${record.sub_id}`
-                    );
+                    // requestFullscreen();
+                    setOpenViewModal(true);
+                    setSelected(record);
                   }}
                 >
                   Mulai Mengerjakan Soal

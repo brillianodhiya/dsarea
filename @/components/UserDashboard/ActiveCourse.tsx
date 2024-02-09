@@ -1,12 +1,16 @@
 "use client";
 import Link from "next/link";
 import { ListCource } from "./ListCource";
+import { Grid } from "antd";
+const { useBreakpoint } = Grid;
 
 interface DataType {
   data: any;
 }
 
 const ActiveCourse: React.FC<DataType> = ({ data }) => {
+  const screens = useBreakpoint();
+
   return (
     <>
       <div
@@ -15,12 +19,14 @@ const ActiveCourse: React.FC<DataType> = ({ data }) => {
           justifyContent: "space-between",
           marginTop: 10,
           marginBottom: 10,
+          flexWrap: "wrap",
+          alignItems: "center",
         }}
       >
         <div
           className="font-semibold"
           style={{
-            fontSize: 18,
+            fontSize: screens.sm ? "16px" : "14px",
           }}
         >
           Program yang sedang berjalan
@@ -29,6 +35,7 @@ const ActiveCourse: React.FC<DataType> = ({ data }) => {
           <Link
             style={{
               color: "#7A7A7A",
+              fontSize: screens.sm ? "12px" : "14px",
             }}
             href={"/siswa/latihan-soal"}
             type="text"

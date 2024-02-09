@@ -262,7 +262,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                   minHeight: 280,
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
-                  // position: !collapsed && !screens.sm ? "absolute" : undefined,
+                  position: !collapsed && !screens.sm ? "absolute" : undefined,
                 }}
               >
                 {children}

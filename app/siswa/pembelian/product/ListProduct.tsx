@@ -47,7 +47,7 @@ const ListProduct: React.FC<HeaderProps> = ({ data }) => {
       <Input
         placeholder="Search anything..."
         suffix={<SearchOutlined />}
-        className="!w-[250px]"
+        className="!w-[calc(100%-30px)]"
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div className="w-full flex justify-center max-h-[86vh] overflow-y-scroll overflow-x-hidden">

@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Button,
   Col,
@@ -20,7 +20,7 @@ import {
   Statistic,
   Typography,
 } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -28,6 +28,8 @@ const { Countdown } = Statistic;
 
 type HeaderProps = {
   dataSoal: {
+    end_duration: string;
+    title: string;
     category_id: number;
     duration: number;
     rules: string;
@@ -43,14 +45,21 @@ type HeaderProps = {
       }[];
     }[];
   };
+  detailSoal: {
+    category_name?: string;
+    sub_category_name?: string;
+  };
 };
 
-const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
+const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   const [soal, setSoal] = React.useState<
     {
       no: number;
       type: "pilihan" | "essay";
       soal: string;
+      jawaban_user?: string;
+      answered?: boolean;
+      skipped?: boolean;
       jawaban: {
         key: string;
         jawaban: string;
@@ -59,11 +68,17 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
       }[];
     }[]
   >([]);
+
   const [detail, setDetail] = React.useState<{
+    title: string;
+    end_duration?: string;
     category_id: number;
     duration: number;
     rules: string;
     soal: {
+      jawaban_user?: string;
+      answered?: boolean;
+      skipped?: boolean;
       no: number;
       type: "pilihan" | "essay";
       soal: string;
@@ -75,11 +90,14 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
       }[];
     }[];
   }>({
+    title: "",
     category_id: 0,
     duration: 0,
     rules: "",
     soal: [],
+    end_duration: "",
   });
+
   const [no, setNo] = useState(0);
   const [soalNow, setSoalNow] = useState<{
     image?: string;
@@ -87,6 +105,9 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
     no: number;
     type: "pilihan" | "essay";
     soal: string;
+    jawaban_user?: string;
+    answered?: boolean;
+    skipped?: boolean;
     jawaban: {
       key: string;
       jawaban: string;
@@ -102,16 +123,99 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
     jawaban: [],
   });
   const [selectedKey, setSelectedKey] = React.useState("");
+  const [essayAnswer, setEssayAnswer] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const handleSendToServer = (body: any, type: string) => {
+    setLoading(true);
+    axiosClientInstance
+      .post("/api/soal/answer", body)
+      .then((res) => {
+        setLoading(false);
+        if (res.data.status == "success") {
+          console.log("berhasil");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
+
+  const handleExecutionNextNumber = (
+    _next: any,
+    _now: any,
+    next_no: number
+  ) => {
+    if (_now.type == "pilihan") {
+      if (selectedKey == "") {
+        _now.skipped = true;
+        _now.answered = false;
+      } else {
+        _now.jawaban_user = selectedKey;
+        _now.answered = true;
+        _now.skipped = false;
+      }
+    } else {
+      if (essayAnswer.length > 0) {
+        _now.jawaban_user = essayAnswer;
+        _now.answered = true;
+        _now.skipped = false;
+      } else {
+        _now.jawaban_user = "";
+        _now.answered = false;
+        _now.skipped = true;
+      }
+    }
+
+    // console.log(_now, "jawaban user");
+
+    if (_next.type == "pilihan") {
+      setSelectedKey(_next.jawaban_user || "");
+      setEssayAnswer("");
+    } else {
+      setEssayAnswer(_next.jawaban_user || "");
+      setSelectedKey("");
+    }
+    setSoalNow(_next);
+    setNo(next_no);
+    setSoal(
+      soal.map((val) => {
+        if (val.no == no) {
+          return _now;
+        }
+        return val;
+      })
+    );
+  };
 
   const handleNextQuestion = () => {
     if (no < soal.length) {
-      setSoalNow(soal[no - 1 + 1]);
-      setNo(no + 1);
-      setSelectedKey("");
+      const _next = soal[no - 1 + 1];
+      const _now = soalNow;
+
+      handleExecutionNextNumber(_next, _now, no + 1);
     }
   };
 
+  const handlePreviouseQuestion = () => {
+    if (no > 0) {
+      const _next = soal[no - 1 - 1];
+      const _now = soalNow;
+      handleExecutionNextNumber(_next, _now, no - 1);
+    }
+  };
+
+  const handleChangeNumber = (item: any) => {
+    const _next = item;
+    const _now = soalNow;
+
+    handleExecutionNextNumber(_next, _now, item.no);
+  };
+
   const router = useRouter();
+
+  console.log(soal, "datasoal");
 
   // const { data, isFetching } = useQuery({
   //   queryKey: ["category", detail.category_id],
@@ -132,7 +236,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
 
   useEffect(() => {
     if (dataSoal.soal.length > 0) {
-      setSoal(dataSoal.soal);
+      // sorting soal berdasarkan no nya
+      dataSoal.soal.sort((a: any, b: any) => a.no - b.no);
+      setSoal([...dataSoal.soal]);
+      // setSoal(dataSoal.soal);
       setNo(dataSoal.soal[0].no);
       setSoalNow(dataSoal.soal[0]);
       setDetail(dataSoal);
@@ -222,8 +329,6 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
     </div>
   );
 
-  console.log(soalNow, "soalnow");
-
   return (
     <div>
       {/* <CustomHeader
@@ -306,9 +411,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                 <div
                   key={item.no}
                   onClick={() => {
-                    setNo(item.no);
-                    setSoalNow(item);
-                    setSelectedKey("");
+                    handleChangeNumber(item);
                   }}
                   style={{
                     width: 44,
@@ -326,7 +429,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                     borderColor: fontColor == "#333333" ? undefined : fontColor,
                   }}
                 >
-                  {index + 1}
+                  {item.no}
                 </div>
               );
             })}
@@ -381,6 +484,32 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                   {data.length > 0 ? data[0].name : ""}
                 </span>
               </Typography> */}
+              <Space wrap size={"small"}>
+                <div
+                  style={{
+                    border: "1px solid #D0E6E7",
+                    padding: "2px 6px",
+                    background:
+                      "linear-gradient(0deg, #EBF5F5, #EBF5F5), linear-gradient(0deg, #D0E6E7, #D0E6E7)",
+                    borderRadius: "6px",
+                    color: "#3A9699",
+                  }}
+                >
+                  {detailSoal.category_name}
+                </div>
+                <div
+                  style={{
+                    border: "1px solid #F3F3F3",
+                    padding: "2px 6px",
+                    background:
+                      "linear-gradient(0deg, #F7F7F7, #F7F7F7), linear-gradient(0deg, #F3F3F3, #F3F3F3)",
+                    borderRadius: "6px",
+                    color: "#525252",
+                  }}
+                >
+                  {detailSoal.sub_category_name}
+                </div>
+              </Space>
               <Typography
                 style={{
                   fontSize: 20,
@@ -389,7 +518,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                   margin: 0,
                 }}
               >
-                Matematika
+                {detail.title}
               </Typography>
               <Typography
                 style={{
@@ -442,9 +571,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                     }}
                   > */}
                   <Countdown
-                    value={moment(
-                      moment().add(detail.duration, "minutes")
-                    ).format()}
+                    value={dayjs(detail.end_duration).format()}
                     valueStyle={{
                       fontSize: 14,
                       fontWeight: 600,
@@ -568,7 +695,13 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
                   gap: 8,
                 }}
               >
-                <Input.TextArea rows={4} />
+                <Input.TextArea
+                  rows={4}
+                  value={essayAnswer}
+                  onChange={(e) => {
+                    setEssayAnswer(e.target.value);
+                  }}
+                />
               </div>
             ) : (
               <div
@@ -730,11 +863,12 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal }) => {
               }}
               disabled={no == 1}
               onClick={() => {
-                if (no > 0) {
-                  setSoalNow(soal[no - 1 - 1]);
-                  setNo(no - 1);
-                  setSelectedKey("");
-                }
+                // if (no > 0) {
+                //   setSoalNow(soal[no - 1 - 1]);
+                //   setNo(no - 1);
+                //   setSelectedKey("");
+                // }
+                handlePreviouseQuestion();
               }}
             >
               <ArrowLeftOutlined /> Sebelumnya

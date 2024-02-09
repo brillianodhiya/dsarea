@@ -14,6 +14,7 @@ interface Values {
   description: string;
   modifier: string;
   status: boolean;
+  link?: string;
 }
 
 interface AddBannerModalProps {
@@ -204,7 +205,9 @@ const AddBannerModal: React.FC<AddBannerModalProps> = ({
           >
             <Input placeholder="Banner Name" />
           </Form.Item>
-
+          <Form.Item name="link" label="Link" initialValue={""}>
+            <Input.TextArea rows={2} placeholder="Link" />
+          </Form.Item>
           <Form.Item name="description" label="Description" initialValue={""}>
             <Input.TextArea rows={2} placeholder="Description" />
           </Form.Item>
