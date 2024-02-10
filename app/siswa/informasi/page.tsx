@@ -85,10 +85,12 @@ export default function Page() {
               <Typography.Paragraph>{e.desc}</Typography.Paragraph> */}
                 <Meta
                   title={
-                    e.title.length > 20 ? e.title.slice(0, 20) + "..." : e.title
+                    e.title?.length > 20
+                      ? e.title.slice(0, 20) + "..."
+                      : e.title
                   }
                   description={
-                    e.desc.length > 20 ? e.desc.slice(0, 20) + "..." : e.desc
+                    e.desc?.length > 20 ? e.desc.slice(0, 20) + "..." : e.desc
                   }
                 />
               </div>
