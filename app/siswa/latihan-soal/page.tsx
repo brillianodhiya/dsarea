@@ -20,10 +20,15 @@ export default async function Page() {
   const data = await getListData();
 
   return (
-    <>
+    <div
+      style={{
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
       <CustomHeader title="Latihan Soal" />
 
       <ContainerLatihanSoal data={data} />
-    </>
+    </div>
   );
 }
