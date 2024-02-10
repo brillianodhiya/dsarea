@@ -3,6 +3,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import ViewInformasiModal from "@dsarea/@/components/Modals/Informasi/ViewInformasiModal";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Input } from "antd";
 import Meta from "antd/es/card/Meta";
@@ -11,6 +12,7 @@ import { useState } from "react";
 
 export default function Page() {
   const [openModal, setOpenModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [selectedData, setSelectedData] = useState({
     id: 0,
     name: "test",
@@ -46,10 +48,11 @@ export default function Page() {
         <Input
           placeholder="Search anything..."
           suffix={<SearchOutlined />}
-          className="!w-[calc(100%-30px)]"
+          className="!w-[calc(250px)]"
+          onChange={(e) => setSearchText(e.target.value)}
         />
         <Card className="!mt-4">
-          {data.map((e: any, i: any) => (
+          {searchFromValue(data, searchText).map((e: any, i: any) => (
             <Card
               onClick={() => {
                 setOpenModal(true);
@@ -74,13 +77,20 @@ export default function Page() {
                 src={e.image}
                 width={240}
                 height={100}
-                className="h-[140px] aspect-video object-contain object-center"
+                className="h-[140px] aspect-video object-contain object-center w-full sm:w-auto bg-[#EDF3EF]"
               />
 
               <div className="flex-row p-4 ">
                 {/* <Typography.Text strong>{e.title}</Typography.Text>
               <Typography.Paragraph>{e.desc}</Typography.Paragraph> */}
-                <Meta title={e?.title} description={e?.desc} />
+                <Meta
+                  title={
+                    e.title.length > 20 ? e.title.slice(0, 20) + "..." : e.title
+                  }
+                  description={
+                    e.desc.length > 20 ? e.desc.slice(0, 20) + "..." : e.desc
+                  }
+                />
               </div>
             </Card>
           ))}
