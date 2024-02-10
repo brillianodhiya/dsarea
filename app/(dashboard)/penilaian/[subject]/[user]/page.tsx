@@ -8,42 +8,399 @@ import {
   Col,
   Collapse,
   CollapseProps,
+  InputNumber,
   Row,
   Space,
   Tag,
   Typography,
 } from "antd";
 import moment from "moment";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+// const Accordion: React.FC<AccordionProps> = ({ items }) => {
+//   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
-const items: CollapseProps["items"] = [
-  {
-    key: "1",
-    label: (
-      <Row>
-        <Col span={18}>Pertanyaan</Col>
-        <Col span={6}>Score</Col>
-      </Row>
-    ),
-    children: <p>{text}</p>,
-  },
-  {
-    key: "2",
-    label: "This is panel header 2",
-    children: <p>{text}</p>,
-  },
-  {
-    key: "3",
-    label: "This is panel header 3",
-    children: <p>{text}</p>,
-  },
-];
+//   const handleClick = (index: number) => {
+//     const currentIndex = activeIndices.indexOf(index);
+//     if (currentIndex === -1) {
+//       setActiveIndices([...activeIndices, index]); // Add to activeIndices array
+//     } else {
+//       const newIndices = [...activeIndices];
+//       newIndices.splice(currentIndex, 1); // Remove from activeIndices array
+//       setActiveIndices(newIndices);
+//     }
+//   };
+
+//   return (
+//     <div className="w-full mx-auto">
+//       {items.map((item, index) => (
+//         <div key={index} className="border border-gray-200">
+//           <div
+//             className={`flex justify-between items-start p-3 cursor-pointer ${
+//               activeIndex === index ? "bg-gray-100" : ""
+//             }`}
+//             onClick={() => handleClick(index)}
+//           >
+//             <div className="flex items-end w-full">
+//               <div className="flex items-start w-8/12">
+//                 <span className="text-sm text-gray-500 mr-4">{index}</span>
+//                 <span className="overflow-hidden overflow-ellipsis mr-2">
+//                   {activeIndex === index
+//                     ? item.title
+//                     : item.title.length > 80
+//                     ? item.title.slice(0, 80) + "..."
+//                     : item.title}
+//                 </span>
+//               </div>
+//               <span className="text-sm text-[#32D583]">{item.score}</span>
+//             </div>
+//             <svg
+//               className={`w-4 h-4 transition-transform ${
+//                 activeIndex === index ? "transform rotate-180" : ""
+//               }`}
+//               fill="none"
+//               viewBox="0 0 24 24"
+//               stroke="currentColor"
+//             >
+//               <path
+//                 strokeLinecap="round"
+//                 strokeLinejoin="round"
+//                 strokeWidth={2}
+//                 d="M19 9l-7 7-7-7"
+//               />
+//             </svg>
+//           </div>
+//           {activeIndex === index && (
+//             <div className="pl-8 p-3 bg-[#F3F3F3]">
+//               <span className="text-xs text-[#7A7A7A]">Jawaban</span>
+//               {/* {item.type === "essay" && (
+//                 <p className="text-gray-700">{item.content}</p>
+//               )}
+//               {item.type === "pilihan" && <ul>{item.content}</ul>} */}
+//             </div>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+const Accordion: React.FC = ({ items }: any) => {
+  const [activeIndices, setActiveIndices] = useState<number[]>([]);
+
+  const handleClick = (index: number) => {
+    const currentIndex = activeIndices.indexOf(index);
+    if (currentIndex === -1) {
+      setActiveIndices([...activeIndices, index]); // Add to activeIndices array
+    } else {
+      const newIndices = [...activeIndices];
+      newIndices.splice(currentIndex, 1); // Remove from activeIndices array
+      setActiveIndices(newIndices);
+    }
+  };
+
+  return (
+    <div className="w-full mx-auto border-[0.5px] rounded-lg">
+      {items.map((item, index) => (
+        <div key={index} className="border-b-[0.5px] border-gray-200">
+          <div
+            className={`flex justify-between items-start p-3 cursor-pointer ${
+              activeIndices.includes(index) ? "bg-gray-100" : ""
+            }`}
+            onClick={() => handleClick(index)}
+          >
+            <div className="flex items-end w-full">
+              <div className="flex items-start w-[68%]">
+                <span className="text-sm text-gray-500 mr-4">{index + 1}</span>
+                <span className="overflow-hidden overflow-ellipsis mr-2">
+                  {activeIndices.includes(index)
+                    ? item.soal
+                    : item.soal.length > 80
+                    ? item.soal.slice(0, 80) + "..."
+                    : item.soal}
+                </span>
+              </div>
+              <span className="text-sm text-[#32D583]">{80}</span>
+            </div>
+            <svg
+              className={`w-4 h-4 transition-transform ${
+                activeIndices.includes(index) ? "transform rotate-180" : ""
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+          {activeIndices.includes(index) && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                alignItems: "flex-start",
+              }}
+              className="pl-8 pb-3 bg-[#F3F3F3]"
+            >
+              {item.image != undefined ? (
+                <Image
+                  alt={item.image + "Image Soal"}
+                  src={
+                    item.image
+                      ? item.image.includes("http")
+                        ? item.image
+                        : process.env.NEXT_PUBLIC_URL_BE +
+                          "/api/attach/" +
+                          item.image
+                      : ""
+                  }
+                  width={200}
+                  style={{
+                    position: "relative",
+                  }}
+                  height={1000}
+
+                  // className="w-[200px] object-contain aspect-auto"
+                />
+              ) : null}
+
+              {item.audio != undefined ? (
+                <audio id="audio" controls>
+                  <source
+                    id="source"
+                    src={
+                      item.audio
+                        ? item.audio.includes("http")
+                          ? item.audio
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
+                            item.audio
+                        : ""
+                    }
+                    type="audio/mp3"
+                  />
+                  <source
+                    id="source"
+                    src={
+                      item.audio
+                        ? item.audio.includes("http")
+                          ? item.audio
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
+                            item.audio
+                        : ""
+                    }
+                    type="audio/ogg"
+                  />
+                  <source
+                    id="source"
+                    src={
+                      item.audio
+                        ? item.audio.includes("http")
+                          ? item.audio
+                          : process.env.NEXT_PUBLIC_URL_BE +
+                            "/api/attach/" +
+                            item.audio
+                        : ""
+                    }
+                    type="audio/wav"
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              ) : null}
+            </div>
+          )}
+          {activeIndices.includes(index) && (
+            <div className="pl-8 pb-3 bg-[#F3F3F3]">
+              {item.type == "essay" ? (
+                <div className=" flex w-full flex-wrap gap-4">
+                  <div className="w-[65%] flex flex-col gap-2">
+                    <span className="text-xs text-[#7A7A7A]">Jawaban</span>
+                    <div>
+                      <div className="rounded border border-[#32D583] bg-white p-2">
+                        <p className="w-[95%]">
+                          Lorem ipsum dolor sit amet consectetur adipisicing
+                          elit. Qui, perspiciatis optio in magnam quis,
+                          repellendus assumenda vel rem nisi commodi minus,
+                          repellat voluptate esse. Eum quaerat eaque repudiandae
+                          recusandae asperiores. Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit. Qui, perspiciatis optio
+                          in magnam quis, repellendus assumenda vel rem nisi
+                          commodi minus, repellat voluptate esse. Eum quaerat
+                          eaque repudiandae recusandae asperiores. Lorem ipsum
+                          dolor sit amet consectetur adipisicing elit. Qui,
+                          perspiciatis optio in magnam quis, repellendus
+                          assumenda vel rem nisi commodi minus, repellat
+                          voluptate esse. Eum quaerat eaque repudiandae
+                          recusandae asperiores.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs text-[#7A7A7A]">Score</span>
+                    <InputNumber min={0} placeholder="Score" />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex w-full flex-wrap gap-4 mb-2">
+                    <div className="w-[65%] flex flex-col gap-2">
+                      <span className="text-xs text-[#7A7A7A]">Jawaban</span>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <span className="text-xs text-[#7A7A7A]">Score</span>
+                    </div>
+                  </div>
+
+                  {item.jawaban.map((val, idx) => {
+                    return (
+                      <div
+                        key={val.key}
+                        className="flex w-full flex-wrap gap-4"
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 2,
+                            width: "65%",
+                            // cursor: "pointer",
+                          }}
+                          // onClick={() => {
+                          //   setSelectedKey(val.key);
+                          // }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              gap: 10,
+                              alignItems: "center",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <div
+                              style={{
+                                background: "#F3F3F3",
+                                borderRight: "1px solid #F3F3F3",
+                                color: "#333333",
+                                // padding: "2px 8px",
+                                borderRadius: "4px",
+                                width: "26px",
+                                height: "26px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                fontWeight: 500,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {val.key}
+                            </div>
+                            <div>{val.jawaban}</div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "8px",
+                              alignItems: "flex-start",
+                            }}
+                          >
+                            {val.image != undefined ? (
+                              <Image
+                                alt={val.image + "Image Soal"}
+                                src={
+                                  val.image
+                                    ? val.image.includes("http")
+                                      ? val.image
+                                      : process.env.NEXT_PUBLIC_URL_BE +
+                                        "/api/attach/" +
+                                        val.image
+                                    : ""
+                                }
+                                width={200}
+                                style={{
+                                  position: "relative",
+                                }}
+                                height={1000}
+
+                                // className="w-[200px] object-contain aspect-auto"
+                              />
+                            ) : null}
+
+                            {val.audio != undefined ? (
+                              <audio id="audio" controls>
+                                <source
+                                  id="source"
+                                  src={
+                                    val.audio
+                                      ? val.audio.includes("http")
+                                        ? val.audio
+                                        : process.env.NEXT_PUBLIC_URL_BE +
+                                          "/api/attach/" +
+                                          val.audio
+                                      : ""
+                                  }
+                                  type="audio/mp3"
+                                />
+                                <source
+                                  id="source"
+                                  src={
+                                    val.audio
+                                      ? val.audio.includes("http")
+                                        ? val.audio
+                                        : process.env.NEXT_PUBLIC_URL_BE +
+                                          "/api/attach/" +
+                                          val.audio
+                                      : ""
+                                  }
+                                  type="audio/ogg"
+                                />
+                                <source
+                                  id="source"
+                                  src={
+                                    val.audio
+                                      ? val.audio.includes("http")
+                                        ? val.audio
+                                        : process.env.NEXT_PUBLIC_URL_BE +
+                                          "/api/attach/" +
+                                          val.audio
+                                      : ""
+                                  }
+                                  type="audio/wav"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <div className="text-xs text-[#7A7A7A]">
+                            {val.nilai}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default function Page() {
   const pahtname = usePathname();
@@ -59,6 +416,122 @@ export default function Page() {
   const onChange = (key: string | string[]) => {
     console.log(key);
   };
+
+  const items2: any[] = [
+    {
+      id: 36,
+      sub_id: 18,
+      no: 2,
+      soal: "essay",
+      type: "essay",
+      image: null,
+      audio: null,
+      createdAt: "2024-01-30T07:55:50.000Z",
+      updatedAt: "2024-01-30T07:55:50.000Z",
+      jawaban: [],
+    },
+    {
+      id: 35,
+      sub_id: 18,
+      no: 1,
+      soal: "tanap soal",
+      type: "pilihan",
+      image: null,
+      audio: null,
+      createdAt: "2024-01-30T07:55:50.000Z",
+      updatedAt: "2024-01-30T07:55:50.000Z",
+      jawaban: [
+        {
+          id: 50,
+          sub_id: 18,
+          soal_id: 35,
+          key: "A",
+          jawaban: "1",
+          nilai: 1,
+          image: null,
+          audio: null,
+          createdAt: "2024-01-30T07:55:50.000Z",
+          updatedAt: "2024-01-30T07:55:50.000Z",
+        },
+        {
+          id: 51,
+          sub_id: 18,
+          soal_id: 35,
+          key: "B",
+          jawaban: "1",
+          nilai: 1,
+          image: null,
+          audio: null,
+          createdAt: "2024-01-30T07:55:50.000Z",
+          updatedAt: "2024-01-30T07:55:50.000Z",
+        },
+        {
+          id: 52,
+          sub_id: 18,
+          soal_id: 35,
+          key: "C",
+          jawaban: "1",
+          nilai: 1,
+          image: null,
+          audio: null,
+          createdAt: "2024-01-30T07:55:50.000Z",
+          updatedAt: "2024-01-30T07:55:50.000Z",
+        },
+        {
+          id: 53,
+          sub_id: 18,
+          soal_id: 35,
+          key: "D",
+          jawaban: "1",
+          nilai: 1,
+          image: null,
+          audio: null,
+          createdAt: "2024-01-30T07:55:50.000Z",
+          updatedAt: "2024-01-30T07:55:50.000Z",
+        },
+        {
+          id: 54,
+          sub_id: 18,
+          soal_id: 35,
+          key: "E",
+          jawaban: "1",
+          nilai: 1,
+          image: null,
+          audio: null,
+          createdAt: "2024-01-30T07:55:50.000Z",
+          updatedAt: "2024-01-30T07:55:50.000Z",
+        },
+      ],
+    },
+    {
+      id: 45,
+      sub_id: 33,
+      no: 1,
+      soal: "soal 1",
+      type: "pilihan",
+      image:
+        "MTcwODM0NDM2MjE3NzE3MDU2MTgwMDc1NTMxLlBORy4tc3BsYXNoLS5pbWFnZS9wbmcuLXNwbGFzaC0udXBsb2FkXzIwMjQtMDI",
+      audio:
+        "MTcwODIzMjM2MDI1MVdoaXNudSBTYW50aWthLCBoYnJwLCBLZWVibyAtIENhcnRlbC5tcDMuLXNwbGFzaC0uYXVkaW8vbXBlZy4tc3BsYXNoLS51cGxvYWRfMjAyNC0wMg",
+      createdAt: "2024-02-08T12:48:09.000Z",
+      updatedAt: "2024-02-08T12:48:09.000Z",
+      jawaban: [
+        {
+          id: 68,
+          sub_id: 33,
+          soal_id: 45,
+          key: "A",
+          jawaban: "1",
+          nilai: 1,
+          image:
+            "MTcwNzkyMzgzNzQ1MjE3MDU2MTgwMDc1NTMxLlBORy4tc3BsYXNoLS5pbWFnZS9wbmcuLXNwbGFzaC0udXBsb2FkXzIwMjQtMDI",
+          audio: null,
+          createdAt: "2024-02-08T12:48:09.000Z",
+          updatedAt: "2024-02-08T12:48:09.000Z",
+        },
+      ],
+    },
+  ];
 
   return (
     <div>
@@ -139,12 +612,14 @@ export default function Page() {
             </div>
           </Col>
         </Row>
-        <Collapse
+        {/* <Collapse
           items={items}
           defaultActiveKey={["1"]}
           onChange={onChange}
           expandIconPosition="right"
-        />
+        /> */}
+
+        <Accordion items={items2} />
       </Card>
     </div>
   );
