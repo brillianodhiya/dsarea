@@ -19,75 +19,24 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-// const Accordion: React.FC<AccordionProps> = ({ items }) => {
-//   const [activeIndices, setActiveIndices] = useState<number[]>([]);
+interface Question {
+  id: number;
+  sub_id: number;
+  no: number;
+  soal: string;
+  type: string;
+  image: string | null;
+  audio: string | null;
+  createdAt: string;
+  updatedAt: string;
+  jawaban: any[]; // Anda mungkin ingin menyesuaikan tipe data jawaban sesuai kebutuhan
+}
 
-//   const handleClick = (index: number) => {
-//     const currentIndex = activeIndices.indexOf(index);
-//     if (currentIndex === -1) {
-//       setActiveIndices([...activeIndices, index]); // Add to activeIndices array
-//     } else {
-//       const newIndices = [...activeIndices];
-//       newIndices.splice(currentIndex, 1); // Remove from activeIndices array
-//       setActiveIndices(newIndices);
-//     }
-//   };
+interface QuestionGroup {
+  items: Question[];
+}
 
-//   return (
-//     <div className="w-full mx-auto">
-//       {items.map((item, index) => (
-//         <div key={index} className="border border-gray-200">
-//           <div
-//             className={`flex justify-between items-start p-3 cursor-pointer ${
-//               activeIndex === index ? "bg-gray-100" : ""
-//             }`}
-//             onClick={() => handleClick(index)}
-//           >
-//             <div className="flex items-end w-full">
-//               <div className="flex items-start w-8/12">
-//                 <span className="text-sm text-gray-500 mr-4">{index}</span>
-//                 <span className="overflow-hidden overflow-ellipsis mr-2">
-//                   {activeIndex === index
-//                     ? item.title
-//                     : item.title.length > 80
-//                     ? item.title.slice(0, 80) + "..."
-//                     : item.title}
-//                 </span>
-//               </div>
-//               <span className="text-sm text-[#32D583]">{item.score}</span>
-//             </div>
-//             <svg
-//               className={`w-4 h-4 transition-transform ${
-//                 activeIndex === index ? "transform rotate-180" : ""
-//               }`}
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 strokeWidth={2}
-//                 d="M19 9l-7 7-7-7"
-//               />
-//             </svg>
-//           </div>
-//           {activeIndex === index && (
-//             <div className="pl-8 p-3 bg-[#F3F3F3]">
-//               <span className="text-xs text-[#7A7A7A]">Jawaban</span>
-//               {/* {item.type === "essay" && (
-//                 <p className="text-gray-700">{item.content}</p>
-//               )}
-//               {item.type === "pilihan" && <ul>{item.content}</ul>} */}
-//             </div>
-//           )}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-const Accordion: React.FC = ({ items }: any) => {
+const Accordion: React.FC<QuestionGroup> = ({ items }) => {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const handleClick = (index: number) => {
@@ -103,7 +52,7 @@ const Accordion: React.FC = ({ items }: any) => {
 
   return (
     <div className="w-full mx-auto border-[0.5px] rounded-lg">
-      {items.map((item, index) => (
+      {items.map((item: any, index: any) => (
         <div key={index} className="border-b-[0.5px] border-gray-200">
           <div
             className={`flex justify-between items-start p-3 cursor-pointer ${
@@ -261,7 +210,7 @@ const Accordion: React.FC = ({ items }: any) => {
                     </div>
                   </div>
 
-                  {item.jawaban.map((val, idx) => {
+                  {item.jawaban.map((val: any, idx: any) => {
                     return (
                       <div
                         key={val.key}
@@ -417,7 +366,7 @@ export default function Page() {
     console.log(key);
   };
 
-  const items2: any[] = [
+  const items2: Question[] = [
     {
       id: 36,
       sub_id: 18,
