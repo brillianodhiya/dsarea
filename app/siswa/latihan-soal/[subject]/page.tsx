@@ -9,13 +9,14 @@ async function getData(id: string) {
     );
     return res.data.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
 
 export default async function Page(props: { params: any }) {
   const data = await getData(props.params.subject);
+
+  console.log(data);
 
   const submenu = [
     {

@@ -55,6 +55,7 @@ type HeaderProps = {
 const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
   data: dataInitial,
 }) => {
+  console.log(dataInitial, "datainitial");
   const [categoryColor, setCategoryColor] = React.useState<
     {
       name: string;
@@ -243,10 +244,28 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
             key="status"
             render={(text, record: any) =>
               record.status == "expired" ? (
-                <Button type="text" disabled>
+                <Button
+                  type="text"
+                  onClick={() => {
+                    // requestFullscreen();
+                    setOpenViewModal(true);
+                    setSelected(record);
+                  }}
+                >
+                  Expired
+                </Button>
+              ) : record.status == "done" ? (
+                <Button
+                  type="text"
+                  onClick={() => {
+                    // requestFullscreen();
+                    setOpenViewModal(true);
+                    setSelected(record);
+                  }}
+                >
                   Selesai
                 </Button>
-              ) : (
+              ) : record.status == "active" ? (
                 <Button
                   style={{
                     color: "#3A9699",
@@ -261,7 +280,7 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                 >
                   Mulai Mengerjakan Soal
                 </Button>
-              )
+              ) : null
             }
           />
         </Table>

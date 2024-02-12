@@ -4,6 +4,7 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
   ClockCircleOutlined,
+  ExclamationCircleFilled,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import LoadingNonFullscreen from "@dsarea/@/components/LoadingComponent/LoadingComponentParent";
@@ -19,11 +20,14 @@ import {
   Space,
   Statistic,
   Typography,
+  message,
 } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import screenfull from "screenfull";
+
+const { confirm } = Modal;
 
 const { Countdown } = Statistic;
 
@@ -164,21 +168,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   const [selectedKey, setSelectedKey] = React.useState("");
   const [essayAnswer, setEssayAnswer] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const [isFullScreen, setIsFullscreen] = React.useState(true);
-
-  // React.useEffect(() => {
-  //   if (screenfull.isEnabled) {
-  //     screenfull.on("change", () => {
-  //       if (screenfull.isFullscreen) {
-  //         // console.log("is fullscreen");
-  //         setIsFullscreen(true);
-  //       } else {
-  //         // console.log("is not fullscreen");
-  //         setIsFullscreen(false);
-  //       }
-  //     });
-  //   }
-  // }, []);
+  const [isFullScreen, setIsFullscreen] = React.useState(false);
 
   // karena setIsFullscreen di trigger beberapa kali useEffect di bawah jadi trigger 2x benarkan
   // maka gunakan useCallback untuk menghemat proses yang
@@ -223,8 +213,60 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       })
       .catch((err) => {
         setLoading(false);
+        if (err.response.data.message) {
+          message.error(err.response.data.message);
+        } else {
+          message.error(err.message);
+        }
         // console.log(err);
       });
+  };
+
+  const sendCompleteTest = (callback: () => void) => {
+    return axiosClientInstance
+      .post("/api/users/siswa/jawaban/done", {
+        product_id: soalNow.product_id,
+        sub_id: soalNow.sub_id,
+        soal_id: soalNow.soal_id,
+      })
+      .then((res) => {
+        setLoading(false);
+        screenfull.exit();
+        router.back();
+      })
+      .catch((err) => {
+        setLoading(false);
+        callback();
+        // console.log(err);
+        if (err.response.data.message) {
+          message.error(err.response.data.message);
+        } else {
+          message.error(err.message);
+        }
+      });
+  };
+
+  const handleCompleteTest = () => {
+    confirm({
+      title: "Apakah kamu ingin menyelesaikan test ini?",
+      icon: <ExclamationCircleFilled />,
+      content:
+        "Test yang telah selesai tidak dapat di ulangi, silahkan cek kembali jawaban anda!",
+      onOk() {
+        return sendCompleteTest(() => console.log("ok"));
+      },
+      onCancel() {},
+    });
+  };
+
+  const handleExpiredTest = () => {
+    Modal.warning({
+      title: "Waktu Test Sudah Habis!",
+      content: "Anda tidak lagi dapat melanjutkan test ini",
+      onOk: () => {
+        return sendCompleteTest(handleExpiredTest);
+      },
+    });
   };
 
   const handleExecutionNextNumber = (
@@ -437,6 +479,8 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   useEffect(() => {
     if (dataSoal.soal.length > 0) {
       // sorting soal berdasarkan no nya
+      console.log(dataSoal, "dataSoal");
+      console.log(detailSoal, "detailsoal");
       dataSoal.soal.sort((a: any, b: any) => a.no - b.no);
       setSoal([...dataSoal.soal]);
       // setSoal(dataSoal.soal);
@@ -779,14 +823,22 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                     }}
                   > */}
                     <Countdown
-                      value={dayjs(detail.end_duration).format()}
+                      value={dayjs(
+                        dayjs(detail.end_duration)
+                        // .add(6, "day")
+                        // .subtract(13, "hour")
+                        // .subtract(17, "minute")
+                      ).format()}
                       valueStyle={{
                         fontSize: 14,
                         fontWeight: 600,
                         margin: 0,
                         color: "#7A7A7A",
                       }}
-                      // onFinish={onFinish}
+                      onFinish={() => {
+                        // console.log("TEST");
+                        handleExpiredTest();
+                      }}
                     />
                     {/* </Typography> */}
                   </div>
@@ -1107,8 +1159,8 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                   }}
                   onClick={() => {
                     // exit fullscreen tanpa trigger state
-                    screenfull.exit();
-                    router.back();
+
+                    handleCompleteTest();
                   }}
                 >
                   Selesaikan
