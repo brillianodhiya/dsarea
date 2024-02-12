@@ -15,7 +15,7 @@ export function formatRupiah(angka: any) {
     var result = ribuan.join(".").split("").reverse().join("");
     return "Rp" + result;
   } else {
-    return "No Data";
+    return "Gratis";
   }
 }
 

@@ -19,6 +19,8 @@ const getListData = async () => {
 export default async function Page() {
   const data = await getListData();
 
+  console.log(data);
+
   return (
     <div
       style={{
