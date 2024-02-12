@@ -45,7 +45,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
   const { data: dataModal, isFetching } = useQuery({
     queryKey: ["category", data.product_id],
     queryFn: async () => {
-      if (data.product_id == 0) {
+      if (data.product_id) {
         const res = await axiosClientInstance.get(
           "/api/users/pembelian/detail/product/" + data.product_id
         );
@@ -63,7 +63,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
   const { data: dataModalSubCategory, isFetching: isFetching2 } = useQuery({
     queryKey: ["sub_category", data.product_id, data.category_id, data.sub_id],
     queryFn: async () => {
-      if (data.product_id == 0) {
+      if (data.product_id) {
         const res = await axiosClientInstance.get(
           `/api/users/siswa/detail/sub/product/owned/${data.product_id}/${data.category_id}/${data.sub_id}`
         );
@@ -91,22 +91,28 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
       footer={
         <>
           <div>
-            <Space>
+            {dataModalSubCategory.status == "active" ? (
+              <Space>
+                <Button type="default" onClick={onSubmit}>
+                  Nanti Saja
+                </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    // requestFullscreen();
+                    router.push(
+                      `${pathname}/preview-soal/${data.category_id}/${data.sub_id}`
+                    );
+                  }}
+                >
+                  Mulai Mengerjakan Soal
+                </Button>
+              </Space>
+            ) : (
               <Button type="default" onClick={onSubmit}>
-                Nanti Saja
+                Close
               </Button>
-              <Button
-                type="primary"
-                onClick={() => {
-                  // requestFullscreen();
-                  router.push(
-                    `${pathname}/preview-soal/${data.category_id}/${data.sub_id}`
-                  );
-                }}
-              >
-                Mulai Mengerjakan Soal
-              </Button>
-            </Space>
+            )}
           </div>
         </>
       }
@@ -473,7 +479,14 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                 <p>
                   Nilai akan di pulikasi setelah penilaian dari tim kami dan
                   dapat dilihat di Menu{" "}
-                  <Link href={"/siswa/pengumuman"}>Pengumuman</Link>
+                  <Link
+                    href={"/siswa/pengumuman"}
+                    style={{
+                      color: "#3a9699",
+                    }}
+                  >
+                    Pengumuman
+                  </Link>
                 </p>
               </div>
             </div>
