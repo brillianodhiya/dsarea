@@ -280,15 +280,15 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                     color: "#7A7A7A",
                   }}
                 >
-                  {(dataModalSubCategory.total_soal *
-                    parseFloat(dataModalSubCategory.total_soal_answer)) /
+                  {(parseFloat(dataModalSubCategory.total_soal_answer) /
+                    dataModalSubCategory.total_soal) *
                     100}
                   %
                 </div>
                 <Progress
                   percent={
-                    (dataModalSubCategory.total_soal *
-                      parseFloat(dataModalSubCategory.total_soal_answer)) /
+                    (parseFloat(dataModalSubCategory.total_soal_answer) /
+                      dataModalSubCategory.total_soal) *
                     100
                   }
                   showInfo={false}

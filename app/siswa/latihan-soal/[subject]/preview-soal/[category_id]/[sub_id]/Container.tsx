@@ -33,6 +33,7 @@ const { Countdown } = Statistic;
 
 type HeaderProps = {
   dataSoal: {
+    jumlah_akses: number;
     end_duration: string;
     title: string;
     category_id: number;
@@ -193,7 +194,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       Modal.warning({
         title: "Perhatian!",
         content:
-          "Anda tidak dapat keluar dari mode fullscreen, silahkan selesaikan ujian terlebih dahulu",
+          "Pengerjaan ujian wajib menggunakan mode fullscreen, selesaikan ujian terlebih dahulu sebelum keluar dari mode fullscreen!",
         onOk: () => {
           Modal.destroyAll();
           screenfull.request();
@@ -222,27 +223,53 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       });
   };
 
+  console.log(soalNow, "soalnow");
+
   const sendCompleteTest = (callback: () => void) => {
+    let jawaban_id = soalNow.jawaban.filter((val) => val.key == selectedKey);
+
     return axiosClientInstance
-      .post("/api/users/siswa/jawaban/done", {
+      .post("/api/users/siswa/jawab/soal/" + soalNow.type, {
+        jawaban_id:
+          soalNow.type == "pilihan" ? jawaban_id[0].jawaban_id : undefined,
         product_id: soalNow.product_id,
         sub_id: soalNow.sub_id,
         soal_id: soalNow.soal_id,
+        jawaban: soalNow.type == "essay" ? essayAnswer : undefined,
       })
       .then((res) => {
-        setLoading(false);
-        screenfull.exit();
-        router.back();
+        return axiosClientInstance
+          .post("/api/users/siswa/jawaban/done", {
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            category_id: detailSoal.category_id,
+          })
+          .then((res) => {
+            setLoading(false);
+            screenfull.exit();
+            window.location.replace(
+              "/siswa/latihan-soal/" + detailSoal.product_id
+            );
+          })
+          .catch((err) => {
+            setLoading(false);
+            callback();
+            // console.log(err);
+            if (err.response.data.message) {
+              message.error(err.response.data.message);
+            } else {
+              message.error(err.message);
+            }
+          });
       })
       .catch((err) => {
         setLoading(false);
-        callback();
-        // console.log(err);
         if (err.response.data.message) {
           message.error(err.response.data.message);
         } else {
           message.error(err.message);
         }
+        // console.log(err);
       });
   };
 
@@ -478,10 +505,42 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
 
   useEffect(() => {
     if (dataSoal.soal.length > 0) {
+      if (dataSoal.jumlah_akses > 0) {
+        Modal.warning({
+          title:
+            "Batas akses anda adalah 5 kali! anda telah merefresh sebanyak " +
+            dataSoal.jumlah_akses +
+            " kali!",
+          content: "Dilarang untuk merefresh halaman ini, demi kenyamanan.",
+          onOk: () => {},
+        });
+      } else if (dataSoal.jumlah_akses > 5) {
+        Modal.warning({
+          title:
+            "Batas akses anda adalah 5 kali! anda telah merefresh sebanyak " +
+            dataSoal.jumlah_akses +
+            " kali!",
+          content:
+            "Anda tidak diperbolehkan untuk merefresh halaman ini, demi kenyamanan.",
+          onOk: () => {
+            window.location.replace(
+              "/siswa/latihan-soal/" + detailSoal.product_id
+            );
+          },
+        });
+      } else {
+        Modal.warning({
+          title: "Perhatian!",
+          content:
+            "Anda tidak diperbolehkan untuk merefresh halaman ini, demi kenyamanan.",
+          onOk: () => {},
+        });
+      }
       // sorting soal berdasarkan no nya
-      console.log(dataSoal, "dataSoal");
-      console.log(detailSoal, "detailsoal");
+      // console.log(dataSoal, "dataSoal");
+      // console.log(detailSoal, "detailsoal");
       dataSoal.soal.sort((a: any, b: any) => a.no - b.no);
+      // if (dataSoal.jumlah_akses <= 5) {
       setSoal([...dataSoal.soal]);
       // setSoal(dataSoal.soal);
       setNo(dataSoal.soal[0].no);
@@ -494,21 +553,22 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
         setEssayAnswer(dataSoal.soal[0]?.jawaban_user?.jawaban || "");
         setSelectedKey("");
       }
+      // }
     } else {
-      const localData = window.localStorage.getItem("preview-soal")
-        ? JSON.parse(window.localStorage.getItem("preview-soal") || "")
-        : {};
-      // console.log(localData);
-      if (Object.keys(localData).length > 0) {
-        setSoal(localData.soal);
-        if (localData.soal.length > 0) {
-          setNo(localData.soal[0].no);
-          setSoalNow(localData.soal[0]);
-        }
-        setDetail(localData);
-      } else {
-        router.push("/soal/paket-soal");
-      }
+      // const localData = window.localStorage.getItem("preview-soal")
+      //   ? JSON.parse(window.localStorage.getItem("preview-soal") || "")
+      //   : {};
+      // // console.log(localData);
+      // if (Object.keys(localData).length > 0) {
+      //   setSoal(localData.soal);
+      //   if (localData.soal.length > 0) {
+      //     setNo(localData.soal[0].no);
+      //     setSoalNow(localData.soal[0]);
+      //   }
+      //   setDetail(localData);
+      // } else {
+      //   router.push("/soal/paket-soal");
+      // }
     }
   }, []);
 

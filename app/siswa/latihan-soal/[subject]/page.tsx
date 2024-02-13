@@ -16,8 +16,6 @@ async function getData(id: string) {
 export default async function Page(props: { params: any }) {
   const data = await getData(props.params.subject);
 
-  console.log(data);
-
   const submenu = [
     {
       title: "Penilaian",

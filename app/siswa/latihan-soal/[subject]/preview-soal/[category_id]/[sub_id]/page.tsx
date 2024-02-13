@@ -74,8 +74,6 @@ export default async function Page(props: { params: any }) {
     props.params.category_id
   );
 
-  console.log(detail, "detail");
-
   return (
     <div>
       {" "}

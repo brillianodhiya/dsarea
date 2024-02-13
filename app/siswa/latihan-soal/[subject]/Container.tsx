@@ -280,7 +280,21 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                 >
                   Mulai Mengerjakan Soal
                 </Button>
-              ) : null
+              ) : (
+                <Button
+                  type="text"
+                  onClick={() => {
+                    // requestFullscreen();
+                    setOpenViewModal(true);
+                    setSelected(record);
+                  }}
+                  style={{
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {record.status}
+                </Button>
+              )
             }
           />
         </Table>
