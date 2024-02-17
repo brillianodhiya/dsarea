@@ -57,8 +57,6 @@ export default function Page() {
         </Col>
         <Col xs={24} sm={24} md={24} lg={10} xl={8} xxl={6}>
           <EventCalendar
-            data={[]}
-            isFetching={false}
             event={[
               {
                 id: 1,

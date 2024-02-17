@@ -283,11 +283,11 @@ export default function EditSoal(props: {
   return (
     <div>
       <CustomHeader
-        title="Buat Soal"
+        title="Edit Soal"
         isSubMenu
         subMenu={[
           {
-            title: "Tambah Paket Soal (Sub Kategori)",
+            title: "Edit Paket Soal (Sub Kategori)",
           },
         ]}
       />
@@ -345,7 +345,7 @@ export default function EditSoal(props: {
                                 const _data = getImageAndAudio(values);
                                 setLoading(true);
                                 axiosClientInstance
-                                  .post("/api/soal/sub/category/create", {
+                                  .patch("/api/soal/sub/category/edit/" + id, {
                                     ...values,
                                     bulk_file: _data,
                                   })
@@ -444,7 +444,7 @@ export default function EditSoal(props: {
                               const _data = getImageAndAudio(values);
                               setLoading(true);
                               axiosClientInstance
-                                .post("/api/soal/sub/category/create", {
+                                .patch("/api/soal/sub/category/edit/" + id, {
                                   ...values,
                                   bulk_file: _data,
                                 })
