@@ -1,30 +1,25 @@
-"use client";
-import { SearchOutlined } from "@ant-design/icons";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
-import { PengumumanCard } from "@dsarea/@/components/pengumuman/PengumumanCard";
-import { Card, Col, Input, Row, Typography } from "antd";
-import moment from "moment";
-import Image from "next/image";
+import ContainerPengumuman from "./Container";
+import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
 
-export default function Page() {
+const getListData = async () => {
+  try {
+    const res = await axiosInstance.get(
+      "/api/users/siswa/list/product/owned?status=selesai"
+    );
+    return res.data.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export default async function Page() {
+  const data = await getListData();
+
   return (
     <div>
       <CustomHeader title="Pengumuman" />
-      <div className="p-4">
-        <Input
-          placeholder="Search anything..."
-          suffix={<SearchOutlined />}
-          className="!w-[calc(300px)]"
-        />
-
-        <Row gutter={[24, 24]} className="mt-4">
-          {[...Array(5)].map((e, i) => (
-            <Col key={i}>
-              <PengumumanCard />
-            </Col>
-          ))}
-        </Row>
-      </div>
+      <ContainerPengumuman data={data} />
     </div>
   );
 }
