@@ -43,6 +43,20 @@ export default function Page() {
       },
     ],
   });
+  const { data: dataPemenang, isFetching: loadingPemenang } = useQuery({
+    queryKey: ["list-pemenang"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(
+        "api/dashboard/list/pemenang/14"
+      );
+      return res.data.data;
+    },
+    initialData: [
+      {
+        id: 0,
+      },
+    ],
+  });
 
   return (
     <>
@@ -78,7 +92,7 @@ export default function Page() {
               },
             ]}
           />
-          <LeaderBoard data={[]} isLoading={false} />
+          <LeaderBoard data={dataPemenang} isLoading={loadingPemenang} />
         </Col>
       </Row>
     </>

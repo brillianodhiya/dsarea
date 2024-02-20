@@ -1,32 +1,20 @@
 import { List, Select, Space, Typography } from "antd";
 import React from "react";
 import Image from "next/image";
+import { sensorEmail } from "@dsarea/@/lib/utils";
 interface DataType {
   data: any;
   isLoading: boolean;
 }
 
-export const LeaderBoard: React.FC<DataType> = ({}) => {
-  function sortByScoreDescending(dataArray: any[]) {
-    return dataArray.sort((a, b) => b.score - a.score);
-  }
+export const LeaderBoard: React.FC<DataType> = ({ data, isLoading }) => {
+  const checkRank = (rank: number) => {
+    return data?.all?.some((val: { rank: number }) => val?.rank === rank);
+  };
 
-  let dataArray = [
-    { id: 1, name: "John", score: 85 },
-    { id: 2, name: "Jane", score: 92 },
-    { id: 3, name: "Bob", score: 78 },
-    { id: 4, name: "Alice", score: 95 },
-    { id: 5, name: "Charlie", score: 88 },
-    { id: 6, name: "Eve", score: 90 },
-    { id: 7, name: "David", score: 75 },
-    { id: 8, name: "Grace", score: 96 },
-    { id: 9, name: "Frank", score: 82 },
-    { id: 10, name: "Helen", score: 89 },
-  ];
+  const isRankExist = checkRank(data?.my_rank?.[0]?.rank);
 
-  let sortedArray = sortByScoreDescending(dataArray);
-
-  const myId = 99;
+  console.log(isRankExist, "isRankExist");
 
   return (
     <div className="flex flex-col my-4 gap-4">
@@ -45,6 +33,7 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
         ]}
       />
       <List
+        loading={isLoading}
         header={
           <div
             style={{
@@ -57,7 +46,7 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
           </div>
         }
         footer={
-          myId > 10 && (
+          !isRankExist && (
             <div
               style={{
                 display: "flex",
@@ -87,32 +76,36 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
                       color: "#3A9699",
                     }}
                   >
-                    {myId}
+                    {data?.my_rank?.[0]?.rank}
                   </div>
                 </div>
                 <Space direction="vertical" size={0}>
                   <div style={{ fontSize: 12, color: "#3A9699" }}>
-                    email@email.com
+                    {data?.my_rank?.[0]?.email}
                   </div>
                   <div style={{ fontSize: 12, color: "#7A7A7A" }}>Anda</div>
                 </Space>
               </Space>
-              <div style={{ fontSize: 12, color: "#3A9699" }}>100</div>
+              <div style={{ fontSize: 12, color: "#3A9699" }}>
+                {data?.my_rank?.[0]?.score}
+              </div>
             </div>
           )
         }
         bordered
-        dataSource={sortedArray}
-        renderItem={(item, index) => (
+        dataSource={data.all}
+        renderItem={(item: any, index) => (
           <List.Item
             actions={[
               <Typography.Text
+                key={index + item.rank}
                 style={{
-                  color: myId == index + 1 ? "#3A9699" : "#000",
+                  color:
+                    data?.my_rank?.[0]?.rank == index + 1 ? "#3A9699" : "#000",
                 }}
                 type="secondary"
               >
-                100
+                {item.score}
               </Typography.Text>,
             ]}
           >
@@ -139,8 +132,30 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
                     width={24}
                     height={24}
                   />
-                ) : myId === index + 1 ? (
-                  <div>asd {/* Your content for myid equal to index */}</div>
+                ) : data?.my_rank?.[0]?.rank === index + 1 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "24px",
+                      height: "24px",
+                      padding: 12,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderWidth: 1,
+                      borderColor: "#AAD2D3",
+                      backgroundColor: "#EBF5F5",
+                      borderRadius: 100,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "#3A9699",
+                      }}
+                    >
+                      {data?.my_rank?.[0]?.rank}
+                    </div>
+                  </div>
                 ) : (
                   <div
                     style={{
@@ -152,13 +167,16 @@ export const LeaderBoard: React.FC<DataType> = ({}) => {
                   </div>
                 )}
               </div>
-              <div
-                style={{
-                  color: myId == index + 1 ? "#3A9699" : "#000",
-                }}
-              >
-                user@email.com
-              </div>
+              {data?.my_rank?.[0]?.rank === index + 1 ? (
+                <Space direction="vertical" size={0}>
+                  <div style={{ fontSize: 12, color: "#3A9699" }}>
+                    {data.my_rank[0].email}
+                  </div>
+                  <div style={{ fontSize: 12, color: "#7A7A7A" }}>Anda</div>
+                </Space>
+              ) : (
+                <div>{sensorEmail(item.email)}</div>
+              )}
             </Space>
           </List.Item>
         )}

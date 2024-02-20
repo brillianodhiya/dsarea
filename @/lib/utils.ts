@@ -92,3 +92,10 @@ export function formatAngka(angka: any) {
 
   return formattedAngka;
 }
+
+export const sensorEmail = (email = "") => {
+  const [name, domain] = email.split("@");
+  const maskedName = name.substring(0, 3) + "**";
+  const maskedEmail = maskedName + "@" + domain;
+  return maskedEmail;
+};
