@@ -131,10 +131,10 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
                   {dataInitial.total_duration} min
                 </Typography.Text>
               </Space>
-              <Space>
+              {/* <Space>
                 <CalendarOutlined />
                 {moment().format("DD/MM/YYYY")}
-              </Space>
+              </Space> */}
 
               <Space>
                 <Badge color="#3A9699" />
@@ -187,13 +187,13 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
             <div>Dilewati</div>
             <div className="font-semibold">{dataInitial.total_dilewati}</div>
           </Space>
-          <Space>
+          {/* <Space>
             <DurationIcon />
             <div>Total Durasi Pengerjaan</div>
             <div className="font-semibold">
               {dataInitial.total_duration} min
             </div>
-          </Space>
+          </Space> */}
         </div>
         <Table
           dataSource={dataInitial.sub_category}
