@@ -149,7 +149,7 @@ const ContainerPengumuman: React.FC<HeaderProps> = ({ data: dataInitial }) => {
           <Row gutter={[24, 24]} className="mt-4">
             {searchFromValue(data, searchText).map((e, i) => (
               <Col key={i}>
-                <PengumumanCard />
+                <PengumumanCard data={e} />
               </Col>
             ))}
           </Row>

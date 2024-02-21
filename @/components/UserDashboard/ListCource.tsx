@@ -146,7 +146,8 @@ export const ListCource: React.FC<dataType> = ({
                       borderRadius: 100,
                       // maxWidth: 200,
                       textAlign: "center",
-                      right: 0,
+                      right: 20,
+                      top: 30,
                       width: "max-content",
                       color: e.status == "selesai" ? "#7A7A7A" : "#FFF",
                     }}

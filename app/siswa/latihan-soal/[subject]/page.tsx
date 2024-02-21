@@ -16,17 +16,9 @@ async function getData(id: string) {
 export default async function Page(props: { params: any }) {
   const data = await getData(props.params.subject);
 
-  const submenu = [
-    {
-      title: "Penilaian",
-    },
-    {
-      title: "Sub Menu",
-    },
-  ];
   return (
     <div>
-      <CustomHeader title="Sub Menu" isSubMenu={true} subMenu={submenu} />
+      <CustomHeader title="Latihan Soal" />
       <ContainerDetailLatihanSoal data={data} />
     </div>
   );
