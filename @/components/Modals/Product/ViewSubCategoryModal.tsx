@@ -109,8 +109,16 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                 </Button>
               </Space>
             ) : (
-              <Button type="default" onClick={onSubmit}>
-                Close
+              <Button
+                type="primary"
+                onClick={() => {
+                  // requestFullscreen();
+                  router.push(
+                    `${pathname}/preview-soal/${data.category_id}/${data.sub_id}`
+                  );
+                }}
+              >
+                Mulai Mengerjakan Soal
               </Button>
             )}
           </div>
@@ -187,7 +195,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                     textTransform: "capitalize",
                   }}
                 >
-                  {dataModal.end_date}
+                  {dataModalSubCategory.expired_date}
                 </span>
               </Typography.Text>
               <Space style={{}}>
@@ -197,7 +205,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                     fontSize: 14,
                   }}
                 >
-                  <FieldTimeOutlined /> {dataModal.total_duration} min
+                  <FieldTimeOutlined /> {dataModalSubCategory.duration} min
                 </Typography>
                 <Badge color="#3A9699" />
                 <Typography
@@ -205,7 +213,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                     fontSize: 14,
                   }}
                 >
-                  Total Pertanyaan : {dataModal.total_soal}
+                  Total Pertanyaan : {dataModalSubCategory.total_soal}
                 </Typography>
                 <Badge color="#3A9699" />
                 <Typography
@@ -280,9 +288,11 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                     color: "#7A7A7A",
                   }}
                 >
-                  {(parseFloat(dataModalSubCategory.total_soal_answer) /
-                    dataModalSubCategory.total_soal) *
-                    100}
+                  {Math.round(
+                    (parseFloat(dataModalSubCategory.total_soal_answer) /
+                      dataModalSubCategory.total_soal) *
+                      100
+                  )}
                   %
                 </div>
                 <Progress

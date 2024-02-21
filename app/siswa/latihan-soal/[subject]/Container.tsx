@@ -55,7 +55,6 @@ type HeaderProps = {
 const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
   data: dataInitial,
 }) => {
-  console.log(dataInitial, "datainitial");
   const [categoryColor, setCategoryColor] = React.useState<
     {
       name: string;

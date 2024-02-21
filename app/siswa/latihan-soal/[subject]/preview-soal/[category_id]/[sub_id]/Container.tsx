@@ -504,17 +504,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
   // });
 
   useEffect(() => {
+    setDetail(dataSoal);
+
     if (dataSoal.soal.length > 0) {
-      if (dataSoal.jumlah_akses > 0) {
-        Modal.warning({
-          title:
-            "Batas akses anda adalah 5 kali! anda telah merefresh sebanyak " +
-            dataSoal.jumlah_akses +
-            " kali!",
-          content: "Dilarang untuk merefresh halaman ini, demi kenyamanan.",
-          onOk: () => {},
-        });
-      } else if (dataSoal.jumlah_akses > 5) {
+      if (dataSoal.jumlah_akses > 5) {
         Modal.warning({
           title:
             "Batas akses anda adalah 5 kali! anda telah merefresh sebanyak " +
@@ -527,6 +520,15 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
               "/siswa/latihan-soal/" + detailSoal.product_id
             );
           },
+        });
+      } else if (dataSoal.jumlah_akses > 0) {
+        Modal.warning({
+          title:
+            "Batas akses anda adalah 5 kali! anda telah merefresh sebanyak " +
+            dataSoal.jumlah_akses +
+            " kali!",
+          content: "Dilarang untuk merefresh halaman ini, demi kenyamanan.",
+          onOk: () => {},
         });
       } else {
         Modal.warning({
@@ -545,7 +547,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       // setSoal(dataSoal.soal);
       setNo(dataSoal.soal[0].no);
       setSoalNow(dataSoal.soal[0]);
-      setDetail(dataSoal);
+
       if (dataSoal.soal[0].type == "pilihan") {
         setSelectedKey(dataSoal.soal[0]?.jawaban_user?.key || "");
         setEssayAnswer("");
