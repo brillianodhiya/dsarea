@@ -188,13 +188,13 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                   ? {
                       display: collapsed ? "none" : undefined,
                       width: 500,
-                      zIndex: 500,
+                      zIndex: 80,
                       // position: collapsed ? undefined : "absolute",
                     }
                   : {
                       width: 500,
                       display: isFullscreen ? "none" : undefined,
-                      zIndex: 500,
+                      zIndex: 80,
                     }
               }
             >
@@ -256,7 +256,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                   position: "absolute",
                   backgroundColor: "#EBF5F5",
                   top: screens.sm ? 0 : 65,
-                  zIndex: 700,
+                  zIndex: 81,
                 }}
               />
               <Content
