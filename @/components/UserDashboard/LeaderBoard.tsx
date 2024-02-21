@@ -1,37 +1,47 @@
-import { List, Select, Space, Typography } from "antd";
+import { List, Select, SelectProps, Space, Typography } from "antd";
 import React from "react";
 import Image from "next/image";
 import { sensorEmail } from "@dsarea/@/lib/utils";
 interface DataType {
   data: any;
   isLoading: boolean;
+  dataProduct: any;
+  productId: number;
+  setProductId: (val: number) => void;
 }
 
-export const LeaderBoard: React.FC<DataType> = ({ data, isLoading }) => {
+export const LeaderBoard: React.FC<DataType> = ({
+  data,
+  isLoading,
+  dataProduct,
+  productId,
+  setProductId,
+}) => {
   const checkRank = (rank: number) => {
     return data?.all?.some((val: { rank: number }) => val?.rank === rank);
   };
 
   const isRankExist = checkRank(data?.my_rank?.[0]?.rank);
-
-  console.log(isRankExist, "isRankExist");
+  console.log(dataProduct[0].id);
 
   return (
     <div className="flex flex-col my-4 gap-4">
       <div className="font-semibold text-base">Pengumuman 10 terbaik</div>
       <Select
-        defaultValue="lucy"
+        value={productId}
         style={{
           width: "100%",
         }}
-        onChange={() => {}}
-        options={[
-          { value: "jack", label: "Jack" },
-          { value: "lucy", label: "Lucy" },
-          { value: "Yiminghe", label: "yiminghe" },
-          { value: "disabled", label: "Disabled", disabled: true },
-        ]}
-      />
+        onChange={(val: any) => {
+          setProductId(val);
+        }}
+      >
+        {dataProduct.map((item: any) => (
+          <Select.Option key={item.id} value={item.id}>
+            {item.nama_product}
+          </Select.Option>
+        ))}
+      </Select>
       <List
         loading={isLoading}
         header={
@@ -46,7 +56,8 @@ export const LeaderBoard: React.FC<DataType> = ({ data, isLoading }) => {
           </div>
         }
         footer={
-          !isRankExist && (
+          !isRankExist &&
+          data?.my_rank?.length > 0 && (
             <div
               style={{
                 display: "flex",

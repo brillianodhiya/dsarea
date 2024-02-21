@@ -18,7 +18,7 @@ export default async function Page() {
 
   return (
     <div>
-      <CustomHeader title="Pengumuman" />
+      <CustomHeader title="Product" />
       <div className="p-4">
         <ListProduct data={data} />
       </div>

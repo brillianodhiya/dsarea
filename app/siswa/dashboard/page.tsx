@@ -7,6 +7,7 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Col, Row } from "antd";
+import React from "react";
 
 export default function Page() {
   const { data: dataCarousel, isFetching: loadingCarousel } = useQuery({
@@ -43,11 +44,27 @@ export default function Page() {
       },
     ],
   });
+
+  const { data: dataProduct, isFetching: loadingProduct } = useQuery({
+    queryKey: ["type-pemenang"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/dashboard/list/product");
+      return res.data.data;
+    },
+    initialData: [
+      {
+        id: 0,
+      },
+    ],
+  });
+
+  const [productId, setProductId] = React.useState(dataProduct[0].id);
+
   const { data: dataPemenang, isFetching: loadingPemenang } = useQuery({
-    queryKey: ["list-pemenang"],
+    queryKey: ["list-pemenang", productId],
     queryFn: async () => {
       const res = await axiosClientInstance.get(
-        "api/dashboard/list/pemenang/14"
+        "/api/dashboard/list/pemenang/" + productId
       );
       return res.data.data;
     },
@@ -57,6 +74,10 @@ export default function Page() {
       },
     ],
   });
+
+  React.useEffect(() => {
+    setProductId(dataProduct[0].id);
+  }, [dataProduct]);
 
   return (
     <>
@@ -92,7 +113,13 @@ export default function Page() {
               },
             ]}
           />
-          <LeaderBoard data={dataPemenang} isLoading={loadingPemenang} />
+          <LeaderBoard
+            data={dataPemenang}
+            dataProduct={dataProduct}
+            isLoading={loadingPemenang}
+            setProductId={setProductId}
+            productId={productId}
+          />
         </Col>
       </Row>
     </>
