@@ -214,11 +214,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   ? {
                       display: collapsed ? "none" : undefined,
                       width: 500,
+                      zIndex: 500,
                       // position: collapsed ? undefined : "absolute",
                     }
                   : {
                       width: 500,
                       display: isFullscreen ? "none" : undefined,
+                      zIndex: 500,
                     }
               }
             >

@@ -2,7 +2,9 @@
 import { SearchOutlined } from "@ant-design/icons";
 import DropdownMenuAction from "@dsarea/@/components/Dropdown/DropdownMenu";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
+import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Input, Progress, Row, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
 import { Eye } from "lucide-react";
@@ -13,44 +15,15 @@ import React from "react";
 export default function Home() {
   const [searchText, setSearchText] = React.useState("");
 
-  const data = [
-    {
-      id: "1",
-      product: "Try Out",
-      tanggal: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 70,
-      soal: 99,
+  const { data, isFetching } = useQuery({
+    queryKey: ["penilaian"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(`/api/penilaian/list`);
+      return res.data.data;
     },
-    {
-      id: "2",
-      product: "SPSS",
-      tanggal: "Python Lengkap",
-      date: 32,
-      siswa: 90,
-      status: 100,
-      soal: 99,
-    },
-    {
-      id: "3",
-      product: "John",
-      tanggal: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 50,
-      soal: 99,
-    },
-    {
-      id: "4",
-      product: "John",
-      tanggal: "Brown",
-      date: 32,
-      siswa: 90,
-      status: 10,
-      soal: 99,
-    },
-  ];
+    initialData: [],
+  });
+
   const router = useRouter();
 
   return (
@@ -81,48 +54,53 @@ export default function Home() {
           scroll={{
             x: 1000,
           }}
+          loading={isFetching}
+          rowKey={(record: any) => record.id}
         >
           <Column
             title="Product"
-            dataIndex="product"
-            key="product"
+            dataIndex="nama_product"
+            key="nama_product"
             render={(text, record: any) => (
               <Typography className="!text-[#3A9699]">{text}</Typography>
             )}
             sorter={(a, b) => {
-              return a.product.localeCompare(b.product);
+              return a.nama_product.localeCompare(b.nama_product);
             }}
           />
           <Column
             title="Tanggal"
-            dataIndex="tanggal"
-            key="tanggal"
+            dataIndex="expired_date"
+            key="expired_date"
             render={(text, record) => (
-              <Typography>{moment().format("DD/MM/YYYY HH:mm")}</Typography>
+              <Typography>{moment(text).format("DD/MM/YYYY HH:mm")}</Typography>
             )}
             sorter={(a: any, b: any) =>
-              moment(a.tanggal_transaksi).unix() -
-              moment(b.tanggal_transaksi).unix()
+              moment(a.expired_date).unix() - moment(b.expired_date).unix()
             }
           />
           <Column
             title="Jml. Soal"
-            dataIndex="soal"
-            key="soal"
-            sorter={(a: any, b: any) => a.soal - b.soal}
+            dataIndex="total_soal"
+            key="total_soal"
+            sorter={(a: any, b: any) => a.total_soal - b.total_soal}
           />
           <Column
             title="Jml. Siswa"
-            dataIndex="siswa"
-            key="siswa"
-            sorter={(a: any, b: any) => a.siswa - b.siswa}
+            dataIndex="total_siswa"
+            key="total_siswa"
+            sorter={(a: any, b: any) => a.total_siswa - b.total_siswa}
           />
           <Column
             title="Status Penilaian"
-            dataIndex="status"
-            key="status"
-            render={(text, record) => <Progress percent={text} />}
-            sorter={(a: any, b: any) => a.status - b.status}
+            dataIndex="persentase_koreksi"
+            key="persentase_koreksi"
+            render={(text, record) => (
+              <Progress percent={Math.round(parseFloat(text))} />
+            )}
+            sorter={(a: any, b: any) =>
+              a.persentase_koreksi - b.persentase_koreksi
+            }
           />
           <Column
             title="Action"
@@ -139,7 +117,10 @@ export default function Home() {
                 ]}
                 onClick={() => {
                   router.push(
-                    "/penilaian/" + record.id + "?soal=" + record.product
+                    "/penilaian/" +
+                      record.product_id +
+                      "?soal=" +
+                      record.nama_product
                   );
                 }}
               />

@@ -2,6 +2,8 @@
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import { useQuery } from "@tanstack/react-query";
 import {
   Badge,
   Card,
@@ -15,15 +17,18 @@ import {
   Typography,
 } from "antd";
 import Button from "antd/lib/button";
+import dayjs from "dayjs";
 import { CalendarIcon } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 interface DataType {
   key: React.Key;
   name: string;
   score: string;
   status: string;
+  category: any[];
 }
 
 interface ExpandedDataType {
@@ -31,67 +36,60 @@ interface ExpandedDataType {
   name: string;
   score: string;
   status: string;
+  category: any[];
 }
 
 export default function Page(props: any) {
   const pahtname = usePathname();
-  console.log(pahtname);
   const subject = props.searchParams.soal ?? "-";
   const submenu = [
     {
       title: subject,
     },
   ];
-  // const data = [
-  //   {
-  //     key: "1",
-  //     product: "Try Out",
-  //     category: "Brown",
-  //     date: 32,
-  //     siswa: 90,
-  //     status: 70,
-  //     soal: 99,
-  //   },
-  //   {
-  //     key: "2",
-  //     product: "SPSS",
-  //     category: "Python Lengkap",
-  //     date: 32,
-  //     siswa: 90,
-  //     status: 100,
-  //     soal: 99,
-  //   },
-  //   {
-  //     key: "3",
-  //     product: "John",
-  //     category: "Brown",
-  //     date: 32,
-  //     siswa: 90,
-  //     status: 50,
-  //     soal: 99,
-  //   },
-  //   {
-  //     key: "4",
-  //     product: "John",
-  //     category: "Brown",
-  //     date: 32,
-  //     siswa: 90,
-  //     status: 10,
-  //     soal: 99,
-  //   },
-  // ];
+  const { data, isFetching } = useQuery({
+    queryKey: ["penilaian"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get(
+        `/api/penilaian/detail/${props.params.subject}`
+      );
+      return res.data.data;
+    },
+    initialData: [],
+  });
 
-  const expandedRowRender = () => {
+  const [isComplete, setIsComplete] = React.useState(false);
+
+  // cari apakah persentase_penilaian sudah tidak ada yang di bawah 100
+  React.useEffect(() => {
+    if (data.length > 0) {
+      const isComplete = data.every((e: any) => e.presentase_penilaian == 100);
+      setIsComplete(isComplete);
+    }
+  }, [data]);
+
+  const expandedRowRender = (record: any) => {
     const columns: TableColumnsType<ExpandedDataType> = [
-      { title: subject, dataIndex: "name", key: "name", width: "31%" },
-      { title: "Score", dataIndex: "score", key: "score", width: "41%" },
+      {
+        title: subject,
+        dataIndex: "category_title",
+        key: "category_title",
+        width: "31%",
+      },
+      {
+        title: "Score",
+        dataIndex: "category_score",
+        key: "category_score",
+        width: "41%",
+      },
       {
         title: "Status",
-        key: "status",
-        dataIndex: "status",
-        render: (text, record) => (
+        key: "category_presentase_penilaian",
+        dataIndex: "category_presentase_penilaian",
+        render: (text, record2: any) => (
           <div className="flex items-center">
-            <Progress percent={text} />
+            <Progress percent={Math.round(parseFloat(text))} />
+
             <Tag
               color="#EBF5F5"
               style={{
@@ -99,7 +97,7 @@ export default function Page(props: any) {
               }}
             >
               <Link
-                href={`${pahtname}/${record.id}?soal=${subject}&sub_category_id=${record.id}`}
+                href={`${pahtname}/${record2.sub_id}?soal=${subject}&sub_category_id=${record2.sub_id}&user_id=${record2.user_id}&category_id=${record2.category_id}`}
                 style={{
                   color: "#3A9699",
                 }}
@@ -112,20 +110,20 @@ export default function Page(props: any) {
       },
     ];
 
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        id: i.toString(),
-        name: "This is production name",
-        status: "90",
-        score: "80",
-      });
-    }
+    // const data = [];
+    // for (let i = 0; i < 3; ++i) {
+    //   data.push({
+    //     id: i.toString(),
+    //     name: "This is production name",
+    //     status: "90",
+    //     score: "80",
+    //   });
+    // }
     return (
       <Table
         size="small"
         columns={columns}
-        dataSource={data}
+        dataSource={record.category}
         pagination={false}
       />
     );
@@ -136,22 +134,13 @@ export default function Page(props: any) {
     { title: "Total Score", dataIndex: "score", key: "score", width: "40%" },
     {
       title: "status",
-      dataIndex: "status",
-      key: "status",
-      render: (text, record) => <Progress percent={text} />,
+      dataIndex: "presentase_penilaian",
+      key: "presentase_penilaian",
+      render: (text, record) => (
+        <Progress percent={Math.round(parseFloat(text))} />
+      ),
     },
   ];
-
-  const data2: DataType[] = [];
-  for (let i = 0; i < 3; ++i) {
-    data2.push({
-      key: i.toString(),
-      name: "Screen",
-      score: "80",
-      status: "100",
-    });
-  }
-  console.log(props.searchParams.soal);
 
   return (
     <div>
@@ -163,7 +152,7 @@ export default function Page(props: any) {
               <Typography.Text strong className="!text-xl">
                 Penilaian : {subject}
               </Typography.Text>
-              <Tag
+              {/* <Tag
                 color="#EBF5F5"
                 style={{
                   borderRadius: 100,
@@ -176,11 +165,16 @@ export default function Page(props: any) {
                 >
                   TKP SKD CPNS
                 </Typography>
-              </Tag>
+              </Tag> */}
             </Space>
           </Col>
           <Col>
-            <Typography>Expired at : Unlimited</Typography>
+            <Typography>
+              Expired at :{" "}
+              {data.length > 0
+                ? dayjs(data[0].expired_date).format("DD/MM/YYYY HH:mm:ss")
+                : ""}
+            </Typography>
             <div
               style={{
                 display: "flex",
@@ -189,63 +183,40 @@ export default function Page(props: any) {
                 alignItems: "center",
               }}
             >
-              <Space>
+              {/* <Space>
                 <TimeIcon />
                 <Typography.Text strong style={{ color: "#FDB022" }}>
                   90 min
                 </Typography.Text>
-              </Space>
+              </Space> */}
               <Space>
                 <CalendarIcon size={16} />
-                {moment().format("DD/MM/YYYY")}
+                {data.length > 0
+                  ? moment(data[0].start_date).format("DD/MM/YYYY")
+                  : ""}
               </Space>
               <Space>
                 <Badge color="#3A9699" />
-                Total Pertanyaan : 90
+                Total Pertanyaan : {data.length > 0 ? data[0].total_soal : 0}
               </Space>
             </div>
           </Col>
           <Col>
-            <Button type="primary" disabled style={{ borderWidth: 0 }}>
-              Publish Hasil Penilaian
-            </Button>
-            <Typography>9 dari 79 siswa telah di nilai</Typography>
-          </Col>
-        </Row>
-        {/* <Table
-          size="middle"
-          dataSource={data}
-          pagination={{
-            hideOnSinglePage: true,
-          }}
-        >
-          <Column
-            title="Nama Siswa"
-            dataIndex="category"
-            key="category"
-            render={(text, record: any) => (
-              <Button
-                type="link"
-                onClick={() => router.push(`${pahtname}/user`)}
-              >
-                {text}
+            {isComplete ? (
+              <Button type="primary" style={{ borderWidth: 0 }}>
+                Publish Hasil Penilaian
+              </Button>
+            ) : (
+              <Button disabled style={{ borderWidth: 0 }}>
+                Publish Hasil Penilaian
               </Button>
             )}
-          />
-          <Column title="Total Score" dataIndex="score" key="score" />
-          <Column
-            title="Status Penilaian"
-            dataIndex="status"
-            key="status"
-            render={(text, record) => <Progress percent={text} />}
-          />
-          <Column
-            title="Action"
-            dataIndex="action"
-            key="action"
-            render={(text, record) => <DropdownMenu />}
-          />
-        </Table> */}
+
+            <Typography>
+              {data.length > 0 ? data[0].jumlah_penilaian : 0}i
+            </Typography>
+          </Col>
+        </Row>
         <Table
           size="middle"
           columns={columns}
@@ -253,15 +224,25 @@ export default function Page(props: any) {
             expandedRowRender,
             expandIcon: ({ expanded, onExpand, record }) =>
               expanded ? (
-                <DownOutlined onClick={(e) => onExpand(record, e)} />
+                <DownOutlined
+                  onClick={(e) => {
+                    onExpand(record, e);
+                  }}
+                />
               ) : (
-                <RightOutlined onClick={(e) => onExpand(record, e)} />
+                <RightOutlined
+                  onClick={(e) => {
+                    console.log(record, "record");
+                    onExpand(record, e);
+                  }}
+                />
               ),
           }}
-          dataSource={data2}
+          dataSource={data}
           scroll={{
             x: 1000,
           }}
+          loading={isFetching}
         />
       </Card>
     </div>
