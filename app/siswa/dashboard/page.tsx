@@ -58,7 +58,7 @@ export default function Page() {
     ],
   });
 
-  const [productId, setProductId] = React.useState(dataProduct[0].id);
+  const [productId, setProductId] = React.useState(dataProduct[0]?.id);
 
   const { data: dataPemenang, isFetching: loadingPemenang } = useQuery({
     queryKey: ["list-pemenang", productId],
@@ -76,8 +76,12 @@ export default function Page() {
   });
 
   React.useEffect(() => {
-    setProductId(dataProduct[0].id);
+    if (dataProduct) {
+      setProductId(dataProduct[0]?.id);
+    }
   }, [dataProduct]);
+
+  console.log(dataProduct);
 
   return (
     <>

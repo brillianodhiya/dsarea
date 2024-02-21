@@ -22,7 +22,6 @@ export const LeaderBoard: React.FC<DataType> = ({
   };
 
   const isRankExist = checkRank(data?.my_rank?.[0]?.rank);
-  console.log(dataProduct[0].id);
 
   return (
     <div className="flex flex-col my-4 gap-4">
@@ -35,6 +34,8 @@ export const LeaderBoard: React.FC<DataType> = ({
         onChange={(val: any) => {
           setProductId(val);
         }}
+        placeholder="Pilih Product"
+        disabled={dataProduct.length === 0}
       >
         {dataProduct.map((item: any) => (
           <Select.Option key={item.id} value={item.id}>
