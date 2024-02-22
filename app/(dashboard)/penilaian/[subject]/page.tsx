@@ -234,22 +234,28 @@ export default function Page(props: any) {
             </div>
           </Col>
           <Col>
-            {isComplete ? (
-              <Button
-                type="primary"
-                style={{ borderWidth: 0 }}
-                onClick={handlePublish}
-              >
-                Publish Hasil Penilaian
-              </Button>
-            ) : (
-              <Button disabled style={{ borderWidth: 0 }}>
-                Publish Hasil Penilaian
-              </Button>
-            )}
+            {data.length > 0 ? (
+              !data[0].is_publish ? (
+                <>
+                  {isComplete ? (
+                    <Button
+                      type="primary"
+                      style={{ borderWidth: 0 }}
+                      onClick={handlePublish}
+                    >
+                      Publish Hasil Penilaian
+                    </Button>
+                  ) : (
+                    <Button disabled style={{ borderWidth: 0 }}>
+                      Publish Hasil Penilaian
+                    </Button>
+                  )}
+                </>
+              ) : null
+            ) : null}
 
             <Typography>
-              {data.length > 0 ? data[0].jumlah_penilaian : 0}i
+              {data.length > 0 ? data[0].jumlah_penilaian : 0}
             </Typography>
           </Col>
         </Row>

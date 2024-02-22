@@ -5,7 +5,7 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Input, Progress, Row, Table, Typography } from "antd";
+import { Card, Col, Input, Progress, Row, Table, Tag, Typography } from "antd";
 import Column from "antd/lib/table/Column";
 import { Eye } from "lucide-react";
 import moment from "moment";
@@ -101,6 +101,16 @@ export default function Home() {
             sorter={(a: any, b: any) =>
               a.persentase_koreksi - b.persentase_koreksi
             }
+          />
+          <Column
+            title="Status"
+            dataIndex="is_publish"
+            key="is_publish"
+            render={(text, record) => (
+              <Tag color={text ? "green-inverse" : "red-inverse"}>
+                {text ? "Published" : "Unpublished"}
+              </Tag>
+            )}
           />
           <Column
             title="Action"
