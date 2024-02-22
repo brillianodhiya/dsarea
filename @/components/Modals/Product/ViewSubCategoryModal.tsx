@@ -365,7 +365,7 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                       <path
                         d="M4.3335 2V14"
                         stroke="#6A6A6A"
-                        stroke-linejoin="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                     Dikerjakan
@@ -402,8 +402,8 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                       <path
                         d="M10 3.00004L14 3.00004M10 3.00004C10 2.53322 11.3295 1.66106 11.6667 1.33337M10 3.00004C10 3.46686 11.3295 4.33902 11.6667 4.66671"
                         stroke="#6A6A6A"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                     Dilewati
@@ -437,43 +437,43 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                         <path
                           d="M1.3335 14.6667H8.66683C11.9805 14.6667 14.6668 11.9805 14.6668 8.66675C14.6668 5.35304 11.9805 2.66675 8.66683 2.66675C5.57846 2.66675 2.99846 5.00011 2.66683 8.00008"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
+                          strokeLinecap="round"
                         />
                         <path
                           d="M12.3337 3.66667L13.0003 3M3.66699 3L4.33366 3.66667"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                         <path
                           d="M11.0002 6L9.0406 7.95956M9.0406 7.95956C8.85964 7.7786 8.60964 7.66667 8.3335 7.66667C7.78121 7.66667 7.3335 8.11438 7.3335 8.66667C7.3335 9.21895 7.78121 9.66667 8.3335 9.66667C8.88578 9.66667 9.3335 9.21895 9.3335 8.66667C9.3335 8.39052 9.22157 8.14052 9.0406 7.95956Z"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
+                          strokeLinecap="round"
                         />
                         <path
                           d="M8.3335 2.33337V1.33337"
                           stroke="#6A6A6A"
                           stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                         <path
                           d="M7 1.33337H9.66667"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                         <path
                           d="M1.3335 10H3.3335"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                         <path
                           d="M1.3335 12.6667L4.66683 12.6667"
                           stroke="#6A6A6A"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       </g>
                       <defs>

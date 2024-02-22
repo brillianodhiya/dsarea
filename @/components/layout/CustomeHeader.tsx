@@ -6,7 +6,10 @@ import {
   Button,
   Grid,
   Layout,
+  List,
+  Popover,
   Typography,
+  message,
 } from "antd";
 import { Bell } from "lucide-react";
 import DropdownLogout from "../Dropdown/DropdownLogout";
@@ -14,6 +17,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
+import { useQuery } from "@tanstack/react-query";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
+import Link from "next/link";
 
 type HeaderProps = {
   title: string;
@@ -56,6 +62,97 @@ const CustomHeader: React.FC<HeaderProps> = ({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
+
+  const { data: dataCountNotif } = useQuery({
+    queryKey: ["list-notif"],
+    queryFn: async () => {
+      const res = await axiosClientInstance.get("/api/notif/jumlah/unread");
+      return res.data.data;
+    },
+    initialData: 0,
+  });
+
+  const [loadingNotif, setLoadingNotif] = React.useState(false);
+  const [listNotif, setListNotif] = React.useState([]);
+
+  const handleOpenNotif = async () => {
+    try {
+      setLoadingNotif(true);
+      const res = await axiosClientInstance.get("/api/notif/list");
+      setLoadingNotif(false);
+
+      setListNotif(res.data.data);
+    } catch (error) {
+      message.error(
+        "Terjadi kesalahan saat mengambil data notifikasi, silahkan coba lagi"
+      );
+    }
+  };
+
+  const content = (
+    <List
+      style={{
+        width: "200px",
+      }}
+      itemLayout="horizontal"
+      dataSource={listNotif}
+      renderItem={(item: any) => {
+        let url = "";
+
+        switch (item.title) {
+          case "Pengumuman Nilai":
+            url = "/siswa/pengumuman/" + item.product_id;
+            break;
+
+          case "Pembayaran Tertunda":
+            url = item.url ?? "";
+            break;
+
+          case "Pembayaran Berhasil":
+            url = "/siswa/latihan-soal/" + item.product_id;
+            break;
+
+          default:
+            url = item.url ?? "";
+            break;
+        }
+
+        return (
+          <List.Item>
+            <List.Item.Meta
+              title={
+                <Link href={url}>
+                  {item.is_read ? (
+                    item.title
+                  ) : (
+                    <Badge color="red" text={item.title} />
+                  )}
+                </Link>
+              }
+              description={
+                <div
+                  style={{
+                    fontSize: "12px",
+                  }}
+                >
+                  {item.body} <br />{" "}
+                  <span
+                    style={{
+                      marginTop: "4px",
+                      color: "#A3A3A3",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {item.tanggal}
+                  </span>{" "}
+                </div>
+              }
+            />
+          </List.Item>
+        );
+      }}
+    />
+  );
 
   return (
     <Header
@@ -125,9 +222,26 @@ const CustomHeader: React.FC<HeaderProps> = ({
           gap: screens.md ? 24 : 16,
         }}
       >
-        <Badge count={100}>
-          <Bell />
+        <Badge count={dataCountNotif}>
+          <Popover
+            placement="bottomRight"
+            content={content}
+            title="Notification"
+            trigger="click"
+            onOpenChange={(visible) => {
+              if (visible) {
+                handleOpenNotif();
+              }
+            }}
+          >
+            <Bell
+              style={{
+                cursor: "pointer",
+              }}
+            />
+          </Popover>
         </Badge>
+
         <Avatar
           style={{ backgroundColor: "#D9D9D9", verticalAlign: "middle" }}
           size="large"

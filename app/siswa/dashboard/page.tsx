@@ -81,8 +81,6 @@ export default function Page() {
     }
   }, [dataProduct]);
 
-  console.log(dataProduct);
-
   return (
     <>
       <CustomHeader title="Dashboard" />
