@@ -6,6 +6,7 @@ import NoteIcon from "@dsarea/@/components/icons/NoteIcon";
 import SwipeIcon from "@dsarea/@/components/icons/SwipeIcon";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
+import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 import { pickRandomItem } from "@dsarea/@/lib/utils";
 import {
   Badge,
@@ -21,7 +22,9 @@ import {
   Typography,
 } from "antd";
 import moment from "moment";
-import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useContext } from "react";
 const { Column } = Table;
 
 interface DataType {
@@ -37,6 +40,12 @@ const ContainerDetailPengumuman: React.FC<DataType> = ({
       color: string;
     }[]
   >([]);
+
+  const pathname = usePathname();
+
+  const { data } = useContext(ProfileContext);
+
+  console.log(data);
 
   React.useEffect(() => {
     const arr: React.SetStateAction<{ name: string; color: string }[]> = [];
@@ -179,14 +188,14 @@ const ContainerDetailPengumuman: React.FC<DataType> = ({
             dataIndex="status"
             key="status"
             render={(text, record: any) => (
-              <Button
-                type="link"
+              <Link
+                href={`${pathname}/${record.sub_id}?soal=${initialData?.nama_product}&sub_category_id=${record.sub_id}&user_id=${data.id}&category_id=${record.category_id}`}
                 style={{
                   color: "#3A9699",
                 }}
               >
                 Lihat Detail
-              </Button>
+              </Link>
             )}
           />
         </Table>
