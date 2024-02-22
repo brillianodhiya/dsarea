@@ -572,7 +572,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       //   router.push("/soal/paket-soal");
       // }
     }
-  }, []);
+  }, [dataSoal]);
 
   const content = (
     <div
