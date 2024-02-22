@@ -154,8 +154,7 @@ const ViewProductModal: React.FC<ModalProps> = ({
                 >
                   {data.nama_product}
                 </Typography.Text>
-                {dataModal.expired_at == "undefined" ||
-                dataModal.expired_at == "unlimeted" ? (
+                {dataModal.status == "active" ? (
                   <Tag color="#32D583">Active</Tag>
                 ) : dataModal.expired_at ? (
                   <Tag
@@ -164,18 +163,9 @@ const ViewProductModal: React.FC<ModalProps> = ({
                       textTransform: "capitalize",
                     }}
                   >
-                    {getStatus(dataModal.expired_at)}
+                    Non Active
                   </Tag>
-                ) : (
-                  <Tag
-                    color="#f50"
-                    style={{
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    {getStatus(dataModal.expired_at)}
-                  </Tag>
-                )}
+                ) : null}
               </Space>
               <Typography.Text
                 style={{

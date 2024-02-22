@@ -1,5 +1,9 @@
 "use client";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  ExclamationCircleFilled,
+  RightOutlined,
+} from "@ant-design/icons";
 import TimeIcon from "@dsarea/@/components/icons/TimeIcon";
 import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
@@ -8,6 +12,7 @@ import {
   Badge,
   Card,
   Col,
+  Modal,
   Progress,
   Row,
   Space,
@@ -23,6 +28,8 @@ import moment from "moment";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+
+const { confirm } = Modal;
 interface DataType {
   key: React.Key;
   name: string;
@@ -97,6 +104,7 @@ export default function Page(props: any) {
               }}
             >
               <Link
+                target="_blank"
                 href={`${pahtname}/${record2.sub_id}?soal=${subject}&sub_category_id=${record2.sub_id}&user_id=${record2.user_id}&category_id=${record2.category_id}`}
                 style={{
                   color: "#3A9699",
@@ -141,6 +149,30 @@ export default function Page(props: any) {
       ),
     },
   ];
+
+  const handlePublish = () => {
+    confirm({
+      title: "Apakah anda yakin ingin publish nilai produk ini?",
+      icon: <ExclamationCircleFilled />,
+      // content: 'Some descriptions',
+      onOk: async () => {
+        const res = await axiosClientInstance.post(
+          `/api/penilaian/publish/${props.params.subject}`
+        );
+        if (res.status == 200) {
+          Modal.success({
+            content: res.data.message,
+            onOk: () => {
+              history.back();
+            },
+          });
+        }
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
 
   return (
     <div>
@@ -203,7 +235,11 @@ export default function Page(props: any) {
           </Col>
           <Col>
             {isComplete ? (
-              <Button type="primary" style={{ borderWidth: 0 }}>
+              <Button
+                type="primary"
+                style={{ borderWidth: 0 }}
+                onClick={handlePublish}
+              >
                 Publish Hasil Penilaian
               </Button>
             ) : (
@@ -232,12 +268,12 @@ export default function Page(props: any) {
               ) : (
                 <RightOutlined
                   onClick={(e) => {
-                    console.log(record, "record");
                     onExpand(record, e);
                   }}
                 />
               ),
           }}
+          rowKey={(record: any) => record.user_id}
           dataSource={data}
           scroll={{
             x: 1000,

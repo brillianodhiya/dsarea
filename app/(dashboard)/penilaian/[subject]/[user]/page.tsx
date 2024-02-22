@@ -557,7 +557,7 @@ export default function Page(props: any) {
             }}
           >
             <Space>
-              <Button>Cancel</Button>
+              <Button onClick={() => window.close()}>Close</Button>
               <Button type="primary" onClick={() => handleSendSkor()}>
                 Save
               </Button>
