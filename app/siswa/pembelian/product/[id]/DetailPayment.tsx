@@ -59,7 +59,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
     try {
       setLoading(true);
       const res = await axiosClientInstance.get(
-        `/api/voucher/user/check/${code}`
+        `/api/voucher/user/check/${code}/${dataProudct?.data[0]?.id}`
       );
       setLoading(false);
       console.log(res.data.data, "data");
@@ -109,7 +109,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
                       color: "#7A7A7A",
                     }}
                   >
-                    Nama
+                    Nama asd
                   </div>
                   <div className="font-semibold">
                     {dataProudct.data[0].nama_product}
