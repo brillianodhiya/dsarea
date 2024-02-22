@@ -10,6 +10,7 @@ import { Card, Col, Input, Row, Space, Table, Typography } from "antd";
 import SkeletonInput from "antd/es/skeleton/Input";
 import Column from "antd/lib/table/Column";
 import moment from "moment";
+import Link from "next/link";
 import React from "react";
 
 export default function Page() {
@@ -64,8 +65,16 @@ export default function Page() {
             title="No. Transaction"
             dataIndex="invoice"
             key="invoice"
-            render={(text) =>
-              isFetching ? <SkeletonInput active size={"small"} /> : text
+            render={(text, record) =>
+              isFetching ? (
+                <SkeletonInput active size={"small"} />
+              ) : record.status == "pending" ? (
+                <Link target="_blank" href={record.link}>
+                  {text}
+                </Link>
+              ) : (
+                text
+              )
             }
             // fixed="left"
             // width={140}
