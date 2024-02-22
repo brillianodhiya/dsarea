@@ -407,17 +407,17 @@ export default function Page(props: any) {
 
   const submenu = [
     {
-      title: "Penilaian",
+      title: "Pengumaman",
     },
     {
-      title: "Sub Menu",
+      title: "Penilaian",
     },
   ];
 
   return (
     <div>
       <LoadingNonFullscreen spinning={isFetching || loading}>
-        <CustomHeader title="Sub Menu" isSubMenu={true} subMenu={submenu} />
+        <CustomHeader title={product_name} isSubMenu={true} subMenu={submenu} />
         <Card className="!m-6">
           <Row className="mb-4" justify={"space-between"} wrap>
             <Col>

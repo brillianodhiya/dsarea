@@ -66,7 +66,7 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
 
   React.useEffect(() => {
     const arr: React.SetStateAction<{ name: string; color: string }[]> = [];
-    dataInitial.category_name.map((val) => {
+    dataInitial.category_name?.map((val) => {
       const keys = {
         name: val,
         color: pickRandomItem(),
