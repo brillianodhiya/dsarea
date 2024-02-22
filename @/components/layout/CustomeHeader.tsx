@@ -91,6 +91,8 @@ const CustomHeader: React.FC<HeaderProps> = ({
 
   const content = (
     <List
+      loading={loadingNotif}
+      loadMore={true}
       style={{
         width: "200px",
       }}
