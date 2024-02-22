@@ -109,16 +109,8 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                 </Button>
               </Space>
             ) : (
-              <Button
-                type="primary"
-                onClick={() => {
-                  // requestFullscreen();
-                  router.push(
-                    `${pathname}/preview-soal/${data.category_id}/${data.sub_id}`
-                  );
-                }}
-              >
-                Mulai Mengerjakan Soal
+              <Button type="default" onClick={onSubmit}>
+                Tutup
               </Button>
             )}
           </div>
