@@ -1,5 +1,6 @@
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
 import PreviewSoal from "./Container";
+import dayjs from "dayjs";
 
 async function getData(
   sub_id: string,
@@ -11,6 +12,8 @@ async function getData(
       const res = await axiosInstance.get(
         `/api/users/siswa/soal/sub/product/owned/${product_id}/${category_id}/${sub_id}`
       );
+
+      // res.data.data.end_duration = dayjs(res.data.data.end_duration).format()
 
       return res.data.data;
     } catch (error) {

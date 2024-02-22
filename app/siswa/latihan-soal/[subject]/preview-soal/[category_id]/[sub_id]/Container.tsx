@@ -885,12 +885,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                     }}
                   > */}
                     <Countdown
-                      value={dayjs(
-                        dayjs(detail.end_duration)
-                        // .add(6, "day")
-                        // .subtract(13, "hour")
-                        // .subtract(17, "minute")
-                      ).format()}
+                      value={detail.end_duration}
                       valueStyle={{
                         fontSize: 14,
                         fontWeight: 600,
