@@ -95,6 +95,8 @@ const CustomHeader: React.FC<HeaderProps> = ({
       loadMore={true}
       style={{
         width: "200px",
+        maxHeight: "300px",
+        overflowY: "auto",
       }}
       itemLayout="horizontal"
       dataSource={listNotif}
