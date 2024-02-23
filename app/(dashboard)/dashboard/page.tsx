@@ -48,7 +48,7 @@ export default function Page() {
   const { data: dataTransaction, isFetching: loadingTransaction } = useQuery({
     queryKey: ["recent-transaction"],
     queryFn: async () => {
-      const res = await axiosClientInstance.get(`api/transaksi/list?limit=1`);
+      const res = await axiosClientInstance.get(`api/transaksi/list?limit=10`);
       return res.data.data;
     },
     initialData: [
