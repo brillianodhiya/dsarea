@@ -9,8 +9,6 @@ import {
   Badge,
   Card,
   Col,
-  Collapse,
-  CollapseProps,
   InputNumber,
   Row,
   Space,
@@ -21,7 +19,6 @@ import {
   message,
 } from "antd";
 import moment from "moment";
-import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface Question {
@@ -40,9 +37,10 @@ interface Question {
 interface QuestionGroup {
   items: Question[];
   setSoal: React.Dispatch<React.SetStateAction<Question[]>>;
+  type: string;
 }
 
-const Accordion: React.FC<QuestionGroup> = ({ items, setSoal }) => {
+const Accordion: React.FC<QuestionGroup> = ({ items, setSoal, type = "" }) => {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
 
   const handleClick = (index: number) => {
@@ -192,6 +190,7 @@ const Accordion: React.FC<QuestionGroup> = ({ items, setSoal }) => {
                   <div className="flex flex-col gap-2">
                     <span className="text-xs text-[#7A7A7A]">Score</span>
                     <InputNumber
+                      disabled={type == "view" ? true : false}
                       min={0}
                       placeholder="Score"
                       onChange={(v) => {
@@ -387,6 +386,7 @@ export default function Page(props: any) {
   const user_id = props.searchParams.user_id ?? "-";
   const category_id = props.searchParams.category_id ?? "-";
   const product_name = props.searchParams.soal ?? "-";
+  const type = props.searchParams.t ?? "-";
   const [loading, setLoading] = React.useState(false);
   const queryClient = useQueryClient();
 
@@ -428,6 +428,7 @@ export default function Page(props: any) {
         ],
       });
       message.success(res.data.message);
+      window.close();
     } catch (error) {
       message.error("Gagal mengirim skor");
     }
@@ -545,7 +546,7 @@ export default function Page(props: any) {
           expandIconPosition="right"
         /> */}
 
-          <Accordion items={soal} setSoal={setSoal} />
+          <Accordion items={soal} setSoal={setSoal} type={type} />
 
           {/* button cancel dan save floating rigth dengan fixed div */}
           <div
@@ -558,9 +559,15 @@ export default function Page(props: any) {
           >
             <Space>
               <Button onClick={() => window.close()}>Close</Button>
-              <Button type="primary" onClick={() => handleSendSkor()}>
-                Save
-              </Button>
+              {type !== "view" ? (
+                <Button
+                  type="primary"
+                  onClick={() => handleSendSkor()}
+                  disabled={type == "view" ? true : false}
+                >
+                  Save
+                </Button>
+              ) : null}
             </Space>
           </div>
         </Card>

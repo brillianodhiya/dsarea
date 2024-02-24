@@ -103,15 +103,29 @@ export default function Page(props: any) {
                 borderRadius: 100,
               }}
             >
-              <Link
-                target="_blank"
-                href={`${pahtname}/${record2.sub_id}?soal=${subject}&sub_category_id=${record2.sub_id}&user_id=${record2.user_id}&category_id=${record2.category_id}`}
-                style={{
-                  color: "#3A9699",
-                }}
-              >
-                Beri Nilai
-              </Link>
+              {data.length > 0 ? (
+                !data[0].is_publish ? (
+                  <Link
+                    target="_blank"
+                    href={`${pahtname}/${record2.sub_id}?soal=${subject}&sub_category_id=${record2.sub_id}&user_id=${record2.user_id}&category_id=${record2.category_id}`}
+                    style={{
+                      color: "#3A9699",
+                    }}
+                  >
+                    Beri Nilai
+                  </Link>
+                ) : (
+                  <Link
+                    target="_blank"
+                    href={`${pahtname}/${record2.sub_id}?soal=${subject}&sub_category_id=${record2.sub_id}&user_id=${record2.user_id}&category_id=${record2.category_id}&t=view`}
+                    style={{
+                      color: "#3A9699",
+                    }}
+                  >
+                    Lihat Nilai
+                  </Link>
+                )
+              ) : null}
             </Tag>
           </div>
         ),

@@ -5,7 +5,18 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Input, Progress, Row, Table, Tag, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Input,
+  Progress,
+  Row,
+  Space,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import Column from "antd/lib/table/Column";
 import { Eye } from "lucide-react";
 import moment from "moment";
@@ -116,15 +127,45 @@ export default function Home() {
             title="Action"
             dataIndex="action"
             key="action"
+            // render={(text, record: any) => (
+            //   <DropdownMenuAction
+            //     itemLists={[
+            //       {
+            //         label: "View",
+            //         key: "1",
+            //         icon: <Eye size={17} />,
+            //       },
+            //     ]}
+            //     onClick={() => {
+            //       router.push(
+            //         "/penilaian/" +
+            //           record.product_id +
+            //           "?soal=" +
+            //           record.nama_product
+            //       );
+            //     }}
+            //   />
+            // )}
             render={(text, record: any) => (
-              <DropdownMenuAction
-                itemLists={[
-                  {
-                    label: "View",
-                    key: "1",
-                    icon: <Eye size={17} />,
-                  },
-                ]}
+              // <DropdownMenuAction
+              //   itemLists={[
+              //     {
+              //       label: "View",
+              //       key: "1",
+              //       icon: <Eye size={17} />,
+              //     },
+              //   ]}
+              //   onClick={() => {
+              //     router.push(
+              //       "/penilaian/" +
+              //         record.product_id +
+              //         "?soal=" +
+              //         record.nama_product
+              //     );
+              //   }}
+              // />
+              <Button
+                // type="primary"
                 onClick={() => {
                   router.push(
                     "/penilaian/" +
@@ -133,7 +174,12 @@ export default function Home() {
                       record.nama_product
                   );
                 }}
-              />
+              >
+                <Space>
+                  <Eye size={17} />
+                  <Typography>View</Typography>
+                </Space>
+              </Button>
             )}
           />
         </Table>
