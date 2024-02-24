@@ -12,6 +12,7 @@ import {
   Button,
   Card,
   Col,
+  Modal,
   Row,
   Space,
   Table,
@@ -19,6 +20,7 @@ import {
   Typography,
 } from "antd";
 import moment from "moment";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 const { Column } = Table;
@@ -75,6 +77,27 @@ const ContainerDetailLatihanSoal: React.FC<HeaderProps> = ({
     });
     setCategoryColor(arr);
   }, [dataInitial]);
+
+  React.useEffect(() => {
+    Modal.info({
+      title: "Gunakan Google Chrome untuk pengalaman lebih baik.",
+
+      icon: (
+        <Image
+          src={"/google-chrome-logo-1617581309.png"}
+          width={40}
+          height={40}
+          alt="google-chrome"
+          style={{
+            margin: "0 8px",
+          }}
+        />
+      ),
+      onOk() {
+        Modal.destroyAll();
+      },
+    });
+  }, []);
 
   return (
     <>
