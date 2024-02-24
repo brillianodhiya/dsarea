@@ -31,10 +31,12 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
   const [discountId, setDiscountId] = useState(null);
   const router = useRouter();
   const screens = useBreakpoint();
+  const [loading, setLoadingSubmit] = useState(false);
 
   console.log(dataProudct.data[0].image);
 
   const onFinish = async (values: any) => {
+    setLoading(true);
     const body = {
       voucher_id: discountId,
       product_id: dataProudct.data[0].id,
@@ -47,8 +49,10 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
       );
       // open external link
       router.replace(res?.data?.data?.mayar_link);
+      setLoadingSubmit(false);
       // console.log(res.data.data.mayar_link, "res");
     } catch (error: any) {
+      setLoadingSubmit(false);
       message.error(error?.response?.data?.message);
     }
     // console.log(body, "body");
@@ -303,7 +307,13 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
         >
           Batalkan
         </Button>
-        <Button type="primary" htmlType="submit" style={{ marginTop: 10 }}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          style={{ marginTop: 10 }}
+          loading={loading}
+          disabled={loading}
+        >
           Lanjutkan Pembayaran
         </Button>
       </Form.Item>

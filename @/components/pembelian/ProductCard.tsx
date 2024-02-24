@@ -26,6 +26,8 @@ interface dataType {
   total_soal: number;
   total_pembelian: number;
   is_buying: boolean;
+  payment_status: string;
+  mayar_link: string;
   category: {
     id: number;
     product_id: number;
@@ -104,16 +106,30 @@ export const ProductCard: React.FC<dataType> = (props) => {
             Lihat Detail
           </Button>
 
-          <Button
-            style={{
-              width: "100%",
-            }}
-            type={props.is_buying ? "default" : "primary"}
-            disabled={props.is_buying}
-            onClick={() => router.push("/siswa/pembelian/product/" + props.id)}
-          >
-            Beli Sekarang
-          </Button>
+          {props.is_buying && props.payment_status == "pending" ? (
+            <Button
+              style={{
+                width: "100%",
+              }}
+              type={"primary"}
+              onClick={() => router.push(props.mayar_link)}
+            >
+              Bayar
+            </Button>
+          ) : (
+            <Button
+              style={{
+                width: "100%",
+              }}
+              type={props.is_buying ? "default" : "primary"}
+              disabled={props.is_buying}
+              onClick={() =>
+                router.push("/siswa/pembelian/product/" + props.id)
+              }
+            >
+              Beli Sekarang
+            </Button>
+          )}
         </div>
       </Card>
     </>
