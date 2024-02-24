@@ -77,6 +77,8 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
     }
   };
 
+  console.log(dataProudct.data[0].harga);
+
   return (
     <Form form={form} name="payment" onFinish={onFinish}>
       <Row className="p-6" gutter={[24, 24]}>
@@ -158,6 +160,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
                       }}
                     />
                     <Button
+                      disabled={dataProudct.data[0].harga <= 0 ? true : false}
                       type="primary"
                       loading={loadingData}
                       onClick={() =>
