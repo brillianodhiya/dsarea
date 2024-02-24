@@ -73,7 +73,7 @@ export default function Page() {
                     tanggal_transaksi: val.tanggal_transaksi,
                     tanggal_pembayaran: val.tanggal_pembayaran,
                     voucher: val.voucher,
-                    discount: val.discount,
+                    discount: val.ds_voucher ? val.ds_voucher.diskon + "%" : 0,
                     harga: val.harga,
                     total_pembayaran: val.total_pembayaran,
                   };
@@ -241,11 +241,11 @@ export default function Page() {
             title="Diskon"
             dataIndex="discount"
             key="discount"
-            render={(text) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
-              ) : text > 0 ? (
-                `${text}%`
+              ) : record.ds_voucher != null ? (
+                `${record.ds_voucher.diskon}%`
               ) : (
                 "-"
               )

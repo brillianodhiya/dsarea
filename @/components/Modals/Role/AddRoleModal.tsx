@@ -13,6 +13,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent";
+import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 
 interface Values {
   title: string;
@@ -55,6 +56,7 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
 
   const [selectedValues, setSelectedValues] = React.useState<ItemType[]>([]);
   // console.log(selectedValues);
+  const [searchText, setSearchText] = React.useState("");
 
   const isSelected = (item: ItemType): boolean => {
     return selectedValues.some((value) => value.id === item.id);
@@ -112,7 +114,11 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
       }}
     >
       <LoadingNonFullscreen spinning={loading}>
-        <Input placeholder="Search anything..." suffix={<SearchOutlined />} />
+        <Input
+          placeholder="Search anything..."
+          suffix={<SearchOutlined />}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
         <div
           id="scrollableDiv"
           style={{
@@ -123,7 +129,7 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
         >
           <List
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={searchFromValue(data, searchText)}
             renderItem={(item: any, index) => (
               <List.Item
                 extra={

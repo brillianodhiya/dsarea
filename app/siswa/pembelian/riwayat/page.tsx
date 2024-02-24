@@ -195,11 +195,11 @@ export default function Page() {
             title="Diskon"
             dataIndex="discount"
             key="discount"
-            render={(text) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonInput active size={"small"} />
-              ) : text > 0 ? (
-                `${text}%`
+              ) : record.ds_voucher != null ? (
+                `${record.ds_voucher.diskon}%`
               ) : (
                 "-"
               )
