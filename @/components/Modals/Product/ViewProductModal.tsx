@@ -88,15 +88,30 @@ const ViewProductModal: React.FC<ModalProps> = ({
                 >
                   Close
                 </Button>
-                <Button
-                  type={data.is_buying ? "default" : "primary"}
-                  disabled={data.is_buying}
-                  onClick={() => {
-                    router.push(`/siswa/pembelian/product/${data.id}`);
-                  }}
-                >
-                  Beli Sekarang
-                </Button>
+                {data.is_buying && data.payment_status == "pending" ? (
+                  <Button
+                    style={{
+                      width: "100%",
+                    }}
+                    type={"primary"}
+                    onClick={() => router.push(data.mayar_link)}
+                  >
+                    Bayar
+                  </Button>
+                ) : (
+                  <Button
+                    style={{
+                      width: "100%",
+                    }}
+                    type={data.is_buying ? "default" : "primary"}
+                    disabled={data.is_buying}
+                    onClick={() =>
+                      router.push("/siswa/pembelian/product/" + data.id)
+                    }
+                  >
+                    Beli Sekarang
+                  </Button>
+                )}
               </Space>
             </div>
           ) : (
