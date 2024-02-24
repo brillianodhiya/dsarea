@@ -54,6 +54,47 @@ function getItem(
   } as MenuItem;
 }
 
+const itemsAdmin: MenuItem[] = [
+  getItem(
+    <Link href={"/dashboard"}>Dashboard</Link>,
+    "dashboard",
+    <DashboardIcon />
+  ),
+  getItem("Soal", "sub1", <SoalIcon />, [
+    getItem(
+      <Link className="sub-menu-item" href={"/soal/category"}>
+        Kategori
+      </Link>,
+      "category"
+    ),
+    getItem(
+      <Link className="sub-menu-item" href={"/soal/paket-soal"}>
+        Paket Soal
+      </Link>,
+      "paket-soal"
+    ),
+    getItem(
+      <Link className="sub-menu-item" href={"/soal/product"}>
+        Product
+      </Link>,
+      "product"
+    ),
+  ]),
+  getItem(
+    <Link href={"/penilaian"}>Penilaian</Link>,
+    "penilaian",
+    <PenilaianIcon />
+  ),
+  getItem(<Link href={"/siswa"}>Siswa</Link>, "siswa", <SiswaIcon />),
+  getItem(<Link href={"/voucher"}>Voucher</Link>, "voucher", <VoucherIcon />),
+  getItem(<Link href={"/kelas"}>Kelas</Link>, "kelas", <KelasIcon />),
+  getItem(<Link href={"/banner"}>Banner</Link>, "banner", <BannerIcon />),
+  getItem(
+    <Link href={"/transaction"}>Transaksi</Link>,
+    "transaction",
+    <TransaksiIcon />
+  ),
+];
 const itemsSuperAdmin: MenuItem[] = [
   getItem(
     <Link href={"/dashboard"}>Dashboard</Link>,
@@ -117,6 +158,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       redirect("/");
     }
   }, [profileData.error]);
+
+  console.log(profileData?.data?.ds_user_role.id);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -140,7 +183,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     if (profileData?.data?.ds_user_role.id == 1) {
       return itemsSuperAdmin;
     } else if (profileData?.data?.ds_user_role.id == 2) {
-      return [];
+      return itemsAdmin;
     } else if (profileData?.data?.ds_user_role.id == 3) {
       return [];
     } else {
@@ -264,7 +307,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </Sider>
             <Layout>
               {/*
-      
+
         <Header
           style={{
             padding: 0,
@@ -323,7 +366,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </Avatar>
             <DropdownLogout />
           </div>
-          
+
         </Header>
       */}
               <Button
