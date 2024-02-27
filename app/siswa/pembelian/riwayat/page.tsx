@@ -113,7 +113,7 @@ export default function Page() {
                 <SkeletonInput active size={"small"} />
               ) : (
                 <Typography className="!text-[#3A9699]">
-                  {record.ds_user.name}
+                  {record?.ds_user?.name}
                 </Typography>
               )
             }
@@ -132,7 +132,7 @@ export default function Page() {
               isFetching ? (
                 <SkeletonInput active size={"small"} />
               ) : (
-                record.ds_product.nama_product
+                record?.ds_product?.nama_product
               )
             }
             sorter={

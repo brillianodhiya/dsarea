@@ -53,10 +53,10 @@ export default function Page() {
     },
     initialData: [
       {
-        id: "id",
-        name: "name",
+        id: "",
+        name: "",
         coverImage: null,
-        amount: "0",
+        amount: "",
       },
     ],
   });
