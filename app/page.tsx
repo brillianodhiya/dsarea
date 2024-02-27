@@ -48,7 +48,7 @@ export default async function Home() {
               height={20}
               src={"/icons8-google.svg"}
             />
-            Sign in With Google
+            Masuk Dengan Google
           </Link>
         </div>
       </div>
