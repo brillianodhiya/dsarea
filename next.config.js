@@ -9,6 +9,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "media.mayar.id",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
         hostname: "api-dsarea.aitilokal.com",
         pathname: "**",
       },

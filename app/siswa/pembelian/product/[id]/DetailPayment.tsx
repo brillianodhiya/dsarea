@@ -36,7 +36,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
   console.log(dataProudct.data[0].image);
 
   const onFinish = async (values: any) => {
-    setLoading(true);
+    setLoadingSubmit(true);
     const body = {
       voucher_id: discountId,
       product_id: dataProudct.data[0].id,

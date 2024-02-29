@@ -6,7 +6,18 @@ import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
 import { searchFromValue } from "@dsarea/@/lib/SearchFromValue";
 import { formatRupiah } from "@dsarea/@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Empty, Input, Row, Segmented, Skeleton, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+  Segmented,
+  Skeleton,
+  Tag,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import SkeletonImage from "antd/es/skeleton/Image";
 import Image from "next/image";
@@ -22,10 +33,11 @@ export default function Page() {
     queryKey: ["kelas", page, activeMenu],
     queryFn: async () => {
       const res = await axiosClientInstance.get(
-        `/api/kelas/${activeMenu}/1/10`
+        `/api/kelas/${activeMenu}/1/${page}`
       );
       return res.data.data;
     },
+
     initialData: [
       {
         id: "id",
@@ -36,13 +48,14 @@ export default function Page() {
     ],
   });
 
+  console.log(data, "data");
+
   const filteredData = data.filter((e: any) => e.id !== "id");
 
   // console.log(process.env.NEXT_PUBLIC_URL_COURSE_MAYAR);
   return (
     <div>
       <CustomHeader title="Kelas" />
-
       <Card className="!m-6">
         <Row className="mb-4" justify={"space-between"} wrap gutter={[16, 16]}>
           <Col>
@@ -146,41 +159,42 @@ export default function Page() {
               <Empty description="Data not found" />
             </Col>
           ) : (
-            searchFromValue(data, searchText)
-              .filter((e: any) => e.id !== "id")
-              .map((e: any, i: any) => (
-                <Col key={i}>
-                  <Link href={e.link} target="_blank">
-                    <Card
-                      loading={isFetching}
-                      hoverable
-                      style={{
-                        maxWidth: 252,
-                        marginBottom: 10,
-                      }}
-                      cover={
-                        <div>
-                          <Tag
-                            style={{
-                              position: "absolute",
-                              margin: 10,
-                              borderRadius: 100,
-                              // maxWidth: 200,
-                              textAlign: "center",
-                              right: 0,
-                              width: "max-content",
-                            }}
-                            color="#AFCF5B"
-                          >
-                            {activeMenu == "bootcamp"
-                              ? "Kelas Cohort/Bootcamp"
-                              : activeMenu === "online"
-                              ? "Kelas Online"
-                              : activeMenu === "digital-product"
-                              ? "Product Digital"
-                              : "Bundling"}
-                          </Tag>
-                          {/* <SkeletonImage
+            <>
+              {searchFromValue(data, searchText)
+                .filter((e: any) => e.id !== "id")
+                .map((e: any, i: any) => (
+                  <Col key={i}>
+                    <Link href={e.link} target="_blank">
+                      <Card
+                        loading={isFetching}
+                        hoverable
+                        style={{
+                          maxWidth: 252,
+                          marginBottom: 10,
+                        }}
+                        cover={
+                          <div>
+                            <Tag
+                              style={{
+                                position: "absolute",
+                                margin: 10,
+                                borderRadius: 100,
+                                // maxWidth: 200,
+                                textAlign: "center",
+                                right: 0,
+                                width: "max-content",
+                              }}
+                              color="#AFCF5B"
+                            >
+                              {activeMenu == "bootcamp"
+                                ? "Kelas Cohort/Bootcamp"
+                                : activeMenu === "online"
+                                ? "Kelas Online"
+                                : activeMenu === "digital-product"
+                                ? "Product Digital"
+                                : "Bundling"}
+                            </Tag>
+                            {/* <SkeletonImage
                       active
                       style={{
                         // display: "inline-block",
@@ -190,32 +204,44 @@ export default function Page() {
                       }}
                     /> */}
 
-                          <Image
-                            alt="cover image"
-                            src={
-                              e.coverImage
-                                ? e.coverImage.url
-                                : "/card-image.svg"
-                            }
-                            width={250}
-                            height={333}
-                            className="w-full aspect-square object-contain object-center"
-                          />
-                        </div>
-                      }
-                    >
-                      {/* <Skeleton loading={isFetching} active> */}
-                      <Meta
-                        title={e.name}
-                        description={formatRupiah(e.amount)}
-                      />
-                      {/* </Skeleton> */}
-                    </Card>
-                  </Link>
-                </Col>
-              ))
+                            <Image
+                              alt="cover image"
+                              src={
+                                e.coverImage
+                                  ? e.coverImage.url
+                                  : "/card-image.svg"
+                              }
+                              width={250}
+                              height={333}
+                              className="w-full aspect-square object-contain object-center"
+                            />
+                          </div>
+                        }
+                      >
+                        {/* <Skeleton loading={isFetching} active> */}
+                        <Meta
+                          title={e.name}
+                          description={formatRupiah(e.amount)}
+                        />
+                        {/* </Skeleton> */}
+                      </Card>
+                    </Link>
+                  </Col>
+                ))}
+              <Col
+                style={{
+                  textAlign: "center",
+                }}
+                span={24}
+              >
+                <Button onClick={() => setPage((prev) => prev + 10)}>
+                  Load More
+                </Button>
+              </Col>
+            </>
           )}
         </Row>
+        <div className="self-center"></div>
       </Card>
     </div>
   );
