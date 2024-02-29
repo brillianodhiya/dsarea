@@ -52,6 +52,12 @@ export default function Page() {
   });
 
   const handleChangeSiswa = (id: any) => {
+    const body = [
+      {
+        id,
+        role_id: 3,
+      },
+    ];
     Modal.confirm({
       title: "Perhatian!!",
       icon: <ExclamationCircleOutlined />,
@@ -59,10 +65,10 @@ export default function Page() {
       onOk: async () => {
         try {
           setLoading(true);
-          const res = await axiosClientInstance.put("/api/users/change/role", {
-            id: id,
-            role_id: 3,
-          });
+          const res = await axiosClientInstance.put(
+            "/api/users/change/role",
+            body
+          );
           queryClient.invalidateQueries({
             queryKey: ["list-user-role"],
           });
@@ -97,7 +103,7 @@ export default function Page() {
               value
             );
             queryClient.invalidateQueries({
-              queryKey: ["Role"],
+              queryKey: ["list-user-role"],
             });
             setLoading(false);
             message.success(`${res.data.message}`);
