@@ -370,6 +370,30 @@ const Accordion: React.FC<QuestionGroup> = ({ items, setSoal, type = "" }) => {
                       </div>
                     );
                   })}
+
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs text-[#7A7A7A]">Score</span>
+                    <InputNumber
+                      disabled={
+                        type == "view" || !item.jawaban_user ? true : false
+                      }
+                      min={0}
+                      placeholder="Score"
+                      onChange={(v) => {
+                        setSoal((prev: any) => {
+                          const newSoal = [...prev];
+                          if (newSoal[index].jawaban_user) {
+                            newSoal[index].jawaban_user.nilai = v;
+                          } else {
+                            newSoal[index].jawaban_user = {
+                              nilai: v,
+                            };
+                          }
+                          return newSoal;
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
               )}
             </div>
