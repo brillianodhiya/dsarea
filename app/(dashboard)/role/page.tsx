@@ -1,6 +1,7 @@
 "use client";
 import {
   CheckCircleFilled,
+  ExclamationCircleOutlined,
   MinusCircleFilled,
   PlusOutlined,
   SearchOutlined,
@@ -16,6 +17,7 @@ import {
   Card,
   Col,
   Input,
+  Modal,
   Row,
   Space,
   Table,
@@ -35,7 +37,7 @@ export default function Page() {
   const [searchText, setSearchText] = React.useState("");
 
   const { data, isFetching } = useQuery({
-    queryKey: ["Role"],
+    queryKey: ["list-user-role"],
     queryFn: async () => {
       const res = await axiosClientInstance.get("/api/users/list?role_id=1,2");
       return res.data.data;
@@ -48,6 +50,37 @@ export default function Page() {
       },
     ],
   });
+
+  const handleChangeSiswa = (id: any) => {
+    Modal.confirm({
+      title: "Perhatian!!",
+      icon: <ExclamationCircleOutlined />,
+      content: "Apakah anda yakin ingin mengembalikan akun ini menjadi siswa?",
+      onOk: async () => {
+        try {
+          setLoading(true);
+          const res = await axiosClientInstance.put("/api/users/change/role", {
+            id: id,
+            role_id: 3,
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["list-user-role"],
+          });
+          setLoading(false);
+          message.success(`${res.data.message}`);
+          setOpenAddModal(false);
+        } catch (error) {
+          setLoading(false);
+          message.error(
+            `${(error as any).response.data.message} : ${
+              (error as any).response.data.data
+            }`
+          );
+        }
+      },
+      onCancel() {},
+    });
+  };
 
   return (
     <div>
@@ -212,11 +245,13 @@ export default function Page() {
               isFetching ? (
                 <SkeletonButton active />
               ) : (
-                <DropdownMenuAction itemLists={[]} />
+                <Button onClick={() => handleChangeSiswa(record.id)}>
+                  Transfer Ke Siswa
+                </Button>
               )
             }
-            fixed="right"
-            width={80}
+            // fixed="right"
+            // width={80}
           />
         </Table>
       </Card>
