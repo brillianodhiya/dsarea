@@ -241,7 +241,7 @@ export default function Page() {
             title="Action"
             dataIndex="action"
             key="action"
-            render={(text, record) =>
+            render={(text, record: any) =>
               isFetching ? (
                 <SkeletonButton active />
               ) : (
