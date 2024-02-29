@@ -23,6 +23,7 @@ import {
   message,
 } from "antd";
 import dayjs from "dayjs";
+import moment from "moment";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import screenfull from "screenfull";
@@ -223,7 +224,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
       });
   };
 
-  console.log(soalNow, "soalnow");
+  // console.log(soalNow, "soalnow");
 
   const sendCompleteTest = (callback: () => void) => {
     let jawaban_id = soalNow.jawaban.filter((val) => val.key == selectedKey);
@@ -885,7 +886,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                     }}
                   > */}
                     <Countdown
-                      value={detail.end_duration}
+                      value={dataSoal.end_duration}
                       valueStyle={{
                         fontSize: 14,
                         fontWeight: 600,
