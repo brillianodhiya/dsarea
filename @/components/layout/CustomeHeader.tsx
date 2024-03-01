@@ -20,6 +20,7 @@ import { ProfileContext } from "@dsarea/@/lib/ProfileContext";
 import { useQuery } from "@tanstack/react-query";
 import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 import Link from "next/link";
+import Image from "next/image";
 
 type HeaderProps = {
   title: string;
@@ -173,6 +174,10 @@ const CustomHeader: React.FC<HeaderProps> = ({
         // position: "fixed",
       }}
     >
+      {!screens.sm ? (
+        <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
+      ) : null}
+
       {isSubMenu ? (
         <div>
           {screens.md ? (

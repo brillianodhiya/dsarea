@@ -179,7 +179,8 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
             <Sider
               collapsed={collapsed}
               breakpoint="md"
-              collapsedWidth={screens.sm ? "80" : "0"}
+              // collapsedWidth={screens.sm ? "80" : "0"}
+              collapsedWidth={80}
               onCollapse={(collapsed) => {
                 setCollapsed(collapsed);
               }}
@@ -264,7 +265,7 @@ const SiswaLayout: React.FC<SiswaLayoutProps> = ({ children, profileData }) => {
                   minHeight: 280,
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
-                  position: !collapsed && !screens.sm ? "absolute" : undefined,
+                  position: !collapsed && !screens.md ? "absolute" : undefined,
                 }}
               >
                 {children}
