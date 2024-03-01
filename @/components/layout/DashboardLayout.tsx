@@ -399,6 +399,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
                   position: !collapsed && !screens.md ? "absolute" : undefined,
+                  overflowX: "hidden",
+                  width: "100%",
                 }}
               >
                 {children}
