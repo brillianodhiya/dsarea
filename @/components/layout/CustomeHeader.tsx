@@ -177,9 +177,14 @@ const CustomHeader: React.FC<HeaderProps> = ({
       {!screens.sm ? (
         <Image src="/DSAREA.png" width={36} height={36} alt="logo" />
       ) : null}
-
       {isSubMenu ? (
-        <div>
+        <div
+          style={
+            {
+              // position: !screens.sm ? "absolute" : "relative",
+            }
+          }
+        >
           {screens.md ? (
             <Breadcrumb
               separator=">"
@@ -190,6 +195,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
               ].concat(subMenu)}
             />
           ) : null}
+
           <div
             style={{
               display: "flex",
@@ -203,6 +209,7 @@ const CustomHeader: React.FC<HeaderProps> = ({
             <Typography.Text
               style={{
                 fontSize: screens.xs ? 14 : 20,
+                textOverflow: "ellipsis",
               }}
               strong
               // className="!text-xl"
@@ -217,9 +224,16 @@ const CustomHeader: React.FC<HeaderProps> = ({
             display: "flex",
             alignItems: "center",
             gap: 20,
+            // position: !screens.sm ? "absolute" : "relative",
           }}
         >
-          <Typography.Text strong className="!text-xl">
+          <Typography.Text
+            strong
+            className="!text-xl"
+            style={{
+              textOverflow: "ellipsis",
+            }}
+          >
             {title}
           </Typography.Text>
         </div>
