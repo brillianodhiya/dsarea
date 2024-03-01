@@ -22,6 +22,26 @@ const nextConfig = {
         hostname: "api-dsarea.aitilokal.com",
         pathname: "**",
       },
+      {
+        protocol: "https",
+        hostname: "api.dsarea.com",
+        pathname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "api.dsarea.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "api-dsprod.aitilokal.com",
+        pathname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "api-dsprod.aitilokal.com",
+        pathname: "**",
+      },
     ],
   },
 };
