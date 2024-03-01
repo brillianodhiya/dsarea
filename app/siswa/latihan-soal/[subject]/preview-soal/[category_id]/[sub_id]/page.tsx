@@ -68,7 +68,7 @@ import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 //   }
 // }
 
-export default function Page(props: { params: any }) {
+export default function Page(props: { params: any; searchParams: any }) {
   // const data = await getData(
   //   props.params.sub_id,
   //   props.params.subject,
@@ -115,7 +115,15 @@ export default function Page(props: { params: any }) {
   return (
     <div>
       {" "}
-      <PreviewSoal dataSoal={data} detailSoal={detail} />{" "}
+      <PreviewSoal
+        dataSoal={data}
+        detailSoal={detail}
+        end_duration={
+          data.end_duration
+            ? data.end_duration
+            : props.searchParams.end_duration
+        }
+      />{" "}
     </div>
   );
 }
