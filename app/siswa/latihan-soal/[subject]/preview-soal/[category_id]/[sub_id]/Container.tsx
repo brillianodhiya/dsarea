@@ -66,9 +66,37 @@ type HeaderProps = {
     category_name?: string;
     sub_category_name?: string;
   };
+  end_duration: string;
 };
 
-const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
+const PreviewSoal: React.FC<HeaderProps> = ({
+  dataSoal,
+  detailSoal,
+  end_duration,
+}) => {
+  function countdownTimer(endDate: string): string {
+    // Parse the input end_date
+    const endDateTime = new Date(endDate);
+    const now = new Date();
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = endDateTime.getTime() - now.getTime();
+
+    // Convert milliseconds to seconds
+    const secondsRemaining = Math.floor(timeDifference / 1000);
+
+    // Calculate hours, minutes, and seconds
+    const hours = Math.floor(secondsRemaining / 3600);
+    const minutes = Math.floor((secondsRemaining % 3600) / 60);
+    const seconds = secondsRemaining % 60;
+
+    // Format the countdown timer
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+    return formattedTime;
+  }
   const [soal, setSoal] = React.useState<
     {
       product_id: number;
@@ -885,7 +913,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                       color: "#7A7A7A",
                     }}
                   > */}
-                    <Countdown
+                    {/* <Countdown
                       value={dataSoal.end_duration}
                       valueStyle={{
                         fontSize: 14,
@@ -897,7 +925,17 @@ const PreviewSoal: React.FC<HeaderProps> = ({ dataSoal, detailSoal }) => {
                         // console.log("TEST");
                         handleExpiredTest();
                       }}
-                    />
+                    /> */}
+                    <Typography
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        margin: 0,
+                        color: "#7A7A7A",
+                      }}
+                    >
+                      {countdownTimer(end_duration)}
+                    </Typography>
                     {/* </Typography> */}
                   </div>
                 </div>

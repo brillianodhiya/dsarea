@@ -20,6 +20,7 @@ import LoadingNonFullscreen from "../../LoadingComponent/LoadingComponentParent"
 import { usePathname, useRouter } from "next/navigation";
 import screenfull from "screenfull";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 interface ModalProps {
   open: boolean;
@@ -101,7 +102,11 @@ const ViewSubCategoryModal: React.FC<ModalProps> = ({
                   onClick={() => {
                     // requestFullscreen();
                     router.push(
-                      `${pathname}/preview-soal/${data.category_id}/${data.sub_id}`
+                      `${pathname}/preview-soal/${data.category_id}/${
+                        data.sub_id
+                      }?end_duration=${dayjs()
+                        .add(dataModalSubCategory.duration, "minute")
+                        .format("YYYY-MM-DD HH:mm:ss")}`
                     );
                   }}
                 >

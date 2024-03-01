@@ -13,7 +13,8 @@ async function getData(id: string) {
   }
 }
 
-export default async function Page(props: { params: any }) {
+export default async function Page(props: { params: any; searchParams: any }) {
+  // console.log(props.searchParams.w, "props");
   const data = await getData(props.params.subject);
 
   return (
