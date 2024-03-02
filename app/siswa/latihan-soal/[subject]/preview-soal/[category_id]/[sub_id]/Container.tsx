@@ -228,6 +228,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({
           Modal.destroyAll();
           screenfull.request();
         },
+        onCancel: () => {
+          Modal.destroyAll();
+          screenfull.request();
+        },
       });
     }
   }, [isFullScreen]);
@@ -255,7 +259,9 @@ const PreviewSoal: React.FC<HeaderProps> = ({
   // console.log(soalNow, "soalnow");
 
   const sendCompleteTest = (callback: () => void) => {
-    let jawaban_id = soalNow.jawaban.filter((val: any) => val.key == selectedKey);
+    let jawaban_id = soalNow.jawaban.filter(
+      (val: any) => val.key == selectedKey
+    );
 
     if (jawaban_id.length > 0) {
       return axiosClientInstance
@@ -553,6 +559,12 @@ const PreviewSoal: React.FC<HeaderProps> = ({
               "/siswa/latihan-soal/" + detailSoal.product_id
             );
           },
+          closable: false,
+          onCancel: () => {
+            window.location.replace(
+              "/siswa/latihan-soal/" + detailSoal.product_id
+            );
+          },
         });
       } else if (dataSoal.jumlah_akses > 0) {
         Modal.warning({
@@ -562,6 +574,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({
             " kali!",
           content: "Dilarang untuk merefresh halaman ini, demi kenyamanan.",
           onOk: () => {},
+          closable: false,
         });
       } else {
         Modal.warning({
@@ -569,6 +582,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({
           content:
             "Anda tidak diperbolehkan untuk merefresh halaman ini, demi kenyamanan.",
           onOk: () => {},
+          closable: false,
         });
       }
       // sorting soal berdasarkan no nya
@@ -675,7 +689,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({
     </div>
   );
 
-  console.log(soalNow, "soalnow");
+  // console.log(soalNow, "soalnow");
 
   return (
     <div>
