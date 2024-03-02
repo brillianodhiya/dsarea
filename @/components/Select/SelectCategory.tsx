@@ -53,6 +53,13 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({
     );
   };
 
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => {
+    return (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  };
+
   return (
     <Select
       loading={isFetching}
@@ -62,10 +69,13 @@ const SelectCategory: React.FC<SelectCategoryProps> = ({
       mode={multiple ? "multiple" : undefined}
       tagRender={multiple ? tagRender : undefined}
       disabled={disabled}
+      optionFilterProp="children"
+      showSearch
+      filterOption={filterOption}
     >
       {data.map((item: any) => {
         return (
-          <Select.Option key={item.id} value={item.id}>
+          <Select.Option key={item.id} value={item.id} label={item.name}>
             {item.name}
           </Select.Option>
         );
