@@ -80,11 +80,18 @@ export default function Page(props: { params: any; searchParams: any }) {
       const res = await axiosClientInstance.get(
         `/api/users/siswa/soal/sub/product/owned/${props.params.subject}/${props.params.category_id}/${props.params.sub_id}`
       );
+
+      res.data.data.soal.map((va: any, idx: number) => {
+        res.data.data.soal[idx].no = idx + 1;
+        // return va;
+      });
+      // console.log(res.data.data);
       return res.data.data;
     },
     initialData: {
       data: [],
     },
+    refetchOnWindowFocus: false,
   });
 
   // const detail = await getDataDetailSoal(
@@ -106,6 +113,7 @@ export default function Page(props: { params: any; searchParams: any }) {
         sub_category_name: "",
       },
     },
+    refetchOnWindowFocus: false,
   });
 
   if (isFetching || isFetchingDetail) {
