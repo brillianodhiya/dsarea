@@ -328,6 +328,10 @@ const PreviewSoal: React.FC<HeaderProps> = ({
       onOk: () => {
         return sendCompleteTest(handleExpiredTest);
       },
+      closable: false,
+      onCancel: () => {
+        return sendCompleteTest(handleExpiredTest);
+      },
     });
   };
 
@@ -684,6 +688,14 @@ const PreviewSoal: React.FC<HeaderProps> = ({
       </div>
     </div>
   );
+
+  // ketika end_duration sudah kurang dari waktu sekarang
+  // maka tampilkan modal warning
+  if (end_duration) {
+    if (dayjs(end_duration).isBefore(dayjs())) {
+      handleExpiredTest();
+    }
+  }
 
   // console.log(soalNow, "soalnow");
 
