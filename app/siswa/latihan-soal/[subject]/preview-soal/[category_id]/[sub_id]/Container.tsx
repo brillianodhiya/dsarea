@@ -929,8 +929,8 @@ const PreviewSoal: React.FC<HeaderProps> = ({
                       color: "#7A7A7A",
                     }}
                   > */}
-                    {/* <Countdown
-                      value={dataSoal.end_duration}
+                    <Countdown
+                      value={end_duration}
                       valueStyle={{
                         fontSize: 14,
                         fontWeight: 600,
@@ -941,8 +941,8 @@ const PreviewSoal: React.FC<HeaderProps> = ({
                         // console.log("TEST");
                         handleExpiredTest();
                       }}
-                    /> */}
-                    <Typography
+                    />
+                    {/* <Typography
                       style={{
                         fontSize: 14,
                         fontWeight: 600,
@@ -951,7 +951,7 @@ const PreviewSoal: React.FC<HeaderProps> = ({
                       }}
                     >
                       {countdownTimer(end_duration)}
-                    </Typography>
+                    </Typography> */}
                     {/* </Typography> */}
                   </div>
                 </div>
