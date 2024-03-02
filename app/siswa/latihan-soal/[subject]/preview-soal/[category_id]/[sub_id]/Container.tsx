@@ -263,53 +263,49 @@ const PreviewSoal: React.FC<HeaderProps> = ({
       (val: any) => val.key == selectedKey
     );
 
-    if (jawaban_id.length > 0) {
-      return axiosClientInstance
-        .post("/api/users/siswa/jawab/soal/" + soalNow.type, {
-          jawaban_id:
-            soalNow.type == "pilihan" ? jawaban_id[0].jawaban_id : undefined,
-          product_id: soalNow.product_id,
-          sub_id: soalNow.sub_id,
-          soal_id: soalNow.soal_id,
-          jawaban: soalNow.type == "essay" ? essayAnswer : undefined,
-        })
-        .then((res) => {
-          return axiosClientInstance
-            .post("/api/users/siswa/jawaban/done", {
-              product_id: soalNow.product_id,
-              sub_id: soalNow.sub_id,
-              category_id: detailSoal.category_id,
-            })
-            .then((res) => {
-              setLoading(false);
-              screenfull.exit();
-              window.location.replace(
-                "/siswa/latihan-soal/" + detailSoal.product_id
-              );
-            })
-            .catch((err) => {
-              setLoading(false);
-              callback();
-              // console.log(err);
-              if (err.response.data.message) {
-                message.error(err.response.data.message);
-              } else {
-                message.error(err.message);
-              }
-            });
-        })
-        .catch((err) => {
-          setLoading(false);
-          if (err.response.data.message) {
-            message.error(err.response.data.message);
-          } else {
-            message.error(err.message);
-          }
-          // console.log(err);
-        });
-    } else {
-      message.error("Pastikan untuk mengisi jawaban!");
-    }
+    return axiosClientInstance
+      .post("/api/users/siswa/jawab/soal/" + soalNow.type, {
+        jawaban_id:
+          soalNow.type == "pilihan" ? jawaban_id[0].jawaban_id : undefined,
+        product_id: soalNow.product_id,
+        sub_id: soalNow.sub_id,
+        soal_id: soalNow.soal_id,
+        jawaban: soalNow.type == "essay" ? essayAnswer : undefined,
+      })
+      .then((res) => {
+        return axiosClientInstance
+          .post("/api/users/siswa/jawaban/done", {
+            product_id: soalNow.product_id,
+            sub_id: soalNow.sub_id,
+            category_id: detailSoal.category_id,
+          })
+          .then((res) => {
+            setLoading(false);
+            screenfull.exit();
+            window.location.replace(
+              "/siswa/latihan-soal/" + detailSoal.product_id
+            );
+          })
+          .catch((err) => {
+            setLoading(false);
+            callback();
+            // console.log(err);
+            if (err.response.data.message) {
+              message.error(err.response.data.message);
+            } else {
+              message.error(err.message);
+            }
+          });
+      })
+      .catch((err) => {
+        setLoading(false);
+        if (err.response.data.message) {
+          message.error(err.response.data.message);
+        } else {
+          message.error(err.message);
+        }
+        // console.log(err);
+      });
   };
 
   const handleCompleteTest = () => {
