@@ -21,8 +21,8 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
             textTransform: "capitalize",
           }}
         >
-          <CheckCircleFilled />
-          {" " + value}
+          {/* di line ini muncul error ini perbaiki di bawah Type error: Type '{}' is missing the following properties from type 'Pick<AntdIconProps, "prefix" | "media" | "data" | "height" | "width" | "translate" | "rotate" | "content" | "muted" | "headers" | "method" | "size" | "value" | "name" | ... 349 more ... | "twoToneColor">': onPointerEnterCapture, onPointerLeaveCapture */}
+          <CheckCircleFilled /> {value}
         </Typography>
       ) : status === "pending" ? (
         <Typography
@@ -32,8 +32,7 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
             textTransform: "capitalize",
           }}
         >
-          <ExclamationCircleFilled />
-          {" " + value}
+          <ExclamationCircleFilled /> {value}
         </Typography>
       ) : (
         <Typography
@@ -43,8 +42,7 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
             textTransform: "capitalize",
           }}
         >
-          <MinusCircleFilled />
-          {" " + value}
+          <MinusCircleFilled /> {value}
         </Typography>
       )}
     </>
