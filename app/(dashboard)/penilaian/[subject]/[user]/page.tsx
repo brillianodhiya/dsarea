@@ -428,6 +428,7 @@ export default function Page(props: any) {
     initialData: {
       soal: [],
     },
+    refetchOnWindowFocus: false,
   });
 
   const handleSendSkor = async () => {
