@@ -16,7 +16,12 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
       {status === "success" ? (
         <Typography className="capitalize">
           {/* Type error: Type '{ className: string; }' is missing the following properties from type 'Pick<AntdIconProps, "prefix" | "media" | "data" | "height" | "width" | "translate" | "rotate" | "content" | "muted" | "headers" | "method" | "size" | "value" | "name" | ... 349 more ... | "twoToneColor">': onPointerEnterCapture, onPointerLeaveCapture */}
-          <CheckCircleFilled className="!text-[#32D583] text-[10px]" />
+          <CheckCircleFilled
+            style={{
+              color: "#32D583",
+              fontSize: "10px",
+            }}
+          />
           {" " + value}
         </Typography>
       ) : status === "pending" ? (
@@ -24,14 +29,19 @@ export const CustomBadge: React.FC<BadgeProps> = ({ value, status }) => {
           <ExclamationCircleFilled
             style={{
               color: "#FDB022",
+              fontSize: "10px",
             }}
-            className="!text-[#FDB022] text-[10px]"
           />
           {" " + value}
         </Typography>
       ) : (
         <Typography className="capitalize">
-          <MinusCircleFilled className="!text-[#F04438] text-[10px]" />
+          <MinusCircleFilled
+            style={{
+              color: "#F04438",
+              fontSize: "10px",
+            }}
+          />
           {" " + value}
         </Typography>
       )}
