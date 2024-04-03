@@ -81,7 +81,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
     }
   };
 
-  console.log(dataProudct.data[0].harga);
+  console.log(dataProudct.data[0]);
 
   return (
     <Form form={form} name="payment" onFinish={onFinish}>
@@ -115,7 +115,7 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
                       color: "#7A7A7A",
                     }}
                   >
-                    Nama asd
+                    Nama Product
                   </div>
                   <div className="font-semibold">
                     {dataProudct.data[0].nama_product}
@@ -125,7 +125,10 @@ export default function ContainerLatihanSoal({ dataProudct }: any) {
                       color: "#7A7A7A",
                     }}
                   >
-                    Expired at : {moment().format("DD/MM/YYYY HH:mm")}
+                    Expired at :{" "}
+                    {moment(dataProudct.data[0].end_date).format(
+                      "DD/MM/YYYY HH:mm"
+                    )}
                   </div>
                 </div>
               </div>
