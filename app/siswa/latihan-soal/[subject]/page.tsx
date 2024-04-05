@@ -3,6 +3,7 @@ import CustomHeader from "@dsarea/@/components/layout/CustomeHeader";
 import ContainerDetailLatihanSoal from "./Container";
 import { axiosInstance } from "@dsarea/@/lib/AxiosConfig";
 import React from "react";
+import { axiosClientInstance } from "@dsarea/@/lib/AxiosClientConfig";
 
 // async function getData(id: string) {
 //   try {
@@ -48,7 +49,7 @@ export default function Page(props: { params: any; searchParams: any }) {
   });
   async function getData(id: string) {
     try {
-      const res = await axiosInstance.get(
+      const res = await axiosClientInstance.get(
         `/api/users/siswa/detail/product/owned/${id}`
       );
       return res.data.data;
@@ -61,7 +62,7 @@ export default function Page(props: { params: any; searchParams: any }) {
     getData(props.params.subject).then((res) => {
       setData(res);
     });
-  }, []);
+  }, [props.params.subject]);
 
   return (
     <div>
